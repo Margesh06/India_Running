@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import EventCard from '../components/EventCard'; 
 import Logo from './Logo.PNG';
+import Image from 'next/image';
 
 const events = [
   {
@@ -128,7 +129,7 @@ const events = [
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedActivity, setSelectedActivity] = useState('');  // New state for dropdown
+  const [selectedActivity, setSelectedActivity] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerRow = 3; 
   const rowsPerPage = 2; 
@@ -137,7 +138,7 @@ export default function HomePage() {
   const filteredEvents = events.filter((event) =>
     (event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     event.location.toLowerCase().includes(searchQuery.toLowerCase())) &&
-    (selectedActivity ? event.activity === selectedActivity : true)  // Filter by activity type
+    (selectedActivity ? event.activity === selectedActivity : true)
   );
 
   const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
@@ -159,43 +160,58 @@ export default function HomePage() {
 
   return (
     <div className="bg-gray-100">
-      <header className="flex justify-between items-center p-6 bg-white text-white">
-        <Link href="/">
-          <img
+      <header className="flex flex-wrap justify-between items-center p-6 bg-white text-white">
+        <Link href="/" className="flex justify-center w-full sm:w-auto">
+          <Image
             src={Logo.src} 
             alt="Marathon Platform Logo"
-            className="h-15 cursor-pointer" 
+            layout="intrinsic" 
+            width={300}
+            height={60}
+            className="cursor-pointer object-contain w-32 sm:w-48"
           />
         </Link>
-        <div className="flex items-center space-x-6">
-          <select
-            value={selectedActivity}
-            onChange={(e) => setSelectedActivity(e.target.value)}
-            className="px-4 py-2 rounded-md bg-white text-gray-700"
-          >
-            <option value="">All Events</option>
-            <option value="Running">Running</option>
-            <option value="Walking">Walking</option>
-            <option value="Cycling">Cycling</option>
-          </select>
 
-          <input
-            type="text"
-            placeholder="Search events"
-            className="px-4 py-2 rounded-md bg-white text-gray-700"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <div className="space-x-4">
-            <Link href="/auth/login" className="text-black hover:text-blue-400">
+        <div className="flex flex-wrap justify-between w-full sm:w-auto mt-4 sm:mt-0 space-y-4 sm:space-y-0 sm:space-x-6">
+          <div className="w-full sm:w-auto">
+            <select
+              value={selectedActivity}
+              onChange={(e) => setSelectedActivity(e.target.value)}
+              className="px-4 py-2 rounded-md bg-white text-gray-700 w-full"
+            >
+              <option value="">All Events</option>
+              <option value="Running">Running</option>
+              <option value="Walking">Walking</option>
+              <option value="Cycling">Cycling</option>
+            </select>
+          </div>
+
+          <div className="w-full sm:w-auto">
+            <input
+              type="text"
+              placeholder="Search events"
+              className="px-4 py-2 rounded-md bg-white text-gray-700 w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <div className="w-full sm:w-auto space-x-4 flex flex-wrap justify-between sm:justify-start">
+            <Link 
+              href="/auth/login" 
+              className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
+            >
               Login
             </Link>
-            <Link href="/auth/register" className="text-black hover:text-blue-400">
+            <Link 
+              href="/auth/register" 
+              className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
+            >
               Register
             </Link>
             <Link
               href="/events/create"
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500"
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 w-full sm:w-auto text-center"
             >
               Create Event
             </Link>
@@ -205,17 +221,17 @@ export default function HomePage() {
 
       <main className="p-6">
         <h2 className="text-3xl font-bold text-center mb-6">Upcoming Events</h2>
-        <div className="px-9"> {/* Increased padding on left and right */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"> {/* Reduced gap between cards */}
-    {paginatedEvents.length > 0 ? (
-      paginatedEvents.map((event) => <EventCard key={event.id} event={event} />)
-    ) : (
-      <p className="text-center text-gray-500 col-span-full">
-        No events found
-      </p>
-    )}
-  </div>
-</div>
+        <div className="px-9">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginatedEvents.length > 0 ? (
+              paginatedEvents.map((event) => <EventCard key={event.id} event={event} />)
+            ) : (
+              <p className="text-center text-gray-500 col-span-full">
+                No events found
+              </p>
+            )}
+          </div>
+        </div>
         <div className="flex justify-center items-center space-x-4 mt-6">
           <button
             onClick={handlePrevPage}
