@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import EventCard from '../components/EventCard'; 
-import Logo from './Logo.PNG';
+import Logo from '../public/Lg.PNG';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 const events = [
@@ -14,9 +15,11 @@ const events = [
       location: "Mumbai",
       description: "A full marathon for all levels of runners.",
       price: "1000",
-      image: "https://media.istockphoto.com/id/1733237354/photo/runners-on-the-street-healthy-lifestyle-marathon-athletics.jpg?s=2048x2048&w=is&k=20&c=tOaMqk8XrhiIS0eBEYl0-jfxL988gLXtkzLyGPlBG3s=",
+      image:
+        "https://media.istockphoto.com/id/1733237354/photo/runners-on-the-street-healthy-lifestyle-marathon-athletics.jpg?s=2048x2048&w=is&k=20&c=tOaMqk8XrhiIS0eBEYl0-jfxL988gLXtkzLyGPlBG3s=",
       type: "In-Person",
       categories: ["42K"],
+      activityType: "Running",
     },
     {
       id: 2,
@@ -25,9 +28,11 @@ const events = [
       location: "Delhi",
       description: "A challenging half marathon for intermediate runners.",
       price: "500",
-      image: "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image:
+        "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       type: "In-Person",
       categories: ["21.1K"],
+      activityType: "Running",
     },
     {
       id: 3,
@@ -36,9 +41,11 @@ const events = [
       location: "Bangalore",
       description: "A 5K run for beginners and families.",
       price: "300",
-      image: "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image:
+        "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       type: "Virtual",
       categories: ["5K"],
+      activityType: "Walking",
     },
     {
       id: 4,
@@ -47,9 +54,11 @@ const events = [
       location: "Hyderabad",
       description: "A challenging 10K for experienced runners.",
       price: "700",
-      image: "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image:
+        "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       type: "In-Person",
       categories: ["10K"],
+      activityType: "Running",
     },
     {
       id: 5,
@@ -58,9 +67,11 @@ const events = [
       location: "Shimla",
       description: "A scenic trail run through the hills.",
       price: "1500",
-      image: "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image:
+        "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       type: "In-Person",
       categories: ["5K", "10K"],
+      activityType: "Cycling",
     },
     {
       id: 6,
@@ -69,9 +80,11 @@ const events = [
       location: "Chennai",
       description: "A vibrant marathon through the city streets.",
       price: "1200",
-      image: "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image:
+        "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       type: "Virtual",
       categories: ["10K", "21.1K"],
+      activityType: "Running",
     },
     {
       id: 7,
@@ -80,9 +93,11 @@ const events = [
       location: "Goa",
       description: "A refreshing beachside run.",
       price: "800",
-      image: "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image:
+        "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       type: "In-Person",
       categories: ["5K", "10K"],
+      activityType: "Walking",
     },
     {
       id: 8,
@@ -91,53 +106,53 @@ const events = [
       location: "Mumbai",
       description: "An exciting night run with glowing accessories.",
       price: "600",
-      image: "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image:
+        "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       type: "Virtual",
       categories: ["5K", "10K"],
-    },
+      activityType: "Walking",
+    },  
 
-  
 ];
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedActivity, setSelectedActivity] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const eventsPerRow = 3; 
-  const rowsPerPage = 2; 
-  const eventsPerPage = eventsPerRow * rowsPerPage; 
+  const [eventsToShow, setEventsToShow] = useState(6); 
+  const eventsPerRow = 3;
+  const rowsPerPage = 2;
+  const eventsPerPage = eventsPerRow * rowsPerPage;
+
+  const router = useRouter(); 
 
   const filteredEvents = events.filter((event) =>
     (event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     event.location.toLowerCase().includes(searchQuery.toLowerCase())) &&
-    (selectedActivity ? event.activity === selectedActivity : true)
+    (selectedActivity ? event.activityType === selectedActivity : true)
   );
 
-  const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
+  const paginatedEvents = filteredEvents.slice(0, eventsToShow); 
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
+  const handleShowMore = () => {
+    setEventsToShow((prev) => prev + eventsPerPage); 
   };
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
+  const handleAuthForm = (formType) => {
+    if (formType === 'login') {
+      router.push('/auth/login'); 
+    } else if (formType === 'register') {
+      router.push('/auth/register'); 
     }
   };
-
-  const startIndex = (currentPage - 1) * eventsPerPage;
-  const paginatedEvents = filteredEvents.slice(startIndex, startIndex + eventsPerPage);
 
   return (
     <div className="bg-gray-100">
       <header className="flex flex-wrap justify-between items-center p-6 bg-white text-white">
         <Link href="/" className="flex justify-center w-full sm:w-auto">
           <Image
-            src={Logo.src} 
+            src={Logo.src}
             alt="Marathon Platform Logo"
-            layout="intrinsic" 
+            layout="intrinsic"
             width={300}
             height={60}
             className="cursor-pointer object-contain w-32 sm:w-48"
@@ -169,18 +184,18 @@ export default function HomePage() {
           </div>
 
           <div className="w-full sm:w-auto space-x-4 flex flex-wrap justify-between sm:justify-start">
-            <Link 
-              href="/auth/login" 
+            <button
+              onClick={() => handleAuthForm('login')}
               className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
             >
               Login
-            </Link>
-            <Link 
-              href="/auth/register" 
+            </button>
+            <button
+              onClick={() => handleAuthForm('register')}
               className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
             >
               Register
-            </Link>
+            </button>
             <Link
               href="/events/create"
               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 w-full sm:w-auto text-center"
@@ -204,25 +219,18 @@ export default function HomePage() {
             )}
           </div>
         </div>
-        <div className="flex justify-center items-center space-x-4 mt-6">
-          <button
-            onClick={handlePrevPage}
-            disabled={currentPage === 1}
-            className={`px-4 py-2 rounded-md ${currentPage === 1 ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-500'}`}
-          >
-            Previous
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-            className={`px-4 py-2 rounded-md ${currentPage === totalPages ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-500'}`}
-          >
-            Next
-          </button>
-        </div>
+
+        <div className="flex justify-center items-center mt-6">
+  {filteredEvents.length > eventsToShow && (
+    <button
+      onClick={handleShowMore}
+      className="flex bg-gallery items-center rounded-lg border hover:border-secondary-700 relative cursor-pointer px-6 py-2"
+    >
+      Show More 
+    </button>
+  )}
+</div>
+
       </main>
     </div>
   );

@@ -19,3 +19,33 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* Define the background color for bg-gallery */
+.bg-gallery {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 239 239 / var(--tw-bg-opacity));
+}
+
+/* Style for the Show More button */
+.show-more-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(239 239 239);
+  border-radius: 8px; /* Rounded corners */
+  border: 1px solid transparent; /* Default border */
+  padding: 0.5rem 1.5rem; /* Padding inside the button */
+  cursor: pointer; /* Cursor changes to pointer on hover */
+  position: relative; /* Useful if you need absolute positioning inside */
+  transition: border-color 0.3s ease; /* Smooth transition for hover */
+}
+
+/* Hover effect for the Show More button */
+.show-more-button:hover {
+  border-color: #4a90e2; /* Example border color on hover (you can change to secondary-700) */
+}
+
+/* Optional: Add some text styles */
+.show-more-button span {
+  font-size: 1rem;
+  color: #333; /* Text color */
+}

@@ -33,11 +33,16 @@ export default function EventForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form data submitted:', formData);
-    // Add API integration or further processing here
   };
 
-  const nextStep = () => {
-    if (currentStep < 3) setCurrentStep(currentStep + 1);
+  const nextStep = (e) => {
+    e.preventDefault();
+    const form = e.target.form;
+    if (form.checkValidity()) {
+      if (currentStep < 3) setCurrentStep(currentStep + 1);
+    } else {
+      form.reportValidity(); 
+    }
   };
 
   const prevStep = () => {
@@ -159,11 +164,13 @@ export default function EventForm() {
                 id="image"
                 name="image"
                 onChange={handleFileChange}
+                required
                 className="w-full px-4 py-2 border rounded-md focus:outline-none"
               />
             </div>
           </div>
         )}
+
         <div className="flex justify-between items-center mt-6">
           {currentStep > 1 && (
             <button
