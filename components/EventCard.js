@@ -1,57 +1,78 @@
+"use client";
+
 import Link from 'next/link';
+import { MapPin } from 'lucide-react';
 
 export default function EventCard({ event }) {
   return (
-    <div className="relative max-w-sm rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 bg-white overflow-hidden">
+    <div className="max-w-sm bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
       <div className="relative">
         <img
           src={event.image || '/default-event-image.jpg'}
           alt={event.name}
-          className="w-full h-48 object-cover"
+          className="w-full h-[200px] object-cover"
         />
-        <div className="absolute bottom-0 left-0 bg-gray-700 bg-opacity-80 text-white text-xs font-semibold px-3 py-2 rounded-tr-md">
-          <p className="writing-vertical">{event.date}</p>
+        {/* Date Badge */}
+        <div className="absolute left-4 bottom-0 transform translate-y-1/2 bg-white rounded-lg shadow-md p-3 text-center min-w-[60px]">
+          <div className="text-2xl font-bold text-gray-800">31</div>
+          <div className="text-sm font-medium text-gray-600">Jan</div>
         </div>
       </div>
 
-      <div className="p-5">
-        <h3 className="text-xl font-bold text-gray-800 mb-3 truncate">{event.name}</h3>
-        <p className="text-md text-gray-600 mb-2">{event.location}</p>
-        <p className="text-sm text-gray-500 mb-4 line-clamp-3">{event.description}</p>
+      <div className="p-6 pt-8">
+        {/* Title */}
+        <h3 className="text-xl font-bold text-gray-900 mb-4">
+          {event.name}
+        </h3>
 
-        <div className="mb-4 border-t pt-4">
-  <p className="text-sm font-medium text-gray-700 mb-2">
-    <span className="font-semibold text-gray-800">Event Type: </span>
-    {event.isVirtual ? 'Virtual' : 'In-Person'}
-  </p>
-  <p className="text-lg font-semibold text-blue-300 mb-2">
-    {event.activityType || 'Running'}
-  </p>
-  <div>
-    <ul className="flex flex-wrap gap-2 mt-2">
-      {event.categories?.map((category, index) => (
-        <li
-          key={index}
-          className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full shadow-sm"
-        >
-          {category}
-        </li>
-      ))}
-    </ul>
-  </div>
-</div>
+        {/* Categories */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {event.categories?.map((category, index) => (
+            <span
+              key={index}
+              className="px-3 py-1 rounded-full text-sm font-medium bg-[#E8F9F6] text-[#00A991]"
+            >
+              {category}
+            </span>
+          ))}
+        </div>
 
+        <div className="flex items-center gap-2 text-gray-600 mb-4">
+          <MapPin className="w-4 h-4" />
+          <span className="text-sm">Anywhere</span>
+          <span className="mx-2">|</span>
+          <span className="text-[#00A991] font-medium">{event.activityType || '999'}</span>
+        </div>
 
-        <div className="flex justify-between items-center">
+        {/* Registration Info */}
+        <div className="border-t pt-4">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <p className="text-sm text-gray-500">Registrations closing on</p>
+              <p className="text-sm font-medium text-[#FF3366]">30 Jan, 2025</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-500">Starting from</p>
+              <p className="text-lg font-bold">₹ {event.price || '999'}</p>
+            </div>
+          </div>
+
+          {/* Virtual Event Badge */}
+          {event.isVirtual && (
+            <div className="flex items-center gap-2 text-[#FF3366] text-sm mb-4">
+              <div className="w-4 h-4 rounded-full border-2 border-[#FF3366] flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-[#FF3366]"></div>
+              </div>
+              This is a virtual event
+            </div>
+          )}
+
           <Link
             href={`/events/${event.id}`}
-            className="bg-red-500 text-white text-sm font-medium px-4 py-2 rounded-md shadow-md hover:bg-red-600 transition duration-300"
+            className="block w-full bg-[#FF3366] text-white text-center py-3 rounded-lg font-medium hover:bg-[#E62E5C] transition-colors duration-300"
           >
             Register
           </Link>
-          <span className="text-lg font-semibold text-green-600">
-            {event.price ? `₹${event.price} onwards` : 'Free'}
-          </span>
         </div>
       </div>
     </div>

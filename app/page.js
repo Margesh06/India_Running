@@ -7,6 +7,7 @@ import Logo from '../public/Lg.PNG';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Carousel from '../components/carousel';
+import Footer from "../components/footer";
 
 const events = [
     {
@@ -242,6 +243,7 @@ export default function HomePage() {
 </div>
 
       </main>
+      <Footer />
     </div>
   );
 }
