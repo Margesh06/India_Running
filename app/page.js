@@ -6,6 +6,7 @@ import EventCard from '../components/EventCard';
 import Logo from '../public/Lg.PNG';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Carousel from '../components/carousel';
 
 const events = [
     {
@@ -133,6 +134,14 @@ export default function HomePage() {
 
   const paginatedEvents = filteredEvents.slice(0, eventsToShow); 
 
+  const images = [
+    'https://race-registration-cdn.indiarunning.com/events/2025/02/16/chandigarh-fast-marathon-2025/banner1727426134767.jpeg',
+    'https://race-registration-cdn.indiarunning.com/events/2025/02/02/wesness-5k-run-for-women-2025/banner1737044217349.jpeg',
+    'https://race-registration-cdn.indiarunning.com/events/2025/02/02/indian-navy-half-marathon-2025/banner1736749961418.jpeg',
+    'https://race-registration-cdn.indiarunning.com/events/2025/02/09/sakal-nagpur-run-2025/banner1734797929108.jpeg',
+    'https://race-registration-cdn.indiarunning.com/events/2025/01/26/run-wild-marathon-2025-2025/banner1735585526324.jpeg',
+  ];
+
   const handleShowMore = () => {
     setEventsToShow((prev) => prev + eventsPerPage); 
   };
@@ -205,6 +214,10 @@ export default function HomePage() {
           </div>
         </div>
       </header>
+
+      <div>
+        <Carousel images={images} />
+      </div>
 
       <main className="p-6">
         <h2 className="text-3xl font-bold text-center mb-6">Upcoming Events</h2>
