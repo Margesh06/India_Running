@@ -226,7 +226,7 @@ export default function HomePage() {
           onMouseLeave={() => setDistanceDropdown(false)}
         >
           <Link href="" className="text-gray-600 hover:text-red-500">
-    Events by Distance
+          Events by Distance
           </Link>
           {distanceDropdown && (
             <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-96 z-10">

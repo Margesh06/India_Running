@@ -3,81 +3,102 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import MarathonImage1 from '../../../public/login.jpg';
-import MarathonImage2 from '../../../public/register.webp';
-import MarathonImage3 from '../../../public/login.jpg';
+import MarathonImage1 from '../../../public/lm1.avif';
+import MarathonImage2 from '../../../public/lm2.jpg';
+import MarathonImage3 from '../../../public/Lm3.avif';
+
+const carouselData = [
+  {
+    image: MarathonImage1,
+    title: "Push Your Limits",
+    description: "Experience the thrill of marathon running with our community"
+  },
+  {
+    image: MarathonImage2,
+    title: "Train Together",
+    description: "Join thousands of runners in their journey to excellence"
+  },
+  {
+    image: MarathonImage3,
+    title: "Achieve More",
+    description: "Set your goals, track your progress, celebrate success"
+  }
+];
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
 
-  const images = [
-    MarathonImage1,
-    MarathonImage2,
-    MarathonImage3, // Add more images if needed
-  ];
-
-  // Auto-switch image every 3 seconds
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 3000); // Change every 3 seconds
+    const duration = 3000; 
+    const interval = 50; 
+    let progressValue = 0;
+    
+    const progressInterval = setInterval(() => {
+      progressValue += (interval / duration) * 100;
+      setProgress(progressValue);
+      
+      if (progressValue >= 100) {
+        progressValue = 0;
+        setProgress(0);
+        setCurrentIndex((prev) => (prev + 1) % carouselData.length);
+      }
+    }, interval);
 
-    return () => clearInterval(intervalId); // Cleanup interval when component unmounts
-  }, []);
-
-  // Manually change image index on button click
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
-  };
+    return () => clearInterval(progressInterval);
+  }, [currentIndex]);
 
   const handleDotClick = (index) => {
-    setCurrentIndex(index); // Set the current image based on the clicked dot
+    setCurrentIndex(index);
+    setProgress(0);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic
   };
 
   return (
     <div className="flex min-h-screen">
-      <div className="hidden lg:block w-1/2">
-        {/* Card Flip Container */}
-        <div className="relative w-full h-full">
-          <div className="group relative w-full h-full perspective-1000">
-            <div className="flip-card w-full h-full bg-transparent relative">
-              <div className="flip-card-inner w-full h-full absolute transform transition-all duration-500 group-hover:rotate-y-180">
-                {/* Front Image */}
-                <div className="flip-card-front w-full h-full">
-                  <Image
-                    src={images[currentIndex]}
-                    alt={`Marathon Image ${currentIndex + 1}`}
-                    width={500}
-                    height={300}
-                    className="object-cover w-full h-full transition-transform duration-500"
-                  />
-                </div>
-                {/* Back Image - Could be any content */}
-                <div className="flip-card-back w-full h-full bg-gray-800 text-white flex justify-center items-center">
-                  <p>Back Side Content</p>
-                </div>
+      <div className="hidden lg:block w-1/2 relative overflow-hidden">
+        <div className="relative w-full h-screen">
+          {carouselData.map((slide, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                currentIndex === index ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                fill
+                style={{ objectFit: 'cover' }}
+                priority={index === 0}
+              />
+              <div className="absolute inset-0 bg-black/30" />
+              <div className="absolute bottom-32 left-8 right-8 text-white">
+                <h2 className="text-4xl font-bold mb-4">{slide.title}</h2>
+                <p className="text-lg">{slide.description}</p>
               </div>
             </div>
-
-            {/* Dots navigation */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-              {images.map((_, index) => (
-                <div
+          ))}
+          
+          <div className="absolute bottom-16 left-8 right-8">
+            <div className="h-1 bg-white/30 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-white transition-all duration-100 ease-linear"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <div className="flex justify-center mt-4 space-x-2">
+              {carouselData.map((_, index) => (
+                <button
                   key={index}
                   onClick={() => handleDotClick(index)}
-                  className={`w-3 h-3 rounded-full cursor-pointer ${
-                    currentIndex === index ? 'bg-blue-600' : 'bg-gray-400'
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    currentIndex === index ? 'bg-white w-4' : 'bg-white/50'
                   }`}
                 />
               ))}
@@ -86,38 +107,74 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-gray-100 p-8">
-        <div className="max-w-sm w-full">
-          <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white p-8">
+        <div className="max-w-sm w-full space-y-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Please sign in to your account
+            </p>
+          </div>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email address
+              </label>
               <input
+                id="email"
                 type="email"
-                placeholder="Email"
+                placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
             </div>
+            
             <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
               <input
+                id="password"
                 type="password"
-                placeholder="Password"
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
             </div>
-            <button type="submit" className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500">
-              Login
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                  Remember me
+                </label>
+              </div>
+              <Link href="/auth/forgot-password" className="text-sm text-blue-600 hover:text-blue-500">
+                Forgot password?
+              </Link>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            >
+              Sign in
             </button>
           </form>
-          <div className="mt-4 text-center">
-            <p>
-              Do not have an account?{' '}
-              <Link href="/auth/register" className="text-blue-500 hover:underline">
+
+          <div className="text-center">
+            <p className="text-sm text-gray-600">
+              Don&apos;t have an account?{' '}
+              <Link href="/auth/register" className="font-medium text-blue-600 hover:text-blue-500">
                 Register here
               </Link>
             </p>
