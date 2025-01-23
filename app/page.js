@@ -7,7 +7,7 @@ import Logo from '../public/Lg.PNG';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Carousel from '../components/carousel';
-import Footer from "../components/footer";
+import Footer from "../components/Footer";
 
 const events = [
     {
@@ -121,6 +121,8 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedActivity, setSelectedActivity] = useState('');
   const [eventsToShow, setEventsToShow] = useState(6); 
+  const [distanceDropdown, setDistanceDropdown] = useState(false);
+  const [cityDropdown, setCityDropdown] = useState(false);
   const eventsPerRow = 3;
   const rowsPerPage = 2;
   const eventsPerPage = eventsPerRow * rowsPerPage;
@@ -155,64 +157,129 @@ export default function HomePage() {
 
   return (
     <div className="bg-gray-100">
-      <header className="flex flex-wrap justify-between items-center p-6 bg-white text-white">
-        <Link href="/" className="flex justify-center w-full sm:w-auto">
-          <Image
-            src={Logo.src}
-            alt="Marathon Platform Logo"
-            layout="intrinsic"
-            width={300}
-            height={60}
-            className="cursor-pointer object-contain w-32 sm:w-48"
-          />
+        <header className="flex flex-wrap justify-between items-center p-6 bg-white text-white">
+    <Link href="/" className="flex justify-center w-full sm:w-auto">
+    <Image
+    src={Logo.src}
+    alt="Marathon Platform Logo"
+    layout="intrinsic"
+    width={300}
+    height={60}
+    className="cursor-pointer object-contain w-32 sm:w-48 ml-6"
+  />
+
+    </Link>
+
+    <div className="flex flex-wrap justify-between w-full sm:w-auto mt-4 sm:mt-0 space-y-4 sm:space-y-0 sm:space-x-6">
+      <div className="w-full sm:w-auto">
+        <select
+          value={selectedActivity}
+          onChange={(e) => setSelectedActivity(e.target.value)}
+          className="px-4 py-2 rounded-md bg-white text-gray-700 w-full"
+        >
+          <option value="">All Events</option>
+          <option value="Running">Running</option>
+          <option value="Walking">Walking</option>
+          <option value="Cycling">Cycling</option>
+        </select>
+      </div>
+
+      <div className="w-full sm:w-auto">
+        <input
+          type="text"
+          placeholder="Search events"
+          className="px-4 py-2 rounded-md bg-white text-gray-700 w-full"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
+      <div className="w-full sm:w-auto space-x-4 flex flex-wrap justify-between sm:justify-start">
+        <button
+          onClick={() => handleAuthForm('login')}
+          className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
+        >
+          Login
+        </button>
+        <button
+          onClick={() => handleAuthForm('register')}
+          className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
+        >
+          Register
+        </button>
+        <Link
+          href="/events/create"
+          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 w-full sm:w-auto text-center"
+        >
+          Create Event
+        </Link>
+        <div className="flex items-center">
+          <img src="/DefaultUserProfile.svg" alt="IR Logo" className="h-11 px-6" />
+        </div>
+      </div>
+    </div>
+
+    <nav className="flex justify-center space-x-12 px-4 h-12 items-center bg-gray-50 w-full">
+        <div
+          className="relative"
+          onMouseEnter={() => setDistanceDropdown(true)}
+          onMouseLeave={() => setDistanceDropdown(false)}
+        >
+          <Link href="" className="text-gray-600 hover:text-red-500">
+    Events by Distance
+          </Link>
+          {distanceDropdown && (
+            <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-96 z-10">
+              <ul className="grid grid-cols-2 gap-2 p-2">
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">5k</li>
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">10k</li>
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left whitespace-nowrap">Half Marathon</li>
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">Marathon</li>
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">Ultra Marathon</li>
+              </ul>
+            </div>
+            )}
+
+        </div>
+
+        <div
+          className="relative"
+          onMouseEnter={() => setCityDropdown(true)}
+          onMouseLeave={() => setCityDropdown(false)}
+        >
+          <Link href="" className="text-gray-600 hover:text-red-500">
+            Events by City
+          </Link>
+          {cityDropdown && (
+            <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-56 z-10">
+              <ul className="grid grid-cols-2 gap-2 p-2">
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">Mumbai</li>
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">Pune</li>
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">Delhi</li>
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">Bangalore</li>
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">Chennai</li>
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">Hyderabad</li>
+                <li className="text-gray-600 font-bold hover:text-red-500 text-left">Kolkata</li>
+              </ul>
+            </div>
+          )}
+
+        </div>
+        <Link href="/events/review" className="text-gray-600 hover:text-gray-900">
+          Event Review
         </Link>
 
-        <div className="flex flex-wrap justify-between w-full sm:w-auto mt-4 sm:mt-0 space-y-4 sm:space-y-0 sm:space-x-6">
-          <div className="w-full sm:w-auto">
-            <select
-              value={selectedActivity}
-              onChange={(e) => setSelectedActivity(e.target.value)}
-              className="px-4 py-2 rounded-md bg-white text-gray-700 w-full"
-            >
-              <option value="">All Events</option>
-              <option value="Running">Running</option>
-              <option value="Walking">Walking</option>
-              <option value="Cycling">Cycling</option>
-            </select>
-          </div>
+        <Link href="/blog" className="text-gray-600 hover:text-gray-900">
+          Stories and Blogs
+        </Link>
 
-          <div className="w-full sm:w-auto">
-            <input
-              type="text"
-              placeholder="Search events"
-              className="px-4 py-2 rounded-md bg-white text-gray-700 w-full"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+        <Link href="/write" className="text-gray-600 hover:text-gray-900">
+          Write your story
+        </Link>
+      </nav>
 
-          <div className="w-full sm:w-auto space-x-4 flex flex-wrap justify-between sm:justify-start">
-            <button
-              onClick={() => handleAuthForm('login')}
-              className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
-            >
-              Login
-            </button>
-            <button
-              onClick={() => handleAuthForm('register')}
-              className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
-            >
-              Register
-            </button>
-            <Link
-              href="/events/create"
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 w-full sm:w-auto text-center"
-            >
-              Create Event
-            </Link>
-          </div>
-        </div>
-      </header>
+  </header>
+
 
       <div>
         <Carousel images={images} />

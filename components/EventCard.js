@@ -12,20 +12,17 @@ export default function EventCard({ event }) {
           alt={event.name}
           className="w-full h-[200px] object-cover"
         />
-        {/* Date Badge */}
         <div className="absolute left-4 bottom-0 transform translate-y-1/2 bg-white rounded-lg shadow-md p-3 text-center min-w-[60px]">
           <div className="text-2xl font-bold text-gray-800">31</div>
           <div className="text-sm font-medium text-gray-600">Jan</div>
         </div>
       </div>
 
-      <div className="p-6 pt-8">
-        {/* Title */}
+      <div className="p-6 pt-12">
         <h3 className="text-xl font-bold text-gray-900 mb-4">
           {event.name}
         </h3>
 
-        {/* Categories */}
         <div className="flex flex-wrap gap-2 mb-4">
           {event.categories?.map((category, index) => (
             <span
@@ -44,7 +41,6 @@ export default function EventCard({ event }) {
           <span className="text-[#00A991] font-medium">{event.activityType || '999'}</span>
         </div>
 
-        {/* Registration Info */}
         <div className="border-t pt-4">
           <div className="flex items-center justify-between mb-2">
             <div>
@@ -57,7 +53,6 @@ export default function EventCard({ event }) {
             </div>
           </div>
 
-          {/* Virtual Event Badge */}
           {event.isVirtual && (
             <div className="flex items-center gap-2 text-[#FF3366] text-sm mb-4">
               <div className="w-4 h-4 rounded-full border-2 border-[#FF3366] flex items-center justify-center">
