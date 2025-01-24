@@ -14,15 +14,12 @@
 //     );
 //   }
 
-'use client';
+
 import React from 'react';
-import { use } from 'react';
-import { Link } from "react-router-dom";
+import Link from 'next/link';
 
-
-
-const EventPage = ({ params }) => {
-  const { eventId } = use(params);
+const EventPage = async ({ params }) => {
+  const { eventId } = await params; // Await params before destructuring
   const events = [
     {
       id: 1,
@@ -128,8 +125,8 @@ const EventPage = ({ params }) => {
       categories: ["5K", "10K"],
       activityType: "Walking",
     },  
-
-];
+  
+  ];
 
   const eve = events.find((event) => event.id == eventId);
 
@@ -139,26 +136,31 @@ const EventPage = ({ params }) => {
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center p-8">
-      
       <div className="bg-green-900 text-white py-6 text-center w-full rounded-lg shadow-lg px-6">
-      <header className="w-full flex justify-between items-center text-white p-4 m-4  rounded-lg">
-      <Link to="/" className="text-5xl">
-      <img
-        src="https://registrations.indiarunning.com/Logo1.svg"
-        alt="Home"
-        className="w-50 h-50"
-      />
-    </Link>
-        <h1 className="text-3xl font-bold">{eve.name}</h1>
-        <a href="/auth/login" className="text-4xl"><img src="https://registrations.indiarunning.com/default-login-icon.svg" alt="Home" className="w-10 h-10" /></a>
-      </header>
-        
+        <header className="w-full flex justify-between items-center text-white p-4 m-4 rounded-lg">
+          <Link href="/" className="text-5xl">
+            <img
+              src="https://registrations.indiarunning.com/Logo1.svg"
+              alt="Home"
+              className="w-50 h-50"
+            />
+          </Link>
+          <h1 className="text-3xl font-bold">{eve.name}</h1>
+          <Link href="/auth/login" className="text-4xl">
+            <img
+              src="https://registrations.indiarunning.com/default-login-icon.svg"
+              alt="Login"
+              className="w-10 h-10"
+            />
+          </Link>
+        </header>
       </div>
+
       <div className="container mx-auto px-8 py-8 bg-white shadow-lg rounded-lg text-center mb-8">
         <img
           src={eve.image}
           alt={eve.name}
-          className="w-1/2 mx-auto rounded-lg shadow-md border border-gray-300 p-55"
+          className="w-1/2 mx-auto rounded-lg shadow-md border border-gray-300"
         />
         <div className="mt-8 flex justify-center gap-16 text-gray-800 px-6">
           <p className="text-lg font-semibold">📅 {eve.date}</p>
@@ -167,10 +169,12 @@ const EventPage = ({ params }) => {
           <p className="text-lg font-semibold">🏃 {eve.activityType}</p>
         </div>
       </div>
+
       <div className="container mx-auto px-8 py-8 bg-gray-200 shadow-lg rounded-lg text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">About the Event</h2>
         <p className="text-xl text-gray-700 px-6">{eve.description}</p>
       </div>
+
       <div className="container mx-auto px-8 py-8 bg-white shadow-lg rounded-lg text-center">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">Select Category</h2>
         <div className="mt-10 flex justify-evenly items-center text-gray-700 px-6">
@@ -188,5 +192,3 @@ const EventPage = ({ params }) => {
 };
 
 export default EventPage;
-
-
