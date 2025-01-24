@@ -12,15 +12,14 @@ import Footer from "../components/Footer";
 const events = [
   {
     id: 1,
-    name: "Full Marathon 2025",
-    date: "Feb 1, 2025",
-    location: "Mumbai",
+    name: "Indian Navy Half Marathon 2025",
+    date: "Feb 2, 2025",
+    location: "Delhi",
     description: "A full marathon for all levels of runners.",
     price: "1000",
-    image:
-      "https://media.istockphoto.com/id/1733237354/photo/runners-on-the-street-healthy-lifestyle-marathon-athletics.jpg?s=2048x2048&w=is&k=20&c=tOaMqk8XrhiIS0eBEYl0-jfxL988gLXtkzLyGPlBG3s=",
+    image: "/B1.png",
     type: "In-Person",
-    categories: ["42K"],
+    categories: ["5K","10K","21K"],
     activityType: "Running",
   },
   {
@@ -30,23 +29,21 @@ const events = [
     location: "Delhi",
     description: "A challenging half marathon for intermediate runners.",
     price: "500",
-    image:
-      "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/B2.jpg",
     type: "In-Person",
     categories: ["21.1K"],
     activityType: "Running",
   },
   {
     id: 3,
-    name: "5K Fun Run 2025",
-    date: "April 10, 2025",
+    name: "Nagpur Run",
+    date: "Feb 9, 2025",
     location: "Bangalore",
     description: "A 5K run for beginners and families.",
     price: "300",
-    image:
-      "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/B3.png",
     type: "Virtual",
-    categories: ["5K"],
+    categories: ["3K","10k"],
     activityType: "Walking",
   },
   {
@@ -285,21 +282,26 @@ export default function HomePage() {
 
 
       <div>
-        <Carousel images={images} />
+      <Carousel 
+  images={images} 
+  eventIds={['1', '2', '3']} 
+/>
       </div>
+      
 
       <main className="p-6">
-        <div className="px-9">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedEvents.length > 0 ? (
-              paginatedEvents.map((event) => <EventCard key={event.id} event={event} />)
-            ) : (
-              <p className="text-center text-gray-500 col-span-full">
-                No events found
-              </p>
-            )}
-          </div>
-        </div>
+      <div className="px-9">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 justify-items-center">
+    {paginatedEvents.length > 0 ? (
+      paginatedEvents.map((event) => <EventCard key={event.id} event={event} />)
+    ) : (
+      <p className="text-center text-gray-500 col-span-full">
+        No events found
+      </p>
+    )}
+  </div>
+</div>
+
 
         <div className="flex justify-center items-center mt-6">
           {filteredEvents.length > eventsToShow && (

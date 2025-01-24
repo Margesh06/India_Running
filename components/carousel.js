@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import Link from 'next/link';
 
-const Carousel = ({ images }) => {
+const Carousel = ({ images, eventIds }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 3000); // Auto slide every 3 seconds
-    return () => clearInterval(interval); // Cleanup the interval on component unmount
+    }, 3000); // Change slides every 3 seconds
+    return () => clearInterval(interval);
   }, [images.length]);
 
-  const getNextIndex = (index) => (index + 1) % images.length;
-  const getPrevIndex = (index) => (index - 1 + images.length) % images.length;
+  // Ensure eventIds is always an array and has the same length as images
+  const validEventIds = Array.isArray(eventIds) && eventIds.length === images.length ? eventIds : [];
 
   return (
     <div className="relative flex justify-center items-center w-full h-[500px] bg-gray-100 overflow-hidden">
@@ -28,16 +28,25 @@ const Carousel = ({ images }) => {
             key={index}
             className="flex-shrink-0 w-full h-full flex justify-center items-center"
           >
-            <img
-              src={image}
-              alt={`Slide ${index + 1}`}
-              className="object-contain w-full h-full"
-            />
+            {validEventIds[index] ? ( // Check if the eventId exists for the current index
+              <Link href={`/events/${validEventIds[index]}`} className="w-full h-full block">
+                <img
+                  src={image}
+                  alt={`Slide ${index + 1}`}
+                  className="object-contain w-full h-full"
+                />
+              </Link>
+            ) : (
+              <img
+                src={image}
+                alt={`Slide ${index + 1}`}
+                className="object-contain w-full h-full"
+              />
+            )}
           </div>
         ))}
       </div>
 
-      {/* Dots */}
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {images.map((_, index) => (
           <button

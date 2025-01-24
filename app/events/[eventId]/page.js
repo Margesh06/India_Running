@@ -23,15 +23,15 @@ const EventPage = async ({ params }) => {
   const events = [
     {
       id: 1,
-      name: "Full Marathon 2025",
-      date: "Feb 1, 2025",
-      location: "Mumbai",
+      name: "Indian Navy Half Marathon 2025",
+      date: "Feb 2, 2025",
+      location: "Delhi",
       description: "A full marathon for all levels of runners.",
       price: "1000",
       image:
         "https://media.istockphoto.com/id/1733237354/photo/runners-on-the-street-healthy-lifestyle-marathon-athletics.jpg?s=2048x2048&w=is&k=20&c=tOaMqk8XrhiIS0eBEYl0-jfxL988gLXtkzLyGPlBG3s=",
       type: "In-Person",
-      categories: ["42K"],
+      categories: ["5K","10K","21K"],
       activityType: "Running",
     },
     {
@@ -49,15 +49,15 @@ const EventPage = async ({ params }) => {
     },
     {
       id: 3,
-      name: "5K Fun Run 2025",
-      date: "April 10, 2025",
+      name: "Nagpur Run",
+      date: "Feb 9, 2025",
       location: "Bangalore",
       description: "A 5K run for beginners and families.",
       price: "300",
       image:
         "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       type: "Virtual",
-      categories: ["5K"],
+      categories: ["3K","10k"],
       activityType: "Walking",
     },
     {
@@ -124,7 +124,7 @@ const EventPage = async ({ params }) => {
       type: "Virtual",
       categories: ["5K", "10K"],
       activityType: "Walking",
-    },  
+    },
   
   ];
 
