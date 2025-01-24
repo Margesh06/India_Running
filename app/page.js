@@ -208,7 +208,7 @@ export default function HomePage() {
               Register
             </button>
             <Link
-              href="/events/create"
+              href="/events/dashboard"
               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 w-full sm:w-auto text-center"
             >
               Create Event

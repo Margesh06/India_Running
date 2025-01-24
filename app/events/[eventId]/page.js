@@ -17,6 +17,7 @@
 'use client';
 import React from 'react';
 import { use } from 'react';
+import { Link } from "react-router-dom";
 
 
 
@@ -141,7 +142,13 @@ const EventPage = ({ params }) => {
       
       <div className="bg-green-900 text-white py-6 text-center w-full rounded-lg shadow-lg px-6">
       <header className="w-full flex justify-between items-center text-white p-4 m-4  rounded-lg">
-        <a href="/" className="text-5xl"><img src="https://registrations.indiarunning.com/Logo1.svg" alt="Home" className="w-50 h-50" /></a>
+      <Link to="/" className="text-5xl">
+      <img
+        src="https://registrations.indiarunning.com/Logo1.svg"
+        alt="Home"
+        className="w-50 h-50"
+      />
+    </Link>
         <h1 className="text-3xl font-bold">{eve.name}</h1>
         <a href="/auth/login" className="text-4xl"><img src="https://registrations.indiarunning.com/default-login-icon.svg" alt="Home" className="w-10 h-10" /></a>
       </header>
