@@ -14,12 +14,12 @@
 //     );
 //   }
 
-
 import React from 'react';
 import Link from 'next/link';
+import EventRegisterButton from './EventRegisterButton';
 
 const EventPage = async ({ params }) => {
-  const { eventId } = await params; // Await params before destructuring
+  const { eventId } = params;
   const events = [
     {
       id: 1,
@@ -125,7 +125,6 @@ const EventPage = async ({ params }) => {
       categories: ["5K", "10K"],
       activityType: "Walking",
     },
-  
   ];
 
   const eve = events.find((event) => event.id == eventId);
@@ -180,11 +179,7 @@ const EventPage = async ({ params }) => {
         <div className="mt-10 flex justify-evenly items-center text-gray-700 px-6">
           <p className="text-xl font-bold">Type: {eve.categories.join(", ")}</p>
           <p className="text-xl font-bold">Price: Rs. {eve.price}</p>
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full shadow-md transition duration-300"
-          >
-            Register Now
-          </button>
+          <EventRegisterButton />
         </div>
       </div>
     </div>
