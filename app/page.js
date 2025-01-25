@@ -19,7 +19,7 @@ const events = [
     price: "1000",
     image: "/B1.png",
     type: "In-Person",
-    categories: ["5K","10K","21K"],
+    categories: ["5K", "10K", "21K"],
     activityType: "Running",
   },
   {
@@ -43,7 +43,7 @@ const events = [
     price: "300",
     image: "/B3.png",
     type: "Virtual",
-    categories: ["3K","10k"],
+    categories: ["3K", "10k"],
     activityType: "Walking",
   },
   {
@@ -120,16 +120,44 @@ export default function HomePage() {
   const [eventsToShow, setEventsToShow] = useState(6);
   const [distanceDropdown, setDistanceDropdown] = useState(false);
   const [cityDropdown, setCityDropdown] = useState(false);
+  const [selectedDistance, setSelectedDistance] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+
   const eventsPerRow = 3;
   const rowsPerPage = 2;
   const eventsPerPage = eventsPerRow * rowsPerPage;
 
   const router = useRouter();
 
+  const distanceCategories = [
+    "5K",
+    "10K",
+    "21.1K",
+    "Marathon",
+    "Ultra Marathon"
+  ];
+
+  const cityCategories = [
+    "Mumbai",
+    "Pune",
+    "Delhi",
+    "Bangalore",
+    "Chennai",
+    "Hyderabad",
+    "Kolkata",
+  ];
+
+
   const filteredEvents = events.filter((event) =>
     (event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.location.toLowerCase().includes(searchQuery.toLowerCase())) &&
     (selectedActivity ? event.activityType === selectedActivity : true)
+    && (selectedDistance
+      ? event.categories.some((category) =>
+        category.toLowerCase().includes(selectedDistance.toLowerCase())
+      )
+      : true) &&
+    (selectedCity ? event.location.toLowerCase() === selectedCity.toLowerCase() : true)
   );
 
   const paginatedEvents = filteredEvents.slice(0, eventsToShow);
@@ -151,7 +179,7 @@ export default function HomePage() {
   };
 
   const handleMouseLeaveDistance = () => {
-    distanceTimeout = setTimeout(() => setDistanceDropdown(false), 200); 
+    distanceTimeout = setTimeout(() => setDistanceDropdown(false), 200);
   };
 
   const handleMouseEnterCity = () => {
@@ -160,7 +188,7 @@ export default function HomePage() {
   };
 
   const handleMouseLeaveCity = () => {
-    cityTimeout = setTimeout(() => setCityDropdown(false), 200); 
+    cityTimeout = setTimeout(() => setCityDropdown(false), 200);
   };
 
   const handleAuthForm = (formType) => {
@@ -239,52 +267,83 @@ export default function HomePage() {
         </div>
 
         <nav className="flex justify-center space-x-12 px-4 h-12 items-center bg-gray-50 w-full">
-        <div
-        className="relative"
-        onMouseEnter={handleMouseEnterDistance}
-        onMouseLeave={handleMouseLeaveDistance}
-      >
-        <a href="#" className="text-gray-600 hover:text-red-500">
-          Events by Distance
-        </a>
-        {distanceDropdown && (
-          <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-96 z-20">
-            <ul className="grid grid-cols-2 gap-2 p-2">
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">5k</li>
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">10k</li>
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left whitespace-nowrap">
-                Half Marathon
-              </li>
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Marathon</li>
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Ultra Marathon</li>
-            </ul>
+          <div
+            className="relative"
+            onMouseEnter={handleMouseEnterDistance}
+            onMouseLeave={handleMouseLeaveDistance}
+          >
+            <a href="#" className="text-gray-600 hover:text-red-500">
+              Events by Distance
+            </a>
+            {distanceDropdown && (
+              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-56 z-20">
+                <ul className="grid grid-cols-3 gap-2 p-2">
+                  {distanceCategories.map((distance, index) => (
+                    <li
+                      key={index}
+                      className={`text-gray-600 font-bold hover:text-red-500 text-left cursor-pointer 
+            ${selectedDistance === distance ? 'text-red-500' : ''}`}
+                      onClick={() => {
+                        setSelectedDistance(distance);
+                        setDistanceDropdown(false);
+                      }}
+                    >
+                      {distance}
+                    </li>
+                  ))}
+                  <li
+                    className="text-gray-600 font-bold hover:text-red-500 text-left cursor-pointer"
+                    onClick={() => {
+                      setSelectedDistance('');
+                      setDistanceDropdown(false);
+                    }}
+                  >
+                    All Distances
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      {/* Events by City */}
-      <div
-        className="relative"
-        onMouseEnter={handleMouseEnterCity}
-        onMouseLeave={handleMouseLeaveCity}
-      >
-        <a href="#" className="text-gray-600 hover:text-red-500">
-          Events by City
-        </a>
-        {cityDropdown && (
-          <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-56 z-20">
-            <ul className="grid grid-cols-2 gap-2 p-2">
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Mumbai</li>
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Pune</li>
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Delhi</li>
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Bangalore</li>
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Chennai</li>
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Hyderabad</li>
-              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Kolkata</li>
-            </ul>
+
+          {/* Events by City */}
+          <div
+            className="relative"
+            onMouseEnter={handleMouseEnterCity}
+            onMouseLeave={handleMouseLeaveCity}
+          >
+            <a href="#" className="text-gray-600 hover:text-red-500">
+              Events by City
+            </a>
+            {cityDropdown && (
+              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-64 z-20">
+                <ul className="grid grid-cols-3 gap-2 p-2">
+                  {cityCategories.map((city, index) => (
+                    <li
+                      key={index}
+                      className={`text-gray-600 font-bold hover:text-red-500 text-left cursor-pointer 
+            ${selectedCity === city ? 'text-red-500' : ''}`}
+                      onClick={() => {
+                        setSelectedCity(city);
+                        setCityDropdown(false);
+                      }}
+                    >
+                      {city}
+                    </li>
+                  ))}
+                  <li
+                    className="text-gray-600 font-bold hover:text-red-500 text-left cursor-pointer"
+                    onClick={() => {
+                      setSelectedCity('');
+                      setCityDropdown(false);
+                    }}
+                  >
+                    All Cities
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
-        )}
-      </div>
           <Link href="/events/review" className="text-gray-600 hover:text-gray-900">
             Event Review
           </Link>
@@ -302,25 +361,25 @@ export default function HomePage() {
 
 
       <div>
-      <Carousel 
-  images={images} 
-  eventIds={['1', '2', '3']} 
-/>
+        <Carousel
+          images={images}
+          eventIds={['1', '2', '3']}
+        />
       </div>
-      
+
 
       <main className="p-6">
-      <div className="px-9">
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 justify-items-center">
-    {paginatedEvents.length > 0 ? (
-      paginatedEvents.map((event) => <EventCard key={event.id} event={event} />)
-    ) : (
-      <p className="text-center text-gray-500 col-span-full">
-        No events found
-      </p>
-    )}
-  </div>
-</div>
+        <div className="px-9">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 justify-items-center">
+            {paginatedEvents.length > 0 ? (
+              paginatedEvents.map((event) => <EventCard key={event.id} event={event} />)
+            ) : (
+              <p className="text-center text-gray-500 col-span-full">
+                No events found
+              </p>
+            )}
+          </div>
+        </div>
 
 
         <div className="flex justify-center items-center mt-6">

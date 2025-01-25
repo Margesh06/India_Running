@@ -31,7 +31,7 @@ const EventPage = async ({ params }) => {
       description: "A full marathon for all levels of runners.",
       price: "1000",
       image:
-        "https://media.istockphoto.com/id/1733237354/photo/runners-on-the-street-healthy-lifestyle-marathon-athletics.jpg?s=2048x2048&w=is&k=20&c=tOaMqk8XrhiIS0eBEYl0-jfxL988gLXtkzLyGPlBG3s=",
+        "https://race-registration-cdn.indiarunning.com/events/2025/02/02/indian-navy-half-marathon-2025/banner1737728466607.jpeg",
       type: "In-Person",
       categories: ["5K", "10K", "21K"],
       activityType: "Running",
@@ -44,20 +44,20 @@ const EventPage = async ({ params }) => {
       description: "A challenging half marathon for intermediate runners.",
       price: "500",
       image:
-        "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://race-registration-cdn.indiarunning.com/events/2025/02/16/chandigarh-fast-marathon-2025/banner1727426134767.jpeg",
       type: "In-Person",
       categories: ["21.1K"],
       activityType: "Running",
     },
     {
       id: 3,
-      name: "Nagpur Run",
+      name: "Sakal Nagpur Run",
       date: "Feb 9, 2025",
       location: "Bangalore",
       description: "A 5K run for beginners and families.",
       price: "300",
       image:
-        "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://race-registration-cdn.indiarunning.com/events/2025/02/09/sakal-nagpur-run-2025/banner1734797929108.jpeg",
       type: "Virtual",
       categories: ["3K", "10k"],
       activityType: "Walking",
@@ -225,7 +225,7 @@ const EventPage = async ({ params }) => {
                 height={900}
               />
             </div>
-            <div className="flex px-2 mx-auto justify-between max-w-[50%]  items-start flex-wrap bg-sematicInfo-100  py-2  border w-4/5 w-full gap-y-4  list-none shadow-infoCard bg-blue-100 m-5">
+            <div className="flex px-2 mx-auto justify-between max-w-[50%]  items-start flex-wrap bg-sematicInfo-100  py-2  border w-4/5 gap-y-4  list-none shadow-infoCard bg-blue-100 m-5">
               <div className="flex justify-between w-full">
                 {/* Location */}
                 <li className="flex flex-col items-center h-full justify-between min-w-fit w-1/4 basis-full">
