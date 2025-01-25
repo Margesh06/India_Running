@@ -14,14 +14,15 @@
 //     );
 //   }
 
-
 import React from 'react';
 
 import Image from "next/image";
 import Link from "next/link";
+import Link from 'next/link';
+import EventRegisterButton from './EventRegisterButton';
 
 const EventPage = async ({ params }) => {
-  const { eventId } = await params; // Await params before destructuring
+  const { eventId } = params;
   const events = [
     {
       id: 1,
@@ -297,6 +298,12 @@ const EventPage = async ({ params }) => {
             </div>
             <div><button className="mt-2 px-6 py-2  rounded bg-green-500">+ Add</button></div>
           </div>
+      <div className="container mx-auto px-8 py-8 bg-white shadow-lg rounded-lg text-center">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">Select Category</h2>
+        <div className="mt-10 flex justify-evenly items-center text-gray-700 px-6">
+          <p className="text-xl font-bold">Type: {eve.categories.join(", ")}</p>
+          <p className="text-xl font-bold">Price: Rs. {eve.price}</p>
+          <EventRegisterButton />
         </div>
       </div>
     </div>

@@ -144,6 +144,25 @@ export default function HomePage() {
     setEventsToShow((prev) => prev + eventsPerPage);
   };
 
+  let distanceTimeout, cityTimeout;
+  const handleMouseEnterDistance = () => {
+    clearTimeout(distanceTimeout);
+    setDistanceDropdown(true);
+  };
+
+  const handleMouseLeaveDistance = () => {
+    distanceTimeout = setTimeout(() => setDistanceDropdown(false), 200); 
+  };
+
+  const handleMouseEnterCity = () => {
+    clearTimeout(cityTimeout);
+    setCityDropdown(true);
+  };
+
+  const handleMouseLeaveCity = () => {
+    cityTimeout = setTimeout(() => setCityDropdown(false), 200); 
+  };
+
   const handleAuthForm = (formType) => {
     if (formType === 'login') {
       router.push('/auth/login');
@@ -220,51 +239,52 @@ export default function HomePage() {
         </div>
 
         <nav className="flex justify-center space-x-12 px-4 h-12 items-center bg-gray-50 w-full">
-          <div
-            className="relative"
-            onMouseEnter={() => setDistanceDropdown(true)}
-            onMouseLeave={() => setDistanceDropdown(false)}
-          >
-            <Link href="" className="text-gray-600 hover:text-red-500">
-              Events by Distance
-            </Link>
-            {distanceDropdown && (
-              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-96 z-10">
-                <ul className="grid grid-cols-2 gap-2 p-2">
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">5k</li>
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">10k</li>
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left whitespace-nowrap">Half Marathon</li>
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">Marathon</li>
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">Ultra Marathon</li>
-                </ul>
-              </div>
-            )}
-
+        <div
+        className="relative"
+        onMouseEnter={handleMouseEnterDistance}
+        onMouseLeave={handleMouseLeaveDistance}
+      >
+        <a href="#" className="text-gray-600 hover:text-red-500">
+          Events by Distance
+        </a>
+        {distanceDropdown && (
+          <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-96 z-20">
+            <ul className="grid grid-cols-2 gap-2 p-2">
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">5k</li>
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">10k</li>
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left whitespace-nowrap">
+                Half Marathon
+              </li>
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Marathon</li>
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Ultra Marathon</li>
+            </ul>
           </div>
+        )}
+      </div>
 
-          <div
-            className="relative"
-            onMouseEnter={() => setCityDropdown(true)}
-            onMouseLeave={() => setCityDropdown(false)}
-          >
-            <Link href="" className="text-gray-600 hover:text-red-500">
-              Events by City
-            </Link>
-            {cityDropdown && (
-              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-56 z-10">
-                <ul className="grid grid-cols-2 gap-2 p-2">
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">Mumbai</li>
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">Pune</li>
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">Delhi</li>
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">Bangalore</li>
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">Chennai</li>
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">Hyderabad</li>
-                  <li className="text-gray-600 font-bold hover:text-red-500 text-left">Kolkata</li>
-                </ul>
-              </div>
-            )}
-
+      {/* Events by City */}
+      <div
+        className="relative"
+        onMouseEnter={handleMouseEnterCity}
+        onMouseLeave={handleMouseLeaveCity}
+      >
+        <a href="#" className="text-gray-600 hover:text-red-500">
+          Events by City
+        </a>
+        {cityDropdown && (
+          <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-56 z-20">
+            <ul className="grid grid-cols-2 gap-2 p-2">
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Mumbai</li>
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Pune</li>
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Delhi</li>
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Bangalore</li>
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Chennai</li>
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Hyderabad</li>
+              <li className="text-gray-600 font-bold hover:text-red-500 text-left">Kolkata</li>
+            </ul>
           </div>
+        )}
+      </div>
           <Link href="/events/review" className="text-gray-600 hover:text-gray-900">
             Event Review
           </Link>
