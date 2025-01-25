@@ -18,7 +18,6 @@ import React from 'react';
 
 import Image from "next/image";
 import Link from "next/link";
-import Link from 'next/link';
 import EventRegisterButton from './EventRegisterButton';
 
 const EventPage = async ({ params }) => {
@@ -286,28 +285,25 @@ const EventPage = async ({ params }) => {
               <div >
                 <div className="flex justify-evenly">Inclusive</div>
                 <div className='flex gap-2 mt-2'><span className="px-1 py-1 bg-blue-200 rounded-md text-sm">Tshirt</span>
-                <span className="px-1 py-1 bg-blue-200 rounded-md text-sm">Medals</span>
-                <span className="px-1 py-1 bg-blue-200 rounded-md text-sm">Refreshments</span></div>
-                
+                  <span className="px-1 py-1 bg-blue-200 rounded-md text-sm">Medals</span>
+                  <span className="px-1 py-1 bg-blue-200 rounded-md text-sm">Refreshments</span></div>
+
               </div>
             </div>
             <div>
               <p className="text-xl font-medium">Rs. {eve.price}</p>
               <p className="text-xs">(Inc. of all taxes)</p>
-              
+
             </div>
-            <div><button className="mt-2 px-6 py-2  rounded bg-green-500">+ Add</button></div>
+            <div><EventRegisterButton /></div>
           </div>
-      <div className="container mx-auto px-8 py-8 bg-white shadow-lg rounded-lg text-center">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">Select Category</h2>
-        <div className="mt-10 flex justify-evenly items-center text-gray-700 px-6">
-          <p className="text-xl font-bold">Type: {eve.categories.join(", ")}</p>
-          <p className="text-xl font-bold">Price: Rs. {eve.price}</p>
-          <EventRegisterButton />
         </div>
+
+       
+        
       </div>
     </div>
-  );
+      );
 };
 
 export default EventPage;
