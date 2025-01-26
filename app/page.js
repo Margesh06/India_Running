@@ -268,7 +268,7 @@ export default function HomePage() {
 
         <nav className="flex justify-center space-x-12 px-4 h-12 items-center bg-gray-50 w-full">
           <div
-            className="relative"
+            className="relative "
             onMouseEnter={handleMouseEnterDistance}
             onMouseLeave={handleMouseLeaveDistance}
           >
@@ -276,12 +276,12 @@ export default function HomePage() {
               Events by Distance
             </a>
             {distanceDropdown && (
-              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-56 z-20">
-                <ul className="grid grid-cols-3 gap-2 p-2">
+              <div className="absolute p-3 left-0 mt-2 bg-white shadow-lg rounded-md w-80 z-20">
+                <ul className="grid grid-cols-2 gap-2 p-2">
                   {distanceCategories.map((distance, index) => (
                     <li
                       key={index}
-                      className={`text-gray-600 font-bold hover:text-red-500 text-left cursor-pointer 
+                      className={`text-gray-600 m-2 font-bold hover:text-red-500 text-left cursor-pointer 
             ${selectedDistance === distance ? 'text-red-500' : ''}`}
                       onClick={() => {
                         setSelectedDistance(distance);
@@ -292,7 +292,7 @@ export default function HomePage() {
                     </li>
                   ))}
                   <li
-                    className="text-gray-600 font-bold hover:text-red-500 text-left cursor-pointer"
+                    className="text-gray-600 m-2 font-bold hover:text-red-500 text-left cursor-pointer"
                     onClick={() => {
                       setSelectedDistance('');
                       setDistanceDropdown(false);
@@ -316,12 +316,12 @@ export default function HomePage() {
               Events by City
             </a>
             {cityDropdown && (
-              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-64 z-20">
-                <ul className="grid grid-cols-3 gap-2 p-2">
+              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-72 z-20">
+                <ul className="grid grid-cols-2 gap-2 p-2 m-4">
                   {cityCategories.map((city, index) => (
                     <li
                       key={index}
-                      className={`text-gray-600 font-bold hover:text-red-500 text-left cursor-pointer 
+                      className={`text-gray-600 font-bold m-2 hover:text-red-500 text-left cursor-pointer 
             ${selectedCity === city ? 'text-red-500' : ''}`}
                       onClick={() => {
                         setSelectedCity(city);
@@ -332,7 +332,7 @@ export default function HomePage() {
                     </li>
                   ))}
                   <li
-                    className="text-gray-600 font-bold hover:text-red-500 text-left cursor-pointer"
+                    className="text-gray-600 m-2 font-bold hover:text-red-500 text-left cursor-pointer"
                     onClick={() => {
                       setSelectedCity('');
                       setCityDropdown(false);
