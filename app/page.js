@@ -394,7 +394,8 @@ export default function HomePage() {
         </div>
 
       </main>
-      <Footer />
+      <Footer onDistanceChange={(distance) => setSelectedDistance(distance)}
+        onCityChange={(city) => setSelectedCity(city)} selectedCity={selectedCity} selectedDistance={selectedDistance}/>
     </div>
   );
 }

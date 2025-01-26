@@ -1,7 +1,7 @@
 import React from "react";
 import { Facebook, Instagram } from "lucide-react";
 
-const Footer = () => {
+const Footer = ({ onDistanceChange, onCityChange, selectedCity, selectedDistance }) => {
   return (
     <footer className="bg-[#1A1A1A] text-white py-8">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 px-20">
@@ -30,25 +30,25 @@ const Footer = () => {
         <div className="space-y-3">
           <h3 className="font-medium text-lg">Events by Distance</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:text-[#FF0066]">&lt;5K</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">5K</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">10K</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">Half Marathon</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">Marathon</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">Ultra Marathon</a></li>
+            <li onClick={()=>onDistanceChange('2K')}><a href="#" className={`hover:text-[#FF0066] ${selectedDistance === '2K' ? 'text-red-500' : ''}`}>&lt;5K</a></li>
+            <li onClick={()=>onDistanceChange('5K')}><a href="#" className={`hover:text-[#FF0066] ${selectedDistance === '5K' ? 'text-red-500' : ''}`}>5K</a></li>
+            <li onClick={()=>onDistanceChange('10K')}><a href="#" className={`hover:text-[#FF0066] ${selectedDistance === '10K' ? 'text-red-500' : ''}`}>10K</a></li>
+            <li onClick={()=>onDistanceChange('21.1K')}><a href="#" className={`hover:text-[#FF0066] ${selectedDistance === '21.1K' ? 'text-red-500' : ''}`}>Half Marathon</a></li>
+            <li onClick={()=>onDistanceChange('42.1K')}><a href="#" className={`hover:text-[#FF0066] ${selectedDistance === '42.1K' ? 'text-red-500' : ''}`}>Marathon</a></li>
+            <li onClick={()=>onDistanceChange('Ultra Marathon')}><a href="#" className={`hover:text-[#FF0066] ${selectedDistance === 'Ultra Marathon' ? 'text-red-500' : ''}`}>Ultra Marathon</a></li>
           </ul>
         </div>
 
         <div className="space-y-3">
           <h3 className="font-medium text-lg">Events by City</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:text-[#FF0066]">Mumbai</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">Pune</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">Delhi</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">Bangalore</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">Chennai</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">Hyderabad</a></li>
-            <li><a href="#" className="hover:text-[#FF0066]">Kolkata</a></li>
+            <li onClick={() => onCityChange('Mumbai')}><a href="#" className={`hover:text-[#FF0066] ${selectedCity === 'Mumbai' ? 'text-red-500' : ''}`}>Mumbai</a></li>
+            <li onClick={() => onCityChange('Pune')}><a href="#" className={`hover:text-[#FF0066] ${selectedCity === 'Pune' ? 'text-red-500' : ''}`}>Pune</a></li>
+            <li onClick={() => onCityChange('Delhi')}><a href="#" className={`hover:text-[#FF0066] ${selectedCity === 'Delhi' ? 'text-red-500' : ''}`}>Delhi</a></li>
+            <li onClick={() => onCityChange('Bangalore')}><a href="#" className={`hover:text-[#FF0066] ${selectedCity === 'Bangalore' ? 'text-red-500' : ''}`}>Bangalore</a></li>
+            <li onClick={() => onCityChange('Chennai')}><a href="#" className={`hover:text-[#FF0066] ${selectedCity === 'Chennai' ? 'text-red-500' : ''}`}>Chennai</a></li>
+            <li onClick={() => onCityChange('Hyderabad')}><a href="#" className={`hover:text-[#FF0066] ${selectedCity === 'Hyderabad' ? 'text-red-500' : ''}`}>Hyderabad</a></li>
+            <li onClick={() => onCityChange('Kolkata')}><a href="#" className={`hover:text-[#FF0066] ${selectedCity === 'Kolkata' ? 'text-red-500' : ''}`}>Kolkata</a></li>
           </ul>
         </div>
 
