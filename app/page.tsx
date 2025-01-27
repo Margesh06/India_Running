@@ -351,7 +351,7 @@ export default function HomePage() {
             Stories and Blogs
           </Link>
 
-          <Link href="/write" className="text-gray-600 hover:text-gray-900">
+          <Link href="/story" className="text-gray-600 hover:text-gray-900">
             Write your story
           </Link>
         </nav>
