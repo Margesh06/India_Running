@@ -1,7 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-// Define types for the props
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type?: string;
   className?: string;

@@ -6,7 +6,6 @@ import { Circle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-// Adding types for props and ref
 interface RadioGroupProps extends React.ComponentProps<typeof RadioGroupPrimitive.Root> {
   className?: string;
 }

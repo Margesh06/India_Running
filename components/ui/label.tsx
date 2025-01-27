@@ -6,7 +6,6 @@ import { cva } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
-// Define the props for the Label component
 type LabelProps = React.ComponentProps<typeof LabelPrimitive.Root> & {
   className?: string;
 };

@@ -5,7 +5,6 @@ import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-// Define types for props with optional className
 interface DialogProps extends React.HTMLProps<HTMLDivElement> {
   className?: string;
 }
