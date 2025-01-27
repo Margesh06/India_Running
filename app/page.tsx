@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import EventCard from '../components/EventCard';
-import Logo from '../public/Lg.PNG';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Carousel from '../components/carousel';
@@ -204,7 +203,7 @@ export default function HomePage() {
       <header className="flex flex-wrap justify-between items-center p-6 bg-white text-white">
         <Link href="/" className="flex justify-center w-full sm:w-auto">
           <Image
-            src={Logo.src}
+            src={"/Lg.PNG"}
             alt="Marathon Platform Logo"
             layout="intrinsic"
             width={300}
