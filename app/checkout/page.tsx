@@ -12,21 +12,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from 'next/link';
 
 export default function Home() {
-  // const router = useRouter();
-  // console.log(router.query);
-  // const [eventName, setEventName] = useState(null);
 
-  // // Check if query exists and set the event name accordingly
-  // useEffect(() => {
-  //   if (router.query?.name) {
-  //     setEventName(router.query.name);
-  //   }
-  // }, [router.query]);
-
+  const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Get the 'name' query parameter from the URL
   const eventName = searchParams.get('name');
+  const eventPrice = searchParams.get('price');
 
   console.log("lofu", eventName);
   const [formData, setFormData] = useState({
@@ -35,7 +26,9 @@ export default function Home() {
     dateOfBirth: "25-03-2004",
     gender: "male",
     email: "margeshmod@flyzipjet.in",
-    phone: "+919712121441"
+    phone: "+919712121441",
+    address: "",
+    pincode: ""
   });
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
@@ -49,7 +42,7 @@ export default function Home() {
   };
 
   const handleSaveAndContinue = () => {
-    if (!formData.firstName || !formData.lastName || !formData.dateOfBirth || !formData.gender) {
+    if (!formData.firstName || !formData.lastName || !formData.dateOfBirth || !formData.gender || !formData.pincode || !formData.address || !formData.phone || !formData.email) {
       alert("Please fill in all required fields");
       return;
     }
@@ -106,7 +99,7 @@ export default function Home() {
               </button>
             </div>
 
-            
+
 
             <div className="flex mb-4 h-[100px]">
               <button
@@ -152,12 +145,12 @@ export default function Home() {
             {!showAdditionalInfo ? (
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-sm font-medium">Participant Details</h3>
-                  <h4 className="text-sm text-gray-600 mt-1">42 KM FULL MARATHON RUN</h4>
+                  <h3 className="text-2xl font-bold m-1 p-1">Participant Details</h3>
+                  <h4 className="text-xl text-gray-600 m-1 p-1">{eventName}</h4>
                 </div>
 
                 <div className="bg-white rounded shadow-sm p-4">
-                  <h5 className="text-[#00856F] font-medium mb-4">42 KM FULL MARATHON RUN - Attendee 1 Details</h5>
+                  <h5 className="text-white font-bold text-2xl h-[60px] flex justify-center items-center mb-4 bg-[#00856F]">{eventName} - Attendee 1 Details</h5>
 
                   <div className="border border-dashed border-yellow-400 bg-[#FFFBEB] p-3 mb-6 text-xs">
                     <div className="flex gap-1 items-start">
@@ -168,7 +161,7 @@ export default function Home() {
                       <span>Fields highlighted with</span>
                       <div className="w-3 h-3 relative">
                         <Image
-                          src="/B1.png"
+                          src="http://localhost:3000/DefaultUserProfile.svg"
                           alt="Info"
                           fill
                           className="object-contain"
@@ -178,7 +171,8 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-4 p-2">
+                    <div className="font-bold">PARTICIPANT INFO</div>
                     <div>
                       <Label className="text-sm mb-1">
                         First Name <span className="text-red-500">*</span>
@@ -231,6 +225,30 @@ export default function Home() {
                         </div>
                       </RadioGroup>
                     </div>
+                    <div>
+                      <Label className="text-sm mb-1">
+                        Address <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        value={formData.address}
+                        onChange={(e) => handleInputChange('address', e.target.value)}
+                        className="border-gray-300"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-sm mb-1">
+                        Pincode <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        type="number"
+                        value={formData.pincode}
+                        onChange={(e) => handleInputChange('pincode', e.target.value)}
+                        className="border-gray-300"
+                        required
+                      />
+                    </div>
                   </div>
 
                   <Button
@@ -260,8 +278,8 @@ export default function Home() {
                 <div>
                   <h3 className="text-gray-500 text-sm mb-4">EVENT TICKET</h3>
                   <div className="flex justify-between text-sm mb-2">
-                    <span>42 KM FULL MARATHON RUN</span>
-                    <span>Rs. 1499.00</span>
+                    <span>{eventName}</span>
+                    <span>Rs. {eventPrice}</span>
                   </div>
                   <div className="flex justify-between text-xs">
                     <span className="text-gray-500">Platform Fee</span>
@@ -278,11 +296,12 @@ export default function Home() {
                 <div className="border-t pt-4 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Total Amount</span>
-                    <span>Rs. 1569.75</span>
+                    <span>Rs. {Number(eventPrice) + 70.75}</span>
+
                   </div>
                   <div className="flex justify-between text-sm font-medium">
                     <span>Grand Total</span>
-                    <span>Rs. 1569.75</span>
+                    <span>Rs. {Number(eventPrice) + 70.75}</span>
                   </div>
                 </div>
 

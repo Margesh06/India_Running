@@ -1,19 +1,3 @@
-// export default async function EventDetails({ params }) {
-//     const { eventId } = params;
-//     const res = await fetch(`/api/events/${eventId}`);
-//     const event = await res.json();
-
-//     return (
-//       <div>
-//         <h1>{event.title}</h1>
-//         <p>Date: {new Date(event.date).toLocaleDateString()}</p>
-//         <p>Location: {event.location}</p>
-//         <p>Category: {event.category}</p>
-//         <p>{event.description}</p>
-//       </div>
-//     );
-//   }
-
 import React from 'react';
 
 import Image from "next/image";
@@ -137,59 +121,6 @@ const EventPage = async ({ params }) => {
   }
 
   return (
-    // <div className="bg-gray-100 min-h-screen flex flex-col items-center p-8">
-    //   <div className="bg-green-900 text-white py-6 text-center w-full rounded-lg shadow-lg px-6">
-    //     <header className="w-full flex justify-between items-center text-white p-4 m-4 rounded-lg">
-    //       <Link href="/" className="text-5xl">
-    //         <img
-    //           src="https://registrations.indiarunning.com/Logo1.svg"
-    //           alt="Home"
-    //           className="w-50 h-50"
-    //         />
-    //       </Link>
-    //       <h1 className="text-3xl font-bold">{eve.name}</h1>
-    //       <Link href="/auth/login" className="text-4xl">
-    //         <img
-    //           src="https://registrations.indiarunning.com/default-login-icon.svg"
-    //           alt="Login"
-    //           className="w-10 h-10"
-    //         />
-    //       </Link>
-    //     </header>
-    //   </div>
-
-    //   <div className="container mx-auto px-8 py-8 bg-white shadow-lg rounded-lg text-center mb-8">
-    //     <img
-    //       src={eve.image}
-    //       alt={eve.name}
-    //       className="w-1/2 mx-auto rounded-lg shadow-md border border-gray-300"
-    //     />
-    //     <div className="mt-8 flex justify-center gap-16 text-gray-800 px-6">
-    //       <p className="text-lg font-semibold">📅 {eve.date}</p>
-    //       <p className="text-lg font-semibold">📍 {eve.location}</p>
-    //       <p className="text-lg font-semibold">🛶 {eve.categories.join(", ")}</p>
-    //       <p className="text-lg font-semibold">🏃 {eve.activityType}</p>
-    //     </div>
-    //   </div>
-
-    //   <div className="container mx-auto px-8 py-8 bg-gray-200 shadow-lg rounded-lg text-center mb-8">
-    //     <h2 className="text-3xl font-bold text-gray-800 mb-6">About the Event</h2>
-    //     <p className="text-xl text-gray-700 px-6">{eve.description}</p>
-    //   </div>
-
-    //   <div className="container mx-auto px-8 py-8 bg-white shadow-lg rounded-lg text-center">
-    //     <h2 className="text-3xl font-bold text-gray-800 mb-6">Select Category</h2>
-    //     <div className="mt-10 flex justify-evenly items-center text-gray-700 px-6">
-    //       <p className="text-xl font-bold">Type: {eve.categories.join(", ")}</p>
-    //       <p className="text-xl font-bold">Price: Rs. {eve.price}</p>
-    //       <button
-    //         className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full shadow-md transition duration-300"
-    //       >
-    //         Register Now
-    //       </button>
-    //     </div>
-    //   </div>
-    // </div>
     <div className="flex flex-col h-screen overflow-y-auto ">
       <div className="pb-4 bg-white shadow-md">
         <div style={{ backgroundColor: 'rgb(0 46 37)' }} className="flex flex-col w-full bg-gradient-to-r from-secondary-900 to-secondary-900 h-[50%] lg:h-[60%]">
@@ -295,12 +226,9 @@ const EventPage = async ({ params }) => {
               <p className="text-xs">(Inc. of all taxes)</p>
 
             </div>
-            <div><EventRegisterButton eveName={eve.name}/></div>
+            <div><EventRegisterButton eveName={eve.name} evePrice={eve.price}/></div>
           </div>
-        </div>
-
-       
-        
+        </div>       
       </div>
     </div>
       );
