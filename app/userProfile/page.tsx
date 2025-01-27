@@ -149,7 +149,7 @@ function PersonalInformation() {
                     <div className="w-full">
                         <label className="text-gray-700 w-full block">
                             Bio: <span className="text-lg text-red-600"> *</span>
-                            <textarea placeholder="Enter bio (Max 100 characters)" required maxLength="100" className="border p-3 w-full rounded bg-gray-100 text-gray-800 resize-none"></textarea>
+                            <textarea placeholder="Enter bio (Max 100 characters)" required  className="border p-3 w-full rounded bg-gray-100 text-gray-800 resize-none"></textarea>
                         </label>
                     </div>
 
