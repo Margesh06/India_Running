@@ -34,7 +34,7 @@ export default function EventCard({ event }) {
   
       <div className="flex items-center gap-2 text-gray-600 mb-4">
         <MapPin className="w-4 h-4" />
-        <span className="text-sm">Anywhere</span>
+        <span className="text-sm">{event.location || 'AnyWhere'}</span>
         <span className="mx-2">|</span>
         <span className="text-[#00A991] font-medium">{event.activityType || '999'}</span>
       </div>
