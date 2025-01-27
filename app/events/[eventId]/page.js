@@ -295,7 +295,7 @@ const EventPage = async ({ params }) => {
               <p className="text-xs">(Inc. of all taxes)</p>
 
             </div>
-            <div><EventRegisterButton /></div>
+            <div><EventRegisterButton eveName={eve.name}/></div>
           </div>
         </div>
 

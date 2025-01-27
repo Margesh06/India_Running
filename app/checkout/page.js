@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,11 +8,27 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from 'next/link';
 
 export default function Home() {
-  const router = useRouter();
+  // const router = useRouter();
+  // console.log(router.query);
+  // const [eventName, setEventName] = useState(null);
+
+  // // Check if query exists and set the event name accordingly
+  // useEffect(() => {
+  //   if (router.query?.name) {
+  //     setEventName(router.query.name);
+  //   }
+  // }, [router.query]);
+
+  const searchParams = useSearchParams();
+
+  // Get the 'name' query parameter from the URL
+  const eventName = searchParams.get('name');
+
+  console.log("lofu", eventName);
   const [formData, setFormData] = useState({
     firstName: "Margesh",
     lastName: "Modi",
@@ -25,6 +41,8 @@ export default function Home() {
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
   const [couponDialogOpen, setCouponDialogOpen] = useState(false);
   const [couponCode, setCouponCode] = useState("");
+
+
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -51,29 +69,30 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#f5f5f5]">
+    <main className="min-h-screen bg-[#f5f5f5] ">
       {/* Header */}
-      <div className="bg-[#004236] text-white py-3">
+      <div className="bg-[#004236] text-white py-3  h-[200px] relative">
         <div className="max-w-[1200px] mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <div className="w-[120px] h-[40px] relative">
+            <div className="w-[256px] h-[56px] relative">
               <Image
-                src="/B1.png"
+                src="https://registrations.indiarunning.com/Logo1.svg"
                 alt="India Running"
-                fill
+                width={356}
+                height={256}
                 className="object-contain"
               />
             </div>
           </div>
           <div className="flex items-center">
-              <Link href="/userProfile" className="text-gray-600 hover:text-gray-900">
-                <img src="/DefaultUserProfile.svg" alt="IR Logo" className="h-11 px-6" />
-              </Link>
+            <Link href="/userProfile" className="text-gray-600 hover:text-gray-900">
+              <img src="/DefaultUserProfile.svg" alt="IR Logo" className="h-11 px-6" />
+            </Link>
 
-            </div>
+          </div>
         </div>
-        <div className="text-center mt-2">
-          <h1 className="text-2xl font-bold tracking-wide">NEW YEAR RUNNING CHALLENGES 2025 - EXCLUSIVE EDITION</h1>
+        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-1/4 text-center mt-2">
+          <h1 className="text-4xl font-extrabold tracking-wide">{eventName}</h1>
         </div>
       </div>
 
@@ -87,14 +106,35 @@ export default function Home() {
               </button>
             </div>
 
+            
+
+            <div className="flex mb-4 h-[100px]">
+              <button
+                onClick={() => setShowAdditionalInfo(false)}
+                className={`flex-1 ${!showAdditionalInfo ? 'bg-[#FFF5F5] border-l-4 border-yellow-400' : 'bg-white'} py-3 px-4`}
+              >
+                <span className={`text-sm font-medium ${!showAdditionalInfo ? '' : 'text-gray-500'}`}>
+                  PERSONAL INFORMATION
+                </span>
+              </button>
+              <button
+                onClick={() => setShowAdditionalInfo(true)}
+                className={`flex-1 ${showAdditionalInfo ? 'bg-[#FFF5F5] border-l-4 border-yellow-400' : 'bg-white'} py-3 px-4`}
+              >
+                <span className={`text-sm font-medium ${showAdditionalInfo ? '' : 'text-gray-500'}`}>
+                  ADDITIONAL INFORMATION
+                </span>
+              </button>
+            </div>
+
             <div className="bg-white rounded shadow-sm p-4 mb-4">
-              <h2 className="text-sm font-medium mb-3">PARTICIPANT ACCOUNT DETAILS</h2>
+              <h2 className="text-sm  mb-3 font-bold text-black">PARTICIPANT ACCOUNT DETAILS</h2>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between items-center">
-                  <p className="text-gray-600">Email:</p>
+                  <p className="text-black font-bold">Email:</p>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-500">{formData.email}</span>
-                    <button 
+                    <button
                       onClick={() => setIsEditDialogOpen(true)}
                       className="text-blue-500 text-xs hover:underline"
                     >
@@ -103,29 +143,10 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
-                  <p className="text-gray-600">Contact Number:</p>
+                  <p className="text-black font-bold">Contact Number:</p>
                   <span className="text-gray-500">{formData.phone}</span>
                 </div>
               </div>
-            </div>
-
-            <div className="flex mb-4">
-              <button 
-                onClick={() => setShowAdditionalInfo(false)}
-                className={`flex-1 ${!showAdditionalInfo ? 'bg-[#FFF5F5] border-l-4 border-yellow-400' : 'bg-white'} py-3 px-4`}
-              >
-                <span className={`text-sm font-medium ${!showAdditionalInfo ? '' : 'text-gray-500'}`}>
-                  PERSONAL INFORMATION
-                </span>
-              </button>
-              <button 
-                onClick={() => setShowAdditionalInfo(true)}
-                className={`flex-1 ${showAdditionalInfo ? 'bg-[#FFF5F5] border-l-4 border-yellow-400' : 'bg-white'} py-3 px-4`}
-              >
-                <span className={`text-sm font-medium ${showAdditionalInfo ? '' : 'text-gray-500'}`}>
-                  ADDITIONAL INFORMATION
-                </span>
-              </button>
             </div>
 
             {!showAdditionalInfo ? (
@@ -137,7 +158,7 @@ export default function Home() {
 
                 <div className="bg-white rounded shadow-sm p-4">
                   <h5 className="text-[#00856F] font-medium mb-4">42 KM FULL MARATHON RUN - Attendee 1 Details</h5>
-                  
+
                   <div className="border border-dashed border-yellow-400 bg-[#FFFBEB] p-3 mb-6 text-xs">
                     <div className="flex gap-1 items-start">
                       <span className="text-red-500">*</span>
@@ -162,7 +183,7 @@ export default function Home() {
                       <Label className="text-sm mb-1">
                         First Name <span className="text-red-500">*</span>
                       </Label>
-                      <Input 
+                      <Input
                         value={formData.firstName}
                         onChange={(e) => handleInputChange('firstName', e.target.value)}
                         className="border-gray-300"
@@ -173,7 +194,7 @@ export default function Home() {
                       <Label className="text-sm mb-1">
                         Last Name <span className="text-red-500">*</span>
                       </Label>
-                      <Input 
+                      <Input
                         value={formData.lastName}
                         onChange={(e) => handleInputChange('lastName', e.target.value)}
                         className="border-gray-300"
@@ -184,7 +205,7 @@ export default function Home() {
                       <Label className="text-sm mb-1">
                         Date Of Birth <span className="text-red-500">*</span>
                       </Label>
-                      <Input 
+                      <Input
                         value={formData.dateOfBirth}
                         onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
                         className="border-gray-300"
@@ -195,7 +216,7 @@ export default function Home() {
                       <Label className="text-sm mb-1">
                         Gender <span className="text-red-500">*</span>
                       </Label>
-                      <RadioGroup 
+                      <RadioGroup
                         value={formData.gender}
                         onValueChange={(value) => handleInputChange('gender', value)}
                         className="flex gap-6 mt-2"
@@ -212,7 +233,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <Button 
+                  <Button
                     onClick={handleSaveAndContinue}
                     className="bg-[#FF1B75] hover:bg-[#FF1B75]/90 text-white mt-4 rounded"
                   >
@@ -234,7 +255,7 @@ export default function Home() {
               <div className="bg-[#00856F] text-white p-3">
                 <h2 className="font-medium">SUMMARY</h2>
               </div>
-              
+
               <div className="p-4 space-y-6">
                 <div>
                   <h3 className="text-gray-500 text-sm mb-4">EVENT TICKET</h3>
@@ -246,7 +267,7 @@ export default function Home() {
                     <span className="text-gray-500">Platform Fee</span>
                     <span>Rs. 70.75</span>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setCouponDialogOpen(true)}
                     className="text-[#00856F] text-xs mt-1 hover:underline"
                   >
@@ -265,7 +286,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <button 
+                <button
                   onClick={handleCheckout}
                   className="w-full bg-gray-100 text-gray-800 py-2 text-sm font-medium rounded hover:bg-gray-200"
                 >
@@ -286,14 +307,14 @@ export default function Home() {
           <div className="space-y-4">
             <div>
               <Label>Email</Label>
-              <Input 
+              <Input
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
               />
             </div>
             <div>
               <Label>Phone</Label>
-              <Input 
+              <Input
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
               />
@@ -312,7 +333,7 @@ export default function Home() {
           <div className="space-y-4">
             <div>
               <Label>Coupon Code</Label>
-              <Input 
+              <Input
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
                 placeholder="Enter coupon code"
