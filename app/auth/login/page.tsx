@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import MarathonImage1 from '../../../public/lm1.avif';
 import MarathonImage2 from '../../../public/lm2.jpg';
-import MarathonImage3 from '../../../public/Lm3.avif';
+import MarathonImage3 from '../../../public/lm3.avif';
 
 const carouselData = [
   {
