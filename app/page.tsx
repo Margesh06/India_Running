@@ -347,7 +347,7 @@ export default function HomePage() {
             Event Review
           </Link>
 
-          <Link href="/blog" className="text-gray-600 hover:text-gray-900">
+          <Link href="/blogs" className="text-gray-600 hover:text-gray-900">
             Stories and Blogs
           </Link>
 
