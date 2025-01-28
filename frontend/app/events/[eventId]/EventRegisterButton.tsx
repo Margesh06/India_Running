@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation';
 
 const EventRegisterButton = ({eveName, evePrice}) => {
-  console.log("eventreg",eveName);
   const router = useRouter();
 
   return (

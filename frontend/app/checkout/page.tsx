@@ -19,7 +19,6 @@ export default function Home() {
   const eventName = searchParams.get('name');
   const eventPrice = searchParams.get('price');
 
-  console.log("lofu", eventName);
   const [formData, setFormData] = useState({
     firstName: "Margesh",
     lastName: "Modi",

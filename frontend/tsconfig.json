@@ -1,4 +1,3 @@
-
 {
   "compilerOptions": {
     "target": "ES2017",
@@ -24,15 +23,19 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
   "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "components/**/*"  // Include the components folder to resolve JSX files
+    "frontend/.next/types/**/*.ts",
+    "frontend/components/**/*",
+    "next-env.d.ts" // Include the components folder to resolve JSX files
+    ,
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
