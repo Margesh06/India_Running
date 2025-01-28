@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param,Query, ParseIntPipe } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { Event } from '../entities/event.entity';
 
@@ -8,13 +8,28 @@ export class EventsController {
 
   // GET request to fetch all events
   @Get()
-  async findAll(): Promise<Event[]> {
-    return this.eventsService.findAll();
+  async findAll(): Promise<any> {
+    const result = await this.eventsService.findAll();
+    return {
+      data: result,
+      error: null,
+    };
   }
 
   // GET request to fetch a specific event by its ID
   @Get(':id')
-  async findById(@Param('id', ParseIntPipe) id: number): Promise<Event> {
-    return this.eventsService.findById(id);
+  async findById(@Param('id', ParseIntPipe) id: number): Promise<any> {
+    try {
+      const result = await this.eventsService.findById(id);
+      return {
+        data: result,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        error: error.message,
+      };
+    }
   }
 }
