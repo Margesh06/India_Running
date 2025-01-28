@@ -137,11 +137,11 @@ export default function Stories() {
                         </div>
 
                         <div className="hidden md:flex text-pink-800 bg-pink-200 py-2 font-semibold rounded-2xl md:rounded-lg items-center mx-1 px-4 text-sm h-12 hover:cursor-pointer">
-                            <a href="https://organiser.indiarunning.com">
-                                <div className="flex gap-2 justify-center items-center mx-auto lg:text-sm">
-                                    <span className="lg:text-sm text-center">Create Event</span>
-                                </div>
-                            </a>
+                        <Link href="/events/dashboard" passHref>
+                        <div className="flex gap-2 justify-center items-center mx-auto lg:text-sm cursor-pointer">
+                            <span className="lg:text-sm text-center">Create Event</span>
+                        </div>
+                        </Link>
                         </div>
 
 
