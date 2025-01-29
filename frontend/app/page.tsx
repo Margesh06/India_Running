@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import Link from 'next/link';
 import EventCard from '../components/EventCard';
 import { useRouter } from 'next/navigation';
@@ -8,110 +8,112 @@ import Image from 'next/image';
 import Carousel from '../components/carousel';
 import Footer from "../components/Footer";
 
-const events = [
-  {
-    id: 1,
-    name: "Indian Navy Half Marathon 2025",
-    date: "Feb 2, 2025",
-    location: "Delhi",
-    description: "A full marathon for all levels of runners.",
-    price: "1000",
-    image: "/B1.png",
-    type: "In-Person",
-    categories: ["5K", "10K", "21K"],
-    activityType: "Running",
-  },
-  {
-    id: 2,
-    name: "Half Marathon 2025",
-    date: "March 5, 2025",
-    location: "Delhi",
-    description: "A challenging half marathon for intermediate runners.",
-    price: "500",
-    image: "/B2.jpg",
-    type: "In-Person",
-    categories: ["21.1K"],
-    activityType: "Running",
-  },
-  {
-    id: 3,
-    name: "Nagpur Run",
-    date: "Feb 9, 2025",
-    location: "Bangalore",
-    description: "A 5K run for beginners and families.",
-    price: "300",
-    image: "/B3.png",
-    type: "Virtual",
-    categories: ["3K", "10k"],
-    activityType: "Walking",
-  },
-  {
-    id: 4,
-    name: "10K Challenge 2025",
-    date: "May 20, 2025",
-    location: "Hyderabad",
-    description: "A challenging 10K for experienced runners.",
-    price: "700",
-    image:
-      "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    type: "In-Person",
-    categories: ["10K"],
-    activityType: "Running",
-  },
-  {
-    id: 5,
-    name: "Trail Run 2025",
-    date: "June 15, 2025",
-    location: "Shimla",
-    description: "A scenic trail run through the hills.",
-    price: "1500",
-    image:
-      "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    type: "In-Person",
-    categories: ["5K", "10K"],
-    activityType: "Cycling",
-  },
-  {
-    id: 6,
-    name: "City Marathon 2025",
-    date: "July 25, 2025",
-    location: "Chennai",
-    description: "A vibrant marathon through the city streets.",
-    price: "1200",
-    image:
-      "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    type: "Virtual",
-    categories: ["10K", "21.1K"],
-    activityType: "Running",
-  },
-  {
-    id: 7,
-    name: "Beach Run 2025",
-    date: "August 12, 2025",
-    location: "Goa",
-    description: "A refreshing beachside run.",
-    price: "800",
-    image:
-      "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    type: "In-Person",
-    categories: ["5K", "10K"],
-    activityType: "Walking",
-  },
-  {
-    id: 8,
-    name: "Night Run 2025",
-    date: "September 5, 2025",
-    location: "Mumbai",
-    description: "An exciting night run with glowing accessories.",
-    price: "600",
-    image:
-      "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    type: "Virtual",
-    categories: ["5K", "10K"],
-    activityType: "Walking",
-  },
+// const events = [
+//   {
+//     id: 1,
+//     name: "Indian Navy Half Marathon 2025",
+//     date: "Feb 2, 2025",
+//     location: "Delhi",
+//     description: "A full marathon for all levels of runners.",
+//     price: "1000",
+//     image: "/B1.png",
+//     type: "In-Person",
+//     categories: ["5K", "10K", "21K"],
+//     activityType: "Running",
+//   },
+//   {
+//     id: 2,
+//     name: "Half Marathon 2025",
+//     date: "March 5, 2025",
+//     location: "Delhi",
+//     description: "A challenging half marathon for intermediate runners.",
+//     price: "500",
+//     image: "/B2.jpg",
+//     type: "In-Person",
+//     categories: ["21.1K"],
+//     activityType: "Running",
+//   },
+//   {
+//     id: 3,
+//     name: "Nagpur Run",
+//     date: "Feb 9, 2025",
+//     location: "Bangalore",
+//     description: "A 5K run for beginners and families.",
+//     price: "300",
+//     image: "/B3.png",
+//     type: "Virtual",
+//     categories: ["3K", "10k"],
+//     activityType: "Walking",
+//   },
+//   {
+//     id: 4,
+//     name: "10K Challenge 2025",
+//     date: "May 20, 2025",
+//     location: "Hyderabad",
+//     description: "A challenging 10K for experienced runners.",
+//     price: "700",
+//     image:
+//       "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//     type: "In-Person",
+//     categories: ["10K"],
+//     activityType: "Running",
+//   },
+//   {
+//     id: 5,
+//     name: "Trail Run 2025",
+//     date: "June 15, 2025",
+//     location: "Shimla",
+//     description: "A scenic trail run through the hills.",
+//     price: "1500",
+//     image:
+//       "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//     type: "In-Person",
+//     categories: ["5K", "10K"],
+//     activityType: "Cycling",
+//   },
+//   {
+//     id: 6,
+//     name: "City Marathon 2025",
+//     date: "July 25, 2025",
+//     location: "Chennai",
+//     description: "A vibrant marathon through the city streets.",
+//     price: "1200",
+//     image:
+//       "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//     type: "Virtual",
+//     categories: ["10K", "21.1K"],
+//     activityType: "Running",
+//   },
+//   {
+//     id: 7,
+//     name: "Beach Run 2025",
+//     date: "August 12, 2025",
+//     location: "Goa",
+//     description: "A refreshing beachside run.",
+//     price: "800",
+//     image:
+//       "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//     type: "In-Person",
+//     categories: ["5K", "10K"],
+//     activityType: "Walking",
+//   },
+//   {
+//     id: 8,
+//     name: "Night Run 2025",
+//     date: "September 5, 2025",
+//     location: "Mumbai",
+//     description: "An exciting night run with glowing accessories.",
+//     price: "600",
+//     image:
+//       "https://plus.unsplash.com/premium_photo-1663090417989-b399378d45ac?q=80&w=1783&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//     type: "Virtual",
+//     categories: ["5K", "10K"],
+//     activityType: "Walking",
+//   },
 
-];
+// ];
+
+
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -127,6 +129,17 @@ export default function HomePage() {
   const eventsPerPage = eventsPerRow * rowsPerPage;
 
   const router = useRouter();
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const res = await fetch('http://localhost:5000/events'); // Update with the correct route
+      const data = await res.json();
+      setEvents(data.data); // Assuming the response contains `data` key
+    };
+
+    fetchEvents();
+  }, []);
 
   const distanceCategories = [
     "5K",
@@ -149,14 +162,14 @@ export default function HomePage() {
 
   const filteredEvents = events.filter((event) =>
     (event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.location.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      event.city.toLowerCase().includes(searchQuery.toLowerCase())) &&
     (selectedActivity ? event.activityType === selectedActivity : true)
     && (selectedDistance
       ? event.categories.some((category) =>
         category.toLowerCase().includes(selectedDistance.toLowerCase())
       )
       : true) &&
-    (selectedCity ? event.location.toLowerCase() === selectedCity.toLowerCase() : true)
+    (selectedCity ? event.city.toLowerCase() === selectedCity.toLowerCase() : true)
   );
 
   const paginatedEvents = filteredEvents.slice(0, eventsToShow);

@@ -4,6 +4,20 @@ import Link from 'next/link';
 import { MapPin } from 'lucide-react';
 
 export default function EventCard({ event }) {
+  const startDate = new Date(event.start_date);
+const endDate = new Date(event.end_date);
+
+const startDay = startDate.getDate();
+const startMonth = startDate.toLocaleString("en-US", { month: "short" });
+
+const endDay = endDate.getDate();
+const endMonth = endDate.toLocaleString("en-US", { month: "short" });
+
+const isSameDate =
+  startDate.getFullYear() === endDate.getFullYear() &&
+  startDate.getMonth() === endDate.getMonth() &&
+  startDate.getDate() === endDate.getDate();
+  
   return (
     <div className="max-w-md w-full bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
     <div className="relative">
@@ -12,10 +26,19 @@ export default function EventCard({ event }) {
         alt={event.name}
         className="w-full h-[200px] object-cover"
       />
-      <div className="absolute left-4 bottom-0 transform translate-y-1/2 bg-white rounded-lg shadow-md p-3 text-center min-w-[60px]">
-        <div className="text-2xl font-bold text-gray-800">31</div>
-        <div className="text-sm font-medium text-gray-600">Jan</div>
-      </div>
+      
+
+<div className="absolute left-4 bottom-0 transform translate-y-1/2 bg-white rounded-lg shadow-md p-3 text-center min-w-[60px]">
+  <div className="text-2xl font-bold text-gray-800">{startDay}</div>
+  <div className="text-sm font-medium text-gray-600">{startMonth}</div>
+  {!isSameDate && (
+    <>
+      <div className="text-2xl font-bold text-gray-800">{endDay}</div>
+      <div className="text-sm font-medium text-gray-600">{endMonth}</div>
+    </>
+  )}
+</div>;
+
     </div>
   
     <div className="p-6 pt-12">
@@ -34,7 +57,7 @@ export default function EventCard({ event }) {
   
       <div className="flex items-center gap-2 text-gray-600 mb-4">
         <MapPin className="w-4 h-4" />
-        <span className="text-sm">{event.location || 'AnyWhere'}</span>
+        <span className="text-sm">{event.city || 'AnyWhere'}</span>
         <span className="mx-2">|</span>
         <span className="text-[#00A991] font-medium">{event.activityType || '999'}</span>
       </div>
@@ -51,14 +74,14 @@ export default function EventCard({ event }) {
           </div>
         </div>
   
-        {event.isVirtual && (
-          <div className="flex items-center gap-2 text-[#FF3366] text-sm mb-4">
-            <div className="w-4 h-4 rounded-full border-2 border-[#FF3366] flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-[#FF3366]"></div>
-            </div>
-            This is a virtual event
-          </div>
-        )}
+        {event.event_type === "virtual" && (
+  <div className="flex items-center gap-2 text-[#FF3366] text-sm mb-4">
+    <div className="w-4 h-4 rounded-full border-2 border-[#FF3366] flex items-center justify-center">
+      <div className="w-2 h-2 rounded-full bg-[#FF3366]"></div>
+    </div>
+    This is a virtual event
+  </div>
+)}
   
         <Link
           href={`/events/${event.id}`}
