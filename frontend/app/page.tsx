@@ -163,7 +163,7 @@ export default function HomePage() {
   const filteredEvents = events.filter((event) =>
     (event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.city.toLowerCase().includes(searchQuery.toLowerCase())) &&
-    (selectedActivity ? event.activityType === selectedActivity : true)
+    (selectedActivity ? event.activity_type === selectedActivity : true)
     && (selectedDistance
       ? event.categories.some((category) =>
         category.toLowerCase().includes(selectedDistance.toLowerCase())
