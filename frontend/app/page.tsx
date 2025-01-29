@@ -176,8 +176,8 @@ export default function HomePage() {
 
   const images = [
     '/B1.png',
-    '/B2.jpg',
     '/B3.png',
+    '/B2.jpg',
   ];
 
   const handleShowMore = () => {
