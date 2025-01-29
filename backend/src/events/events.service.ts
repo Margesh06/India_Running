@@ -33,11 +33,25 @@ export class EventsService {
     });
   }
 
-  async findById(id: number): Promise<Event> {
-    const event = await this.eventRepository.findOne({ where: { id } });
+  async findById(id: number): Promise<any> {
+    const event = await this.eventRepository.findOne({
+      where: { id },
+      relations: ['eventCategories', 'eventCategories.category'], // Include related event categories and their associated category
+    });
+  
     if (!event) {
       throw new NotFoundException(`Event with ID ${id} not found`);
     }
-    return event;
+  
+
+    const prices = event.eventCategories.map((eventCategory) => eventCategory.category.price);
+    const minPrice = Math.min(...prices);
+  
+    return {
+      ...event,
+      categories: event.eventCategories.map((eventCategory) => eventCategory.category.title),  // Category titles
+      minPrice, 
+    };
   }
+  
 }
