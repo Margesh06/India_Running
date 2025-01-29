@@ -1,11 +1,13 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-console.log("fit"+__dirname);
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 export const TypeOrmConfig: DataSourceOptions = {
     type: 'postgres',
     host: 'localhost',
     port: 5432,
     username: 'postgres',
-    password: 'Mar@06032004',
+    password: process.env.DB_PASSWORD,
     database: 'fitpage',
     entities: [__dirname + '../../entities/**/*.entity.{ts,js}'],
     migrations: [__dirname + '/../migrations/*.{ts,js}'], 
