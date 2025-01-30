@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { MapPin } from 'lucide-react';
 
 export default function EventCard({ event }) {
-  const startDate = new Date(event.start_date);
+const startDate = new Date(event.start_date);
 const endDate = new Date(event.end_date);
 const reg_close_date = new Date(event.reg_close_date)
 
@@ -42,7 +42,7 @@ const isSameDate =
       <div className="text-sm font-medium text-gray-600">{endMonth}</div>
     </>
   )}
-</div>;
+</div>
 
     </div>
   
