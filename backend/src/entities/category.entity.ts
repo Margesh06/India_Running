@@ -31,6 +31,11 @@ export class Category {
   @Column({ type: "int", nullable: true })
   ageLimitMax: number;
 
-  @Column({ type: "enum", enum: InclusiveItems, array: true, default: [] })
+  @Column({
+    type: 'enum',
+    enum: InclusiveItems,
+    array: true, // Enables storing multiple enum values as an array
+    default: [],
+  })
   inclusive: InclusiveItems[];
 }

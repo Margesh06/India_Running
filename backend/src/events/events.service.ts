@@ -6,6 +6,8 @@ import { Category } from '../entities/category.entity';
 import { EventCategory } from '../entities/eventCategory.entity';
 import { Organiser } from '../entities/organiser.entity';
 import { CreateEventDto } from '../events/create-event.dto'; 
+import { CreateCategoryDto } from '../events/create-category.dto';
+import { InclusiveItems } from '../entities/category.entity';
 
 
 @Injectable()
@@ -109,4 +111,22 @@ export class EventsService {
     // Save to DB
     return await this.eventRepository.save(event);
   }
+  async createCategory(createCategoryDto: CreateCategoryDto): Promise<Category> {
+    const { title, price, additionalInfo, ageLimitMin, ageLimitMax, inclusive } = createCategoryDto;
+  
+    // Ensure `inclusive` contains valid enum values
+    const validInclusive = inclusive?.map((item) => InclusiveItems[item.toUpperCase() as keyof typeof InclusiveItems]);
+  
+    const category = this.categoryRepository.create({
+      title,
+      price,
+      additionalInfo,
+      ageLimitMin,
+      ageLimitMax,
+      inclusive: validInclusive || [],
+    });
+  
+    return await this.categoryRepository.save(category);
+  }
+  
 }
