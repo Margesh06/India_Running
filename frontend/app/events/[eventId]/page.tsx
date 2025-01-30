@@ -29,9 +29,13 @@ type EventData = {
   eventCategories: {
     id: number
     category: {
-      id: number
-      title: string
-      price: string
+      id: number;
+      title: string;
+      price: string;
+      additionalInfo?: string;
+      ageLimitMin?: number;
+      ageLimitMax?: number;
+      inclusive: string[];
     }
   }[]
   categories: string[] // This represents the category titles like "10K", "21.1K"
@@ -230,15 +234,20 @@ const EventPage = ({
                 </div>
 
                 <div className="flex-1 mx-16">
-                  <p className="text-gray-700 mb-3">Inclusive</p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Tshirt", "Medals", "Refreshments"].map((item) => (
-                      <span key={item} className="px-3 py-1 bg-blue-50 text-blue-700 rounded text-sm">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+  <p className="text-gray-700 mb-3">Inclusive</p>
+  <div className="flex flex-wrap gap-2">
+    {category.category.inclusive?.length > 0 ? (
+      category.category.inclusive.map((item) => (
+        <span key={item} className="px-3 py-1 bg-blue-50 text-blue-700 rounded text-sm">
+          {item}
+        </span>
+      ))
+    ) : (
+      <span className="text-gray-500 text-sm">No inclusions available</span>
+    )}
+  </div>
+</div>
+
 
                 <div className="flex items-center gap-8">
                   <div className="text-right">
