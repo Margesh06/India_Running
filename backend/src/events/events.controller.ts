@@ -12,6 +12,8 @@ export class EventsController {
     return this.eventsService.createEvent(createEventDto);
   }
 
+  
+
   // GET request to fetch all events
   @Get()
   async findAll(): Promise<any> {
