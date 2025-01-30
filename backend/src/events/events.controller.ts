@@ -1,10 +1,16 @@
-import { Controller, Get, Param,Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param,Post, ParseIntPipe,Body  } from '@nestjs/common';
 import { EventsService } from './events.service';
+import { CreateEventDto } from './create-event.dto';
 
 
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
+
+  @Post()
+  async createEvent(@Body() createEventDto: CreateEventDto) {
+    return this.eventsService.createEvent(createEventDto);
+  }
 
   // GET request to fetch all events
   @Get()

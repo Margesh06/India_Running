@@ -4,6 +4,8 @@ import { Repository ,ILike} from 'typeorm';
 import { Event } from '../entities/event.entity';
 import { Category } from '../entities/category.entity';
 import { EventCategory } from '../entities/eventCategory.entity';
+import { Organiser } from '../entities/organiser.entity';
+import { CreateEventDto } from '../events/create-event.dto'; 
 
 
 @Injectable()
@@ -15,6 +17,9 @@ export class EventsService {
     private readonly eventCategoryRepository: Repository<EventCategory>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    @InjectRepository(Organiser)
+    private readonly organiserRepository: Repository<Organiser>,
+    
   ) {}
 
   async findAll(): Promise<any> {
@@ -53,5 +58,55 @@ export class EventsService {
       minPrice, 
     };
   }
-  
+  async createEvent(createEventDto: CreateEventDto): Promise<Event> {
+    const {
+      name,
+      description,
+      venue,
+      gallery_images,
+      organiser_id,
+      event_type,
+      activity_type,
+      start_date,
+      end_date,
+      reg_close_date,
+      country,
+      state,
+      city,
+      pincode,
+      area,
+      banner_image,
+      mobile_banner,
+    } = createEventDto;
+
+    // Validate that organiser exists
+    const organiser = await this.organiserRepository.findOne({ where: { id: organiser_id } });
+    if (!organiser) {
+      throw new NotFoundException(`Organiser with ID ${organiser_id} not found`);
+    }
+
+    // Create event entity
+    const event = this.eventRepository.create({
+      name,
+      description,
+      venue,
+      gallery_images,
+      organiser,
+      event_type,
+      activity_type,
+      start_date,
+      end_date,
+      reg_close_date,
+      country,
+      state,
+      city,
+      pincode,
+      area,
+      banner_image,
+      mobile_banner,
+    });
+
+    // Save to DB
+    return await this.eventRepository.save(event);
+  }
 }

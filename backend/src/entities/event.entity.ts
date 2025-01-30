@@ -27,7 +27,7 @@ import {
     gallery_images: string[];  
   
     @Column()
-    organiser_id: string;
+    organiser_id: number;
   
     @Column({ type: "enum", enum: ["OnGround", "Virtual", "OnGround+Virtual"] })
     event_type: string;
