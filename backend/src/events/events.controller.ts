@@ -40,4 +40,20 @@ export class EventsController {
       };
     }
   }
+  // GET request to fetch events by organiser ID
+  @Get('organiser/:organiserId')
+  async findByOrganiser(@Param('organiserId', ParseIntPipe) organiserId: number): Promise<any> {
+    try {
+      const result = await this.eventsService.getEventByOrganiser(organiserId);
+      return {
+        data: result,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        error: error.message,
+      };
+    }
+  }
 }

@@ -1,13 +1,32 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { LayoutGrid, Users, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { EventForm } from "@/components/EventForm"
+import { MoreVertical,MapPin } from "lucide-react"
 
 export default function Home() {
   const [showEventForm, setShowEventForm] = useState(false)
+  const [events, setEvents] = useState([])
+  const router = useRouter()
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/events/organiser/1")
+        if (!response.ok) throw new Error("Failed to fetch events")
+        const data = await response.json()
+        setEvents(data.data || [])
+      } catch (error) {
+        console.error("Error fetching events:", error)
+      }
+    }
+
+    fetchEvents()
+  }, [])
 
   const handleCreateEvent = () => {
     setShowEventForm(true)
@@ -43,46 +62,97 @@ export default function Home() {
 
         {!showEventForm && (
           <>
-            <div className="bg-pink-100 px-8 py-4 flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Users className="text-pink-500" />
-                <span className="text-pink-500">
-                  Complete your KYC (Know Your Customer) process to ensure the security and compliance of your account.
-                </span>
-              </div>
-              <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50">
-                Verify Now
-              </Button>
-            </div>
+            {events.length > 0 ? (
+              <>
+                <div className="bg-pink-100 px-8 py-4 flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Users className="text-pink-500" />
+                    <span className="text-pink-500">
+                      Complete your KYC (Know Your Customer) process to ensure the security and compliance of your account.
+                    </span>
+                  </div>
+                  <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50">
+                    Verify Now
+                  </Button>
+                </div>
 
-            <div className="px-8 pt-6">
-              <Tabs defaultValue="active" className="w-full">
-                <TabsList className="w-full justify-start h-12 p-0 bg-transparent border-b rounded-none">
-                  <TabsTrigger
-                    value="active"
-                    className="px-8 data-[state=active]:border-b-2 data-[state=active]:border-emerald-700 rounded-none"
-                  >
-                    Active events
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="past"
-                    className="px-8 data-[state=active]:border-b-2 data-[state=active]:border-emerald-700 rounded-none"
-                  >
-                    Past Events
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
+                <div className="px-8 pt-6">
+                  <Tabs defaultValue="active" className="w-full">
+                    <TabsList className="w-full justify-start h-12 p-0 bg-transparent border-b rounded-none">
+                      <TabsTrigger
+                        value="active"
+                        className="px-8 data-[state=active]:border-b-2 data-[state=active]:border-emerald-700 rounded-none"
+                      >
+                        Active events
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="past"
+                        className="px-8 data-[state=active]:border-b-2 data-[state=active]:border-emerald-700 rounded-none"
+                      >
+                        Past Events
+                      </TabsTrigger>
+                      <Button className="ml-auto bg-pink-500 hover:bg-pink-600" onClick={handleCreateEvent}>
+                        + Create Event
+                      </Button>
+                    </TabsList>
 
-            <div className="flex flex-col items-center justify-center mt-32">
-              <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
-                <LayoutGrid size={32} className="text-gray-400" />
+                    <TabsContent value="active">
+        <div className="flex flex-col gap-4 mt-6">
+         {events.map((event, index) => (
+          <div key={event.id || index} className="flex gap-4 p-4 border rounded-lg">
+               <div className="w-48 h-32 bg-gray-200 rounded-lg overflow-hidden">
+              <img
+                src={event.banner_image}
+                alt={event.name}
+                className="w-full h-full object-cover"
+              />
+        </div>
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">{event.name}</h3>
+              <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+                <MapPin size={16} />
+                <span>{event.location || 'Mumbai'}</span>
+                <span className="mx-2">|</span>
+                <span>{event.type || 'On Ground'}</span>
               </div>
-              <p className="text-gray-500 mb-6">Create your first event here</p>
-              <Button className="bg-pink-500 hover:bg-pink-600" onClick={handleCreateEvent}>
-                + Create Event
-              </Button>
             </div>
+            <button className="p-2 hover:bg-gray-100 rounded-full">
+              <MoreVertical size={20} className="text-gray-500" />
+            </button>
+          </div>
+          <div className="flex justify-between items-end mt-4">
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-1 bg-amber-100 text-amber-600 rounded-full text-sm">
+                Published
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</TabsContent>
+
+
+                    <TabsContent value="past">
+                      <p className="text-gray-500 mt-6">No past events found.</p>
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center mt-32">
+                <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                  <LayoutGrid size={32} className="text-gray-400" />
+                </div>
+                <p className="text-gray-500 mb-6">Create your first event here</p>
+                <Button className="bg-pink-500 hover:bg-pink-600" onClick={handleCreateEvent}>
+                  + Create Event
+                </Button>
+              </div>
+            )}
           </>
         )}
 
@@ -91,4 +161,3 @@ export default function Home() {
     </div>
   )
 }
-

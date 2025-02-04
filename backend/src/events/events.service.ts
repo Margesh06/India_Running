@@ -128,5 +128,14 @@ export class EventsService {
   
     return await this.categoryRepository.save(category);
   }
+
+  async getEventByOrganiser(organiserId: number) {
+    // Query the event database for events where the organiser_id matches
+    return await this.eventRepository.find({
+      where: {
+        organiser_id: organiserId,
+      },
+    });
+  }
   
 }
