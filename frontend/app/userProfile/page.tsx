@@ -417,12 +417,19 @@ function AddressForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const updatedData = { 
+            country: userProfile?.country, 
+            state: userProfile?.state, 
+            pincode: userProfile?.pincode, 
+            address: userProfile?.address,
+            nationality: userProfile?.nationality 
+        };
         if (!userProfile) return;
         try {
             await fetch(`http://localhost:5000/userProfile/${userProfile.id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(userProfile),
+                body: JSON.stringify(updatedData),
             });
             setOriginalData(userProfile);
             setIsEditing(false);
@@ -437,9 +444,9 @@ function AddressForm() {
     };
     return (
         <div className="overflow-hidden px-4 ">
-            <div className="flex items-center bg-yellow-300 h-40 rounded-xl p-6 my-10">
+            <div className="flex items-center bg-yellow-300 h-40 rounded-xl p-6 my-10 overflow-hidden">
                 <img height={108} width={108} src={userProfile?.profileImage || "https://www.indiarunning.com/images/DefaultUserProfile.svg"} alt="User Profile" />
-                <h1 className="flex content-center mx-10 text-black text-4xl">{userData?.fname} {userData?.fname}</h1>
+                <h1 className="flex content-center mx-10 text-black text-4xl">{userData?.fname} {userData?.lname}</h1>
             </div>
             <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">Address
                 <button onClick={() => setIsEditing(!isEditing)} className="flex text-sm text-[rgb(0,179,146)]"> <img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />

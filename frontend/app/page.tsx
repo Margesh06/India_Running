@@ -267,17 +267,8 @@ export default function HomePage() {
           </div>
 
           <div className="w-full sm:w-auto space-x-4 flex flex-wrap justify-between sm:justify-start">
-          {isLoggedIn ? (
-              <>
-                <button
-                  onClick={handleLogout}
-                  className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
-                >
-                  Logout
-                </button>
-               
-              </>
-            ) : (
+          {!isLoggedIn &&
+            (
               <>
                 <button
                   onClick={() => handleAuthForm('login')}
@@ -300,10 +291,15 @@ export default function HomePage() {
               Create Event
             </Link>
 
-            import Image from 'next/image';
 
             {isLoggedIn && (
               <div className="flex items-center">
+                <button
+                  onClick={handleLogout}
+                  className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
+                >
+                  Logout
+                </button>
                 <Link href="/userProfile" className="text-gray-600 hover:text-gray-900">
                   <img
                     src="/DefaultUserProfile.svg"
