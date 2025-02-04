@@ -78,8 +78,10 @@ export default function RegisterPage() {
   
     
     if (validateForm()) {
-      const [fname, lname] = formData.name.split(' ');
-      const payload = {
+      const nameParts = formData.name.trim().split(" ");
+      const fname = nameParts[0]; 
+      const lname = nameParts.slice(1).join(" ") || "";
+        const payload = {
         fname,
         lname,
         email: formData.email,

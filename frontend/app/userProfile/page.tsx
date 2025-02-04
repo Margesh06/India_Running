@@ -504,7 +504,7 @@ function AddressForm() {
 
                     <div>
                         <label className="text-gray-700">Address: <span className="text-lg text-red-600"> *</span>
-                            <textarea name="address" value={userProfile?.address || ""} onChange={handleInputChange} disabled={!isEditing} placeholder="sdf" required className="border p-3 w-full rounded bg-gray-100 text-gray-800"></textarea>
+                            <textarea name="address" value={userProfile?.address || ""} onChange={handleInputChange} disabled={!isEditing} placeholder="Enter Your Address" required className="border p-3 w-full rounded bg-gray-100 text-gray-800"></textarea>
                         </label>
                     </div>
                 </div>

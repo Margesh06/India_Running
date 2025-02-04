@@ -20,12 +20,12 @@ export default function Home() {
   const eventPrice = searchParams.get('price');
 
   const [formData, setFormData] = useState({
-    firstName: "Margesh",
-    lastName: "Modi",
-    dateOfBirth: "25-03-2004",
-    gender: "male",
-    email: "margeshmod@flyzipjet.in",
-    phone: "+919712121441",
+    firstName: "",
+    lastName: "",
+    dateOfBirth: "",
+    gender: "",
+    email: "",
+    phone: "",
     address: "",
     pincode: ""
   });
@@ -33,8 +33,52 @@ export default function Home() {
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
   const [couponDialogOpen, setCouponDialogOpen] = useState(false);
   const [couponCode, setCouponCode] = useState("");
+  const [userId, setUserId] = useState<number | null>(null);
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          console.error("No token found");
+          return;
+        }
 
+        const userResponse = await fetch("http://localhost:5000/users/current", {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!userResponse.ok) throw new Error("Failed to fetch user");
+
+        const userData = await userResponse.json();
+        setUserId(userData.id);
+
+        const profileResponse = await fetch(`http://localhost:5000/userProfile/${userData.id}`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!profileResponse.ok) throw new Error("Failed to fetch profile");
+
+        const profileData = await profileResponse.json();
+
+        setFormData({
+          firstName: userData?.fname,
+          lastName: userData?.lname,
+          dateOfBirth: profileData?.dob || "",
+          gender: profileData?.gender || "",
+          email: userData?.email,
+          phone: profileData?.phone_no || "",
+          address: profileData?.address || "",
+          pincode: profileData?.pincode || "",
+        });
+
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -211,15 +255,16 @@ export default function Home() {
                       </Label>
                       <RadioGroup
                         value={formData.gender}
+                        
                         onValueChange={(value) => handleInputChange('gender', value)}
                         className="flex gap-6 mt-2"
                       >
                         <div className="flex items-center gap-2">
-                          <RadioGroupItem value="male" id="male" className="border-gray-300" />
-                          <Label htmlFor="male" className="text-sm">Male</Label>
+                          <RadioGroupItem value="male" id="male" className="border-gray-300" checked={formData.gender === "Male"}/>
+                          <Label htmlFor="male" className="text-sm" >Male</Label>
                         </div>
                         <div className="flex items-center gap-2">
-                          <RadioGroupItem value="female" id="female" className="border-gray-300" />
+                          <RadioGroupItem value="female" id="female" className="border-gray-300" checked={formData.gender === "Female"}/>
                           <Label htmlFor="female" className="text-sm">Female</Label>
                         </div>
                       </RadioGroup>

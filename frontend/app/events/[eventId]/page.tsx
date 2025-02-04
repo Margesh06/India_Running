@@ -51,6 +51,7 @@ const EventPage = ({
   const [eventData, setEventData] = useState<EventData | null>(null)
   const [selectedCategories, setSelectedCategories] = useState<Set<number>>(new Set())
   const [eventCategories, setEventCategories] = useState<EventData["eventCategories"]>([])
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleAdd = (categoryId: number) => {
     setSelectedCategories((prev) => {
@@ -101,6 +102,10 @@ const EventPage = ({
   const startYear = startDate.getFullYear()
 
   const { name, description, venue, gallery_images, banner_image } = eventData
+  const handleLogout = () => {
+    localStorage.removeItem('access_token')
+    window.location.href = '/'
+  }
 
   return (
     <div className="flex flex-col h-screen overflow-y-auto ">
@@ -111,27 +116,32 @@ const EventPage = ({
         >
           <nav className="flex flex-row-reverse justify-around w-11/12 mx-auto pt-5 smobile:pt-10 smobile:mb-0 tablet:mb-8">
             <div className="flex items-center cursor-pointer basis-1/12">
-              <div className="relative flex flex-row items-center gap-3 group">
-                <div className=" ">
+              <div className=" flex flex-row items-center gap-3 group">
+                <div
+                  className="relative flex flex-col items-center"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
                   <img
                     src="https://www.indiarunning.com/images/DefaultUserProfile.svg"
-                    alt="Logout"
-                    width={30}
-                    height={30}
-                    className=""
+                    alt="User Profile"
+                    width={40}
+                    height={40}
+                    className="cursor-pointer"
                   />
-                </div>
-                <div className="absolute hidden group-hover:block -bottom-12 -left-12">
-                  <button className="text-[#023571] font-rubik font-semibold text-sm tablet:text-base px-2 pr-4 py-2 flex items-center border-1 rounded-md bg-white">
-                    <img
-                      src="https://www.indiarunning.com/images/DefaultUserProfile.svg"
-                      alt="Logout"
-                      width={20}
-                      height={20}
-                      className="px-2 h-100 w-100"
-                    />
-                    Logout
-                  </button>
+
+                  <div
+                    className={`absolute flex justify-between top-12 transition-opacity duration-500 ${isHovered ? "opacity-100 visible" : "opacity-0 invisible"
+                      }`}
+                  >
+                    <button
+                      onClick={handleLogout}
+                      className="text-[#023571] font-semibold text-sm px-6 py-2 flex items-center border rounded-md bg-white shadow-lg transition hover:bg-gray-100"
+                    >
+                      <img src="https://registrations.indiarunning.com/logout-icon.svg" alt="Logout" className="mr-2 w-4 h-4" />
+                      Logout
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
