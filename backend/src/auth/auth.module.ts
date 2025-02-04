@@ -11,7 +11,7 @@ import { UsersService } from 'src/users/users.service';
   imports: [
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: 'process.env.JWT_SECRET',
+      secret: 'ramsiyaram', 
       signOptions: { expiresIn: '10h' }, 
     }),
   ],
