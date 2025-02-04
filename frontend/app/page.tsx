@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Carousel from '../components/carousel';
 import Footer from "../components/Footer";
-
+import * as jwt from 'jsonwebtoken';
 // const events = [
 //   {
 //     id: 1,
@@ -134,6 +134,8 @@ export default function HomePage() {
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
+    console.log ("Access token:",token);
+    console.log(process.env.JWT_SECRET);
     if (token) {
       setIsLoggedIn(true);
     } else {

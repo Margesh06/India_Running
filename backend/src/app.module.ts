@@ -7,7 +7,7 @@ import { EventCategoryModule } from './categories/event_category/event_category.
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RegisterModule } from './auth/register/register.module';
-
+import { UserProfileModule } from './userProfile/userProfile.module';
 
 @Module({
   imports: [
@@ -17,7 +17,8 @@ import { RegisterModule } from './auth/register/register.module';
     EventCategoryModule,
     UsersModule,
     AuthModule,
-    RegisterModule
+    RegisterModule,
+    UserProfileModule
   ],
 })
 export class AppModule {}

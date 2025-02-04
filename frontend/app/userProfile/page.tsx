@@ -97,435 +97,375 @@ interface User {
     fname: string;
     lname: string;
     email: string;
-    password: string;
-    reg_at: string;
+}
+
+interface UserProfile {
+    id: number;
+    profileImage: string;
+    address: string;
+    phone_no: number;
+    emergencyContactName: string;
+    emergencyContactNumber: number;
+    country: string;
+    state: string;
+    pincode: string;
     bio: string;
     gender: string;
     dob: string;
+    nationality: string;
+    bloodGroup: string;
+    height: number;
+    weight: number;
+    shoesize: string;
+    tshirtsize: string;
+    raceType: string;
+    documentType: string;
+    frontPhoto: string;
+    backPhoto: string;
+    user_id: number;
 }
 
-const getUserData = async (): Promise<User> => {
-    const response = await fetch("");  
-    const data = await response.json();
-    return data;
-};
-
-// function PersonalInformation() {
-
-    
-//     const [isEditing, setIsEditing] = useState(false);
-//     const [formData, setFormData] = useState<User | null>(null);
-
-//     useEffect(() => {
-//         const fetchUser = async () => {
-//             const fetchedUser = await getUserData();
-//             setUser(fetchedUser);
-//             setFormData(fetchedUser);
-//         };
-//         fetchUser();
-//     }, []);
-
-//     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-//         if (!formData) return;
-//         const { name, value } = e.target;
-//         setFormData((prev) => ({ ...prev, [name]: value }));
-//     };
-
-//     const handleSubmit = async (e: React.FormEvent) => {
-//         e.preventDefault();
-//         if (!formData) return;
-
-//         const response = await fetch(`/api/users/${user?.id}`, {
-//             method: "PATCH",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(formData),
-//         });
-
-//         const updatedUser = await response.json();
-//         setUser(updatedUser);
-//         setFormData(updatedUser);
-//         setIsEditing(false);
-//     };
-
-//     return (
-//         <div className="overflow-hidden px-4">
-//             <div className="flex items-center bg-yellow-300 h-40 rounded-xl p-6 my-10">
-//                 <img
-//                     height={108}
-//                     width={108}
-//                     src="https://www.indiarunning.com/images/DefaultUserProfile.svg"
-//                     alt="User Profile"
-//                 />
-//                 <h1 className="flex content-center mx-10 text-black text-4xl">{user?.fname} {user?.lname}</h1>
-
-//             </div>
-
-//             <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">
-//                 Personal Information
-//                 <button
-//                     onClick={() => setIsEditing(!isEditing)}
-//                     className="text-sm text-blue-500"
-//                 >
-//                     {isEditing ? "" : "Edit"}
-//                 </button>
-//             </h2>
-
-
-//             <form onSubmit={handleSubmit} className="space-y-4">
-//                 <div className="space-y-6">
-//                     <div className="flex flex-col md:flex-row gap-5">
-//                         <label className="text-gray-700 flex-1">
-//                             First Name: <span className="text-lg text-red-600"> *</span>
-//                             <input
-//                                 type="text"
-//                                 name="fname"
-//                                 value={formData?.fname || ""}
-//                                 onChange={handleInputChange}
-//                                 disabled={!isEditing}
-//                                 required
-//                                 className="border p-3 w-full rounded bg-gray-100 text-gray-800"
-//                             />
-//                         </label>
-
-//                         <label className="text-gray-700 flex-1">
-//                             Last Name: <span className="text-lg text-red-600"> *</span>
-//                             <input
-//                                 type="text"
-//                                 name="lname"
-//                                 value={formData?.lname || ""}
-//                                 onChange={handleInputChange}
-//                                 disabled={!isEditing}
-//                                 required
-//                                 className="border p-3 w-full rounded bg-gray-100 text-gray-800"
-//                             />
-//                         </label>
-//                     </div>
-
-//                     <div className="flex flex-col md:flex-row gap-5">
-//                         <label className="text-gray-700 flex-1">
-//                             Email: <span className="text-lg text-red-600"> *</span>
-//                             <input
-//                                 type="email"
-//                                 name="email"
-//                                 value={formData?.email || ""}
-//                                 onChange={handleInputChange}
-//                                 disabled={!isEditing}
-//                                 required
-//                                 className="border p-3 w-full rounded bg-gray-100 text-gray-800"
-//                             />
-//                         </label>
-
-//                         <label className="text-gray-700 flex-1">
-//                             Date of Birth: <span className="text-lg text-red-600"> *</span>
-//                             <input
-//                                 type="date"
-//                                 name="dob"
-//                                 value={formData?.dob || ""}
-//                                 onChange={handleInputChange}
-//                                 disabled={!isEditing}
-//                                 required
-//                                 className="border p-3 w-full rounded bg-gray-100 text-gray-800"
-//                             />
-//                         </label>
-//                     </div>
-
-//                     <div className="flex items-center space-x-4">
-//                         <label className="text-gray-700">
-//                             Gender: <span className="text-lg text-red-600"> *</span>
-//                             <div className="flex">
-//                                 <label className="flex items-center space-x-2">
-//                                     <input
-//                                         type="radio"
-//                                         name="gender"
-//                                         value="male"
-//                                         checked={formData?.gender === "male"}
-//                                         onChange={handleInputChange}
-//                                         disabled={!isEditing}
-//                                     />
-//                                     <span>Male</span>
-//                                 </label>
-//                                 <label className="flex items-center m-3 space-x-2">
-//                                     <input
-//                                         type="radio"
-//                                         name="gender"
-//                                         value="female"
-//                                         checked={formData?.gender === "female"}
-//                                         onChange={handleInputChange}
-//                                         disabled={!isEditing}
-//                                     />
-//                                     <span>Female</span>
-//                                 </label>
-//                             </div>
-//                         </label>
-//                     </div>
-
-//                     <div className="w-full">
-//                         <label className="text-gray-700 w-full block">
-//                             Bio: <span className="text-lg text-red-600"> *</span>
-//                             <textarea
-//                                 name="bio"
-//                                 value={formData?.bio || ""}
-//                                 onChange={handleInputChange}
-//                                 disabled={!isEditing}
-//                                 required
-//                                 className="border p-3 w-full rounded bg-gray-100 text-gray-800 resize-none"
-//                             ></textarea>
-//                         </label>
-//                     </div>
-//                 </div>
-
-//                 {isEditing && (
-//                     <div className="flex justify-end gap-4 mt-4">
-//                         <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">
-//                             Save
-//                         </button>
-//                         <button
-//                             type="button"
-//                             onClick={() => setIsEditing(false)}
-//                             className="bg-gray-400 text-white p-3 rounded-lg"
-//                         >
-//                             Cancel
-//                         </button>
-//                     </div>
-//                 )}
-//             </form>
-//         </div>
-//     );
-// }
 
 function PersonalInformation() {
-  const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState({
-    fname: '',
-    lname: '',
-    email: '',
-    dob: '',
-    gender: '',
-    bio: ''
-  });
+    const [isEditing, setIsEditing] = useState(false);
+    const [userData, setUserData] = useState<User | null>(null);
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+    const [originalData, setOriginalData] = useState<{ user: User | null; profile: UserProfile | null }>({ user: null, profile: null });
 
-  useEffect(() => {
-    // Fetch user data from your API (e.g., get current logged-in user's info)
-    // This is just a sample data. Replace it with an actual API call.
-    // const fetchUser = async () => {
-        //             const fetchedUser = await getUserData();
-        //             setUser(fetchedUser);
-        //             setFormData(fetchedUser);
-        //         };
-        //         fetchUser();
-        //     }
-    setUserData({
-      fname: 'Abhishek',
-      lname: 'Sharma',
-      email: 'abhishek@example.com',
-      dob: '2003-05-28',
-      gender: 'male',
-      bio: 'Sample bio text'
-    });
-  }, []);
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem('access_token');
+                if (!token) return console.error("No token found");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setUserData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+                const response = await fetch("http://localhost:5000/users/current", {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
 
-//     const handleSubmit = async (e: React.FormEvent) => {
-//         e.preventDefault();
-//         if (!formData) return;
+                if (!response.ok) throw new Error("Failed to fetch user");
 
-//         const response = await fetch(`/api/users/${user?.id}`, {
-//             method: "PATCH",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(formData),
-//         });
+                const user = await response.json();
+                setUserData(user);
+                console.log(user);
 
-//         const updatedUser = await response.json();
-//         setUser(updatedUser);
-//         setFormData(updatedUser);
-//         setIsEditing(false);
-//     };
+                const profileResponse = await fetch(`http://localhost:5000/userProfile/${user.id}`, {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Updated user data:', userData);
-    
-  };
+                const profile = await profileResponse.json();
+                setUserProfile(profile);
+                console.log(profile);
+                setOriginalData({ user, profile });
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+        fetchUserData();
+    }, []);
 
-  return (
-    <div className="overflow-hidden px-4">
-      <div className="flex items-center bg-yellow-300 h-40 rounded-xl p-6 my-10">
-        <img height={108} width={108} src="https://www.indiarunning.com/images/DefaultUserProfile.svg" alt="User Profile" />
-        <h1 className="flex content-center mx-10 text-black text-4xl">ABHISHEK SHARMA</h1>
-      </div>
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (!userData || !userProfile) return;
+        const { name, value } = e.target;
+        if (name in userData) {
+            setUserData((prev) => ({ ...prev, [name]: value }));
+        } else {
+            setUserProfile((prev) => ({ ...prev, [name]: value }));
+        }
+    };
 
-      <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">
-        Personal Information
-        <button onClick={() => setIsEditing(!isEditing)} className="flex text-sm text-[rgb(0,179,146)]"> <img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" /> 
-          {isEditing ? "cancel" :"Edit"}
-        </button>
-      </h2>
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!userData || !userProfile) return;
 
-      <form onSubmit={handleSubmit} className="space-y-4 ">
-        <div className="space-y-6">
-          <div className="flex flex-col md:flex-row gap-5">
-            <label className="text-gray-700 flex-1">
-              First Name: <span className="text-lg text-red-600"> *</span>
-              <input
-                type="text"
-                name="fname"
-                value={userData.fname}
-                onChange={handleChange}
-                disabled={!isEditing}
-                placeholder="First Name"
-                required
-                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
-              />
-            </label>
+        try {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                console.error("No token found");
+                return;
+            }
+            const userUpdateResponse = await fetch(`http://localhost:5000/users/${userData.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    fname: userData.fname,
+                    lname: userData.lname,
+                    email: userData.email
+                }),
+            });
 
-            <label className="text-gray-700 flex-1">
-              Last Name: <span className="text-lg text-red-600"> *</span>
-              <input
-                type="text"
-                name="lname"
-                value={userData.lname}
-                onChange={handleChange}
-                disabled={!isEditing}
-                placeholder="Last Name"
-                required
-                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
-              />
-            </label>
-          </div>
+            if (!userUpdateResponse.ok) {
+                throw new Error("Failed to update user details");
+            }
 
-          <div className="flex flex-col md:flex-row gap-5">
-            <label className="text-gray-700 flex-1">
-              Email: <span className="text-lg text-red-600"> *</span>
-              <input
-                type="email"
-                name="email"
-                value={userData.email}
-                onChange={handleChange}
-                disabled={!isEditing}
-                placeholder="Email"
-                required
-                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
-              />
-            </label>
+            // Update user profile details (dob, gender, bio, etc.)
+            const profileUpdateResponse = await fetch(`http://localhost:5000/userProfile/${userProfile.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    dob: userProfile?.dob || "", // Ensuring it's not null
+                    gender: userProfile?.gender,
+                    bio: userProfile?.bio || ""  // Ensuring bio is not null
+                }),
+            });
 
-            <label className="text-gray-700 flex-1">
-              Date of Birth: <span className="text-lg text-red-600"> *</span>
-              <input
-                type="date"
-                name="dob"
-                value={userData.dob}
-                onChange={handleChange}
-                disabled={!isEditing}
-                required
-                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
-              />
-            </label>
-          </div>
+            if (!profileUpdateResponse.ok) {
+                throw new Error("Failed to update profile details");
+            }
 
-          <div className="flex items-center space-x-4">
-            <label className="text-gray-700">Gender: <span className="text-lg text-red-600"> *</span>
-              <div className="flex">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="male"
-                    checked={userData.gender === 'male'}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    required
-                    className="text-black"
-                  />
-                  <span>Male</span>
-                </label>
-                <label className="flex items-center m-3 space-x-2">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="female"
-                    checked={userData.gender === 'female'}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    required
-                  />
-                  <span>Female</span>
-                </label>
-              </div>
-            </label>
-          </div>
+            console.log("User and profile updated successfully");
 
-          <div className="w-full">
-            <label className="text-gray-700 w-full block">
-              Bio: <span className="text-lg text-red-600"> *</span>
-              <textarea
-                name="bio"
-                value={userData.bio}
-                onChange={handleChange}
-                disabled={!isEditing}
-                placeholder="Enter bio (Max 100 characters)"
-                required
-                className="border p-3 w-full rounded bg-gray-100 text-gray-800 resize-none"
-              />
-            </label>
-          </div>
+            // Set updated data as original to prevent reset
+            setOriginalData({ user: userData, profile: userProfile });
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error updating data:", error);
+        }
+    };
+
+
+    const handleCancel = () => {
+        setUserData(originalData.user);
+        setUserProfile(originalData.profile);
+        setIsEditing(false);
+    };
+
+
+    return (
+        <div className="overflow-hidden px-4">
+            <div className="flex items-center bg-yellow-300 h-40 rounded-xl p-6 my-10">
+                <img height={108} width={108} src={userProfile?.profileImage || "https://www.indiarunning.com/images/DefaultUserProfile.svg"} alt="User Profile" />
+                <h1 className="flex content-center mx-10 text-black text-4xl">{userData?.fname} {userData?.lname}</h1>
+            </div>
+
+            <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">
+                Personal Information
+                <button onClick={() => setIsEditing(!isEditing)} className="flex text-sm text-[rgb(0,179,146)]"> <img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
+                    {isEditing ? "cancel" : "Edit"}
+                </button>
+            </h2>
+
+            <form onSubmit={handleSubmit} className="space-y-4 ">
+                <div className="space-y-6">
+                    <div className="flex flex-col md:flex-row gap-5">
+                        <label className="text-gray-700 flex-1">
+                            First Name: <span className="text-lg text-red-600"> *</span>
+                            <input
+                                type="text"
+                                name="fname"
+                                value={userData?.fname || ""}
+                                disabled
+                                placeholder={userData?.fname || ""}
+                                required
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-400"
+                            />
+                        </label>
+
+                        <label className="text-gray-700 flex-1">
+                            Last Name: <span className="text-lg text-red-600"> *</span>
+                            <input
+                                type="text"
+                                name="lname"
+                                value={userData?.lname || ""}
+                                disabled
+                                placeholder={userData?.lname || ""}
+                                required
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-400"
+                            />
+                        </label>
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-5">
+                        <label className="text-gray-700 flex-1">
+                            Email: <span className="text-lg text-red-600"> *</span>
+                            <input
+                                type="email"
+                                name="email"
+                                value={userData?.email || ""}
+                                disabled
+                                placeholder={userData?.email || ""}
+                                required
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-400"
+                            />
+                        </label>
+
+                        <label className="text-gray-700 flex-1">
+                            Date of Birth: <span className="text-lg text-red-600"> *</span>
+                            <input
+                                type="date"
+                                name="dob"
+                                value={userProfile?.dob || ""}
+                                onChange={handleChange}
+                                disabled={!isEditing}
+                                required
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
+                            />
+                        </label>
+                    </div>
+
+                    <div className="flex items-center space-x-4">
+                        <label className="text-gray-700">Gender: <span className="text-lg text-red-600"> *</span>
+                            <div className="flex">
+                                <label className="flex items-center space-x-2">
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value="Male"
+                                        checked={userProfile?.gender === "Male"}
+                                        onChange={handleChange}
+                                        disabled={!isEditing}
+                                        required
+                                        className="text-black"
+                                    />
+                                    <span>Male</span>
+                                </label>
+                                <label className="flex items-center m-3 space-x-2">
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value="Female"
+                                        checked={userProfile?.gender === "Female"}
+                                        onChange={handleChange}
+                                        disabled={!isEditing}
+                                        required
+                                    />
+                                    <span>Female</span>
+                                </label>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div className="w-full">
+                        <label className="text-gray-700 w-full block">
+                            Bio: <span className="text-lg text-red-600"> *</span>
+                            <textarea
+                                name="bio"
+                                value={userProfile?.bio || ""}
+                                onChange={handleChange}
+                                disabled={!isEditing}
+                                placeholder="Enter bio (Max 100 characters)"
+                                required
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-800 resize-none"
+                            />
+                        </label>
+                    </div>
+                </div>
+
+                {isEditing && (
+                    <div className="flex justify-end gap-4 mt-4">
+                        <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Save</button>
+                        <button type="button" onClick={handleCancel} className="bg-gray-400 text-white p-3 rounded-lg">Cancel</button>
+                    </div>
+                )}
+            </form>
         </div>
-
-        <div className="flex justify-end gap-4 mt-4">
-          <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg" disabled={!isEditing}>
-            Submit
-          </button>
-          <button type="reset" className="bg-gray-400 text-white p-3 rounded-lg" disabled={!isEditing}>
-            Reset
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+    );
 }
 
 
 function AddressForm() {
-    const handleSubmit = (e) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+    const [userData, setUserData] = useState<User | null>(null);
+    const [originalData, setOriginalData] = useState<UserProfile | null>(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem('access_token');
+                if (!token) return console.error("No token found");
+
+                const response = await fetch("http://localhost:5000/users/current", {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch user");
+
+                const user = await response.json();
+                setUserData(user);
+                console.log(user);
+
+                const profileResponse = await fetch(`http://localhost:5000/userProfile/${user.id}`, {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const profile = await profileResponse.json();
+                setUserProfile(profile);
+                console.log(profile);
+                setOriginalData(profile);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+        fetchUserData();
+    }, []);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        if (!userProfile) return;
+        const { name, value } = e.target;
+        setUserProfile((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!userProfile) return;
+        try {
+            await fetch(`http://localhost:5000/userProfile/${userProfile.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userProfile),
+            });
+            setOriginalData(userProfile);
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error updating profile:", error);
+        }
+    };
+
+    const handleCancel = () => {
+        setUserProfile(originalData);
+        setIsEditing(false);
     };
     return (
         <div className="overflow-hidden px-4 ">
             <div className="flex items-center bg-yellow-300 h-40 rounded-xl p-6 my-10">
-                <img height={108} width={108} src="https://www.indiarunning.com/images/DefaultUserProfile.svg" alt="User Profile" />
-                <h1 className="flex content-center mx-10 text-black text-4xl">ABHISHEK SHARMA</h1>
+                <img height={108} width={108} src={userProfile?.profileImage || "https://www.indiarunning.com/images/DefaultUserProfile.svg"} alt="User Profile" />
+                <h1 className="flex content-center mx-10 text-black text-4xl">{userData?.fname} {userData?.fname}</h1>
             </div>
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Address</h2>
+            <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">Address
+                <button onClick={() => setIsEditing(!isEditing)} className="flex text-sm text-[rgb(0,179,146)]"> <img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
+                    {isEditing ? "cancel" : "Edit"}
+                </button>
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
 
                 <div className="space-y-4">
                     <div className="flex flex-col md:flex-row gap-4">
                         <label className="text-gray-700 flex-1">Country:   <span className="text-lg text-red-600"> *</span>
-                            <select className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
+                            <select name="country" value={userProfile?.country || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
                                 <option value="" >Select your country</option>
-                                <option value="USA">United States</option>
-                                <option value="CAN">Canada</option>
-                                <option value="UK">United Kingdom</option>
-                                <option value="AUS">Australia</option>
-                                <option value="IND">India</option>
-                                <option value="GER">Germany</option>
-                                <option value="FRA">France</option>
-                                <option value="JPN">Japan</option>
-                                <option value="BRA">Brazil</option>
+                                <option value="United States">United States</option>
+                                <option value="Canada">Canada</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Australia">Australia</option>
+                                <option value="India">India</option>
+                                <option value="Germany">Germany</option>
+                                <option value="France">France</option>
+                                <option value="Japan">Japan</option>
+                                <option value="Brazil">Brazil</option>
                             </select>
                         </label>
                         <label className="text-gray-700 flex-1">Nationality: <span className="text-lg text-red-600"> *</span>
-                            <select className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
+                            <select name="nationality" value={userProfile?.nationality || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
                                 <option value="" >Select your nationality</option>
                                 <option value="American">American</option>
                                 <option value="Canadian">Canadian</option>
@@ -542,7 +482,7 @@ function AddressForm() {
 
                     <div className="flex flex-col md:flex-row gap-4">
                         <label className="text-gray-700 flex-1">State: <span className="text-lg text-red-600"> *</span>
-                            <select className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
+                            <select name="state" value={userProfile?.state || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
                                 <option value="" >Select your state</option>
                                 <option value="Maharashtra">Maharashtra</option>
                                 <option value="Karnataka">Karnataka</option>
@@ -553,22 +493,22 @@ function AddressForm() {
                             </select>
                         </label>
                         <label className="text-gray-700 flex-1">Pin Code: <span className="text-lg text-red-600"> *</span>
-                            <input type="number" placeholder="Enter your pin code" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                            <input type="number" name="pincode" value={userProfile?.pincode || ""} onChange={handleInputChange} disabled={!isEditing} placeholder="Enter your pin code" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
                         </label>
                     </div>
 
                     <div>
                         <label className="text-gray-700">Address: <span className="text-lg text-red-600"> *</span>
-                            <textarea placeholder="Enter your address" required className="border p-3 w-full rounded bg-gray-100 text-gray-800"></textarea>
+                            <textarea name="address" value={userProfile?.address || ""} onChange={handleInputChange} disabled={!isEditing} placeholder="sdf" required className="border p-3 w-full rounded bg-gray-100 text-gray-800"></textarea>
                         </label>
                     </div>
-
-
                 </div>
-                <div className="flex justify-end gap-4 mt-4">
-                    <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Submit</button>
-                    <button type="reset" className="bg-gray-400 text-white p-3 rounded-lg">Reset</button>
-                </div>
+                {isEditing && (
+                    <div className="flex justify-end gap-4 mt-4">
+                        <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Save</button>
+                        <button type="button" onClick={handleCancel} className="bg-gray-400 text-white p-3 rounded-lg">Cancel</button>
+                    </div>
+                )}
             </form>
         </div>
     );
@@ -577,25 +517,91 @@ function AddressForm() {
 
 
 function EmergencyDetails() {
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const [isEditing, setIsEditing] = useState(false);
+    const [userData, setUserData] = useState<User | null>(null);
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+    const [originalData, setOriginalData] = useState<{ user: User | null; profile: UserProfile | null }>({ user: null, profile: null });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem('access_token');
+                if (!token) return console.error("No token found");
+
+                const response = await fetch("http://localhost:5000/users/current", {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch user");
+
+                const user = await response.json();
+                setUserData(user);
+                console.log(user);
+
+                const profileResponse = await fetch(`http://localhost:5000/userProfile/${user.id}`, {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const profile = await profileResponse.json();
+                setUserProfile(profile);
+                console.log(profile);
+                setOriginalData({ user, profile });
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+        fetchUserData();
+    }, []);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        if (!userProfile) return;
+        const { name, value } = e.target;
+        setUserProfile((prev) => ({ ...prev, [name]: value }));
     };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!userProfile) return;
+        try {
+            await fetch(`http://localhost:5000/userProfile/${userProfile.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userProfile),
+            });
+            setOriginalData({ user: userData, profile: userProfile });
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error updating profile:", error);
+        }
+    };
+
+    const handleCancel = () => {
+        setUserProfile(originalData.profile);
+        setIsEditing(false);
+    };
+
     return (
         <div className="overflow-hidden px-4 ">
             <div className="flex flex-col md:flex-row items-center bg-yellow-300 rounded-xl p-6 my-10">
-                <img height={108} width={108} src="https://www.indiarunning.com/images/DefaultUserProfile.svg" alt="User Profile" className="mb-4 md:mb-0" />
-                <h1 className="text-black text-4xl text-pretty text-center md:text-left md:ml-10">ABHISHEK SHARMA</h1>
+                <img height={108} width={108} src={userProfile?.profileImage || "https://www.indiarunning.com/images/DefaultUserProfile.svg"} alt="User Profile" />
+                <h1 className="flex content-center mx-10 text-black text-4xl">{userData?.fname} {userData?.lname}</h1>
             </div>
 
 
 
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Emergency Details</h2>
+            <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">Emergency Details
+                <button onClick={() => setIsEditing(!isEditing)} className="flex text-sm text-[rgb(0,179,146)]"> <img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
+                    {isEditing ? "cancel" : "Edit"}
+                </button>
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
 
                 <div className="space-y-4">
                     <div className="flex flex-col md:flex-row gap-4">
                         <label className="text-gray-700 flex-1">Blood Group: <span className="text-lg text-red-600"> *</span>
-                            <select className="border p-3 w-full rounded bg-gray-100 text-gray-800" required defaultValue="">
+                            <select name="bloodGroup" value={userProfile?.bloodGroup || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
                                 <option value="" disabled>Select your blood group</option>
                                 <option value="A+">A+</option>
                                 <option value="A-">A-</option>
@@ -608,20 +614,22 @@ function EmergencyDetails() {
                             </select>
                         </label>
                         <label className="text-gray-700 flex-1">Emergency Contact Name: <span className="text-lg text-red-600"> *</span>
-                            <input type="text" pattern="[A-Za-z]*" placeholder="Enter emergency contact name" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                            <input type="text" name="emergencyContactName" value={userProfile?.emergencyContactName || ""} onChange={handleInputChange} disabled={!isEditing} pattern="[A-Za-z ]*" placeholder="Enter Name" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
                         </label>
                     </div>
 
                     <div>
                         <label className="text-gray-700">Emergency Contact Number: <span className="text-lg text-red-600"> *</span>
-                            <input type="tel" placeholder="Enter emergency contact number" pattern="[0-9]{10}" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                            <input type="tel" name="emergencyContactNumber" value={userProfile?.emergencyContactNumber || ""} onChange={handleInputChange} disabled={!isEditing} pattern="[0-9]{10}" placeholder="Enter Mobile No." required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
                         </label>
                     </div>
                 </div>
-                <div className="flex justify-end gap-4 mt-4">
-                    <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Submit</button>
-                    <button type="reset" className="bg-gray-400 text-white p-3 rounded-lg">Reset</button>
-                </div>
+                {isEditing && (
+                    <div className="flex justify-end gap-4 mt-4">
+                        <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Save</button>
+                        <button type="button" onClick={handleCancel} className="bg-gray-400 text-white p-3 rounded-lg">Cancel</button>
+                    </div>
+                )}
             </form>
         </div>
 
@@ -629,169 +637,502 @@ function EmergencyDetails() {
 
     )
 }
+
 function PhysicalMeasurements() {
-    const handleSubmit = (e) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+    const [userData, setUserData] = useState<User | null>(null);
+    const [originalData, setOriginalData] = useState<UserProfile | null>(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem('access_token');
+                if (!token) return console.error("No token found");
+
+                const response = await fetch("http://localhost:5000/users/current", {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch user");
+
+                const user = await response.json();
+                setUserData(user);
+                console.log(user);
+
+                const profileResponse = await fetch(`http://localhost:5000/userProfile/${user.id}`, {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const profile = await profileResponse.json();
+                setUserProfile(profile);
+                console.log(profile);
+                setOriginalData(profile);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+        fetchUserData();
+    }, []);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        if (!userProfile) return;
+        const { name, value } = e.target;
+        setUserProfile((prev) => ({ ...prev!, [name]: value }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!userProfile) return;
+        try {
+            await fetch(`http://localhost:5000/userProfile/${userProfile.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userProfile),
+            });
+            setOriginalData(userProfile);
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error updating profile:", error);
+        }
+    };
+
+    const handleCancel = () => {
+        setUserProfile(originalData);
+        setIsEditing(false);
     };
     return (
         <div className="overflow-hidden px-4 ">
             <div className="flex flex-col md:flex-row items-center bg-yellow-300 rounded-xl p-6 my-10">
-                <img height={108} width={108} src="https://www.indiarunning.com/images/DefaultUserProfile.svg" alt="User Profile" className="mb-4 md:mb-0" />
-                <h1 className="text-black text-4xl text-pretty text-center md:text-left md:ml-10">ABHISHEK SHARMA</h1>
+                <img height={108} width={108} src={userProfile?.profileImage || "https://www.indiarunning.com/images/DefaultUserProfile.svg"} alt="User Profile" className="mb-4 md:mb-0" />
+                <h1 className="text-black text-4xl text-pretty text-center md:text-left md:ml-10">{userData?.fname} {userData?.lname}</h1>
             </div>
 
 
 
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Physical Measurements</h2>
+            <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">Physical Measurements
+                <button onClick={() => setIsEditing(!isEditing)} className="flex text-sm text-[rgb(0,179,146)]"> <img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
+                    {isEditing ? "cancel" : "Edit"}
+                </button>
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
 
                 <div className="space-y-4">
                     <div className="flex flex-col md:flex-row gap-4">
                         <label className="text-gray-700 flex-1">Height: <span className="text-lg text-red-600"> *</span>
-                            <input pattern="^\d+(\.\d{1,2})?$" type="text" placeholder="Enter height (ft)" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                            <input type="text" name="height" value={userProfile?.height || ""} onChange={handleInputChange} disabled={!isEditing} pattern="^\d+(\.\d{1,2})?$" placeholder="Enter height (ft)" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
                         </label>
                         <label className="text-gray-700 flex-1">Weight: <span className="text-lg text-red-600"> *</span>
-                            <input pattern="^\d+(\.\d{1,2})?$" type="text" placeholder="Enter weight (kg)" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                            <input type="text" name="weight" value={userProfile?.weight || ""} onChange={handleInputChange} disabled={!isEditing} pattern="^\d+(\.\d{1,2})?$" placeholder="Enter weight (kg)" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
                         </label>
                     </div>
 
                     <div>
                         <label className="text-gray-700">Shoe Size: <span className="text-lg text-red-600"> *</span>
-                            <select className="border p-3 w-full rounded bg-gray-100 text-gray-800" required defaultValue="">
+                            <select name="shoesize" value={userProfile?.shoesize || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
                                 <option value="" disabled>Select your shoe size</option>
-                                <option value="6">6 UK</option>
-                                <option value="7">7 UK</option>
-                                <option value="8">8 UK</option>
-                                <option value="9">9 UK</option>
-                                <option value="10">10 UK</option>
+                                <option value="6 UK">6 UK</option>
+                                <option value="7 UK">7 UK</option>
+                                <option value="8 UK">8 UK</option>
+                                <option value="9 UK">9 UK</option>
+                                <option value="10 UK">10 UK</option>
                             </select>
                         </label>
                     </div>
                 </div>
-                <div className="flex justify-end gap-4 mt-4">
-                    <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Submit</button>
-                    <button type="reset" className="bg-gray-400 text-white p-3 rounded-lg">Reset</button>
-                </div>
+                {isEditing && (
+                    <div className="flex justify-end gap-4 mt-4">
+                        <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Save</button>
+                        <button type="button" onClick={handleCancel} className="bg-gray-400 text-white p-3 rounded-lg">Cancel</button>
+                    </div>
+                )}
             </form>
         </div>
 
     )
 }
-function RaceKitShirtSize() {
-    const [selectedSize, setSelectedSize] = useState(null);
 
-    const handleSizeClick = (size) => {
-        setSelectedSize(size);
+function RaceKitShirtSize() {
+    const [selectedSize, setSelectedSize] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [userData, setUserData] = useState<User | null>(null);
+    const [userProfileData, setUserProfileData] = useState<UserProfile | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('access_token');
+                if (!token) return console.error("No token found");
+
+                const response = await fetch("http://localhost:5000/users/current", {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch user");
+
+                const user = await response.json();
+                setUserData(user);
+                console.log(user);
+
+                const profileResponse = await fetch(`http://localhost:5000/userProfile/${user.id}`, {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const profile = await profileResponse.json();
+                setUserProfileData(profile);
+                console.log(profile);
+                setSelectedSize(profile?.tshirtsize || null);
+            } catch (error) {
+                console.error("Error fetching user/profile data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleSizeClick = (size: string) => {
+        if (isEditing) {
+            setSelectedSize(size);
+        }
     };
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!selectedSize || !userProfileData) return;
+
+        try {
+            await fetch(`http://localhost:5000/userProfile/${userProfileData.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ tshirtsize: selectedSize }),
+            });
+
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error updating profile:", error);
+        }
+    };
+
+    const handleCancel = () => {
+        setSelectedSize(userProfileData?.tshirtsize || null);
+        setIsEditing(false);
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-
-            <div className="h-screen  px-4 ">
+            <div className="h-screen px-4">
                 <div className="flex flex-col md:flex-row items-center bg-yellow-300 rounded-xl p-6 my-10">
                     <img
                         height={108}
                         width={108}
-                        src="https://www.indiarunning.com/images/DefaultUserProfile.svg"
+                        src={userProfileData?.profileImage || "https://www.indiarunning.com/images/DefaultUserProfile.svg"}
                         alt="User Profile"
                         className="mb-4 md:mb-0"
                     />
                     <h1 className="text-black text-4xl text-pretty text-center md:text-left md:ml-10">
-                        ABHISHEK SHARMA
+                        {userData?.fname} {userData?.lname}
                     </h1>
                 </div>
 
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+                <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">
                     Pick the Perfect Fit: T-shirt Size Selection
+                    <button
+                        type="button"
+                        onClick={() => setIsEditing(!isEditing)}
+                        className="flex text-sm text-[rgb(0,179,146)] ml-4"
+                    ><img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
+                        {isEditing ? "Cancel" : "Edit"}
+                    </button>
                 </h2>
-                <div className="text-sm font-normal w-full text-start " ><p>Select your T-shirt Size<span className="text-lg text-red-600"> *</span></p></div>
+                <div className="text-sm font-normal w-full text-start">
+                    <p>Select your T-shirt Size<span className="text-lg text-red-600"> *</span></p>
+                </div>
 
                 <div className="flex space-x-4 mb-6">
                     {['XS', 'S', 'M', 'L', 'XL', '2XL'].map((size) => (
                         <button
                             key={size}
+                            type="button"
                             className={`border p-3 rounded ${selectedSize === size
                                 ? 'bg-blue-500 text-white'
                                 : 'bg-gray-100 text-gray-800'
                                 }`}
                             onClick={() => handleSizeClick(size)}
+                            disabled={!isEditing}
                         >
                             {size}
                         </button>
                     ))}
                 </div>
-                <div className="w-full flex justify-center md:w-1/2 mx-auto pb-10"><img src="https://www.indiarunning.com/images/t-shirt-size.png" alt="input-guide-Image"></img></div>
+                <div className="w-full flex justify-center md:w-1/2 mx-auto pb-10">
+                    <img src="https://www.indiarunning.com/images/t-shirt-size.png" alt="input-guide-Image" />
+                </div>
+            </div>
 
-            </div>
-            <div className="flex justify-end gap-4 mt-4">
-                <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Submit</button>
-                <button type="reset" className="bg-gray-400 text-white p-3 rounded-lg">Reset</button>
-            </div>
+            {isEditing && (
+                <div className="flex justify-end gap-4 mt-4">
+                    <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Save</button>
+                    <button type="button" onClick={handleCancel} className="bg-gray-400 text-white p-3 rounded-lg">Cancel</button>
+                </div>
+            )}
         </form>
     );
 }
 
+
 function TimingCertificate() {
-    const handleSubmit = (e) => {
+    const [selectedRace, setSelectedRace] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [userData, setUserData] = useState<User | null>(null);
+    const [userProfileData, setUserProfileData] = useState<UserProfile | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                
+
+               
+                
+
+                const token = localStorage.getItem('access_token');
+                if (!token) return console.error("No token found");
+
+                const response = await fetch("http://localhost:5000/users/current", {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch user");
+
+                const user = await response.json();
+                setUserData(user);
+                console.log(user);
+
+                const profileResponse = await fetch(`http://localhost:5000/userProfile/${user.id}`, {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const profile = await profileResponse.json();
+                setUserProfileData(profile);
+                console.log(profile);
+                setSelectedRace(profile?.raceType || null);
+                // setOriginalData(profile);
+            } catch (error) {
+                console.error("Error fetching user/profile data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleRaceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        if (isEditing) {
+            setSelectedRace(e.target.value);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!selectedRace || !userProfileData) return;
+    
+        console.log("Updating raceType:", selectedRace); // Debugging
+    
+        try {
+            const response = await fetch(`http://localhost:5000/userProfile/${userProfileData.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ raceType: selectedRace }),
+            });
+    
+            const result = await response.json();
+            console.log("Server response:", result); // Debugging response
+    
+            if (!response.ok) {
+                throw new Error("Failed to update raceType");
+            }
+    
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error updating profile:", error);
+        }
+    };
+    
+
+    const handleCancel = () => {
+        setSelectedRace(userProfileData?.raceType || null);
+        setIsEditing(false);
     };
     return (
         <div className="overflow-hidden px-4 ">
             <div className="flex flex-col md:flex-row items-center bg-yellow-300 rounded-xl p-6 my-10">
-                <img height={108} width={108} src="https://www.indiarunning.com/images/DefaultUserProfile.svg" alt="User Profile" className="mb-4 md:mb-0" />
-                <h1 className="text-black text-4xl text-pretty text-center md:text-left md:ml-10">ABHISHEK SHARMA</h1>
+                <img height={108} width={108} src={userProfileData?.profileImage || "https://www.indiarunning.com/images/DefaultUserProfile.svg"} alt="User Profile" className="mb-4 md:mb-0" />
+                <h1 className="text-black text-4xl text-pretty text-center md:text-left md:ml-10">{userData?.fname} {userData?.lname}</h1>
             </div>
 
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Race Timing Certificate</h2>
+            <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">Race Timing Certificate
+                <button
+                    type="button"
+                    onClick={() => setIsEditing(!isEditing)}
+                    className="flex text-sm text-[rgb(0,179,146)] ml-4"
+                ><img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
+                    {isEditing ? "Cancel" : "Edit"}
+                </button>
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
 
                 <div className="space-y-4">
                     <div className="flex flex-col md:flex-row gap-4">
                         <label className="text-gray-700 flex-1">Race Type: <span className="text-lg text-red-600"> *</span>
-                            <select className="border p-3 w-full rounded bg-gray-100 text-gray-800" required defaultValue="">
+                            <select
+                                name="raceType"
+                                value={selectedRace || ""}
+                                onChange={handleRaceChange}
+                                disabled={!isEditing}
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
+                                required
+                            >                                
                                 <option value="" disabled>Select Race Type</option>
-                                <option value="10k">10K</option>
-                                <option value="half_marathon">Half Marathon</option>
-                                <option value="full_marathon">Full Marathon</option>
-                                <option value="not_applicable">Not Applicable</option>
+                                <option value="10K">10K</option>
+                                <option value="HALF MARATHON">Half Marathon</option>
+                                <option value="FULL MARATHON">Full Marathon</option>
+                                <option value="NOT APPLICABLE">Not Applicable</option>
                             </select>
                         </label>
 
                     </div>
                 </div>
-                <div className="flex justify-end gap-4 mt-4">
-                    <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Submit</button>
-                    <button type="reset" className="bg-gray-400 text-white p-3 rounded-lg">Reset</button>
-                </div>
+                {isEditing && (
+                    <div className="flex justify-end gap-4 mt-4">
+                        <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Save</button>
+                        <button type="button" onClick={handleCancel} className="bg-gray-400 text-white p-3 rounded-lg">Cancel</button>
+                    </div>
+                )}
             </form>
         </div>
     );
 }
 
 function Documents() {
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
+    const [frontPhoto, setFrontPhoto] = useState<File | null>(null);
+    const [backPhoto, setBackPhoto] = useState<File | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [userData, setUserData] = useState<User | null>(null);
+    const [userProfileData, setUserProfileData] = useState<UserProfile | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('access_token');
+                if (!token) return console.error("No token found");
+
+                const response = await fetch("http://localhost:5000/users/current", {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch user");
+
+                const user = await response.json();
+                setUserData(user);
+                console.log(user);
+
+                const profileResponse = await fetch(`http://localhost:5000/userProfile/${user.id}`, {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const profile = await profileResponse.json();
+                setUserProfileData(profile);
+                console.log(profile);
+                setSelectedDocument(profile?.documentType || null);
+            } catch (error) {
+                console.error("Error fetching user/profile data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleDocumentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        if (isEditing) {
+            setSelectedDocument(e.target.value);
+        }
     };
+
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>, setPhoto: Function) => {
+        if (isEditing && e.target.files) {
+            setPhoto(e.target.files[0]);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedDocument || !userProfileData) return;
+
+        try {
+            await fetch(`/api/userProfile/${userProfileData}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ documentType: selectedDocument }),
+            });
+
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error updating profile:", error);
+        }
+    };
+
+    const handleCancel = () => {
+        setSelectedDocument(userProfileData?.documentType || null);
+        setIsEditing(false);
+    };
+
 
     return (
         <div className="overflow-hidden px-4 ">
             <div className="flex items-center bg-yellow-300 h-40 rounded-xl p-6 my-10">
-                <img height={108} width={108} src="https://www.indiarunning.com/images/DefaultUserProfile.svg" alt="User Profile" />
-                <h1 className="flex content-center mx-10 text-black text-4xl">ABHISHEK SHARMA</h1>
+                <img height={108} width={108} src={userProfileData?.profileImage || "https://www.indiarunning.com/images/DefaultUserProfile.svg"} />
+                <h1 className="flex content-center mx-10 text-black text-4xl">{userData?.fname} {userData?.lname}</h1>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+                <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">
+                    Document Upload
+                    <button
+                        type="button"
+                        onClick={() => setIsEditing(!isEditing)}
+                        className="flex text-sm text-[rgb(0,179,146)] ml-4"
+                    ><img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
+                        {isEditing ? "Cancel" : "Edit"}
+                    </button>
+                </h2>
                 <div className="flex flex-col md:flex-row gap-4">
                     <label className="text-gray-700 flex-1">Select Document Type: <span className="text-lg text-red-600"> *</span>
-                        <select className="border p-3 w-full rounded bg-gray-100 text-gray-800" required defaultValue="">
+                        <select
+                            name="documentType"
+                            value={selectedDocument || ""}
+                            onChange={handleDocumentChange}
+                            disabled={!isEditing}
+                            className="border p-3 w-full rounded bg-gray-100 text-gray-800"
+                            required
+                        >
                             <option value="" disabled>Select Document Type</option>
-                            <option value="aadhar">Aadhar Card</option>
-                            <option value="pan_card">PAN Card</option>
-                            <option value="passport">Passport</option>
-                            <option value="driving_license">Driving License</option>
+                            <option value="Aadhar Card">Aadhar Card</option>
+                            <option value="PAN Card">PAN Card</option>
+                            <option value="Passport">Passport</option>
+                            <option value="Driving License">Driving License</option>
                         </select>
                     </label>
                 </div>
@@ -799,19 +1140,35 @@ function Documents() {
                 <div className="space-y-4">
                     <div className="flex flex-col md:flex-row gap-4">
                         <label className="text-gray-700 flex-1">Front Photo (Identity Proof): <span className="text-lg text-red-600"> *</span>
-                            <input type="file" accept="image/*" className="border p-3 w-full rounded bg-gray-100 text-gray-800" required />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handlePhotoChange(e, setFrontPhoto)}
+                                disabled={!isEditing}
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
+                                required
+                            />
                         </label>
 
                         <label className="text-gray-700 flex-1">Back Photo (Identity Proof): <span className="text-lg text-red-600"> *</span>
-                            <input type="file" accept="image/*" className="border p-3 w-full rounded bg-gray-100 text-gray-800" required />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handlePhotoChange(e, setBackPhoto)}
+                                disabled={!isEditing}
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
+                                required
+                            />
                         </label>
                     </div>
                 </div>
 
-                <div className="flex justify-end gap-4 mt-4">
-                    <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Submit</button>
-                    <button type="reset" className="bg-gray-400 text-white p-3 rounded-lg">Reset</button>
-                </div>
+                {isEditing && (
+                    <div className="flex justify-end gap-4 mt-4">
+                        <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg">Save</button>
+                        <button type="button" onClick={handleCancel} className="bg-gray-400 text-white p-3 rounded-lg">Cancel</button>
+                    </div>
+                )}
             </form>
         </div>
     );

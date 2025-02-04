@@ -78,7 +78,7 @@ export default function RegisterPage() {
   
     
     if (validateForm()) {
-      const [fname, lname] = formData.name.split(' '); // Split name into first and last name
+      const [fname, lname] = formData.name.split(' ');
       const payload = {
         fname,
         lname,
@@ -88,7 +88,6 @@ export default function RegisterPage() {
 
       console.log('Form is valid', payload);
 
-      // Send the payload to the backend
       fetch('http://localhost:5000/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
