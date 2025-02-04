@@ -115,7 +115,7 @@ export default function Home() {
                 <MapPin size={16} />
                 <span>{event.location || 'Mumbai'}</span>
                 <span className="mx-2">|</span>
-                <span>{event.type || 'On Ground'}</span>
+                <span>{event.event_type || 'On Ground'}</span>
               </div>
             </div>
             <button className="p-2 hover:bg-gray-100 rounded-full">
