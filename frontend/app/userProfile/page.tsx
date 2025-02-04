@@ -202,7 +202,6 @@ function PersonalInformation() {
                 throw new Error("Failed to update user details");
             }
 
-            // Update user profile details (dob, gender, bio, etc.)
             const profileUpdateResponse = await fetch(`http://localhost:5000/userProfile/${userProfile.id}`, {
                 method: "PATCH",
                 headers: {
@@ -210,9 +209,9 @@ function PersonalInformation() {
                     Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    dob: userProfile?.dob || "", // Ensuring it's not null
+                    dob: userProfile?.dob || "", 
                     gender: userProfile?.gender,
-                    bio: userProfile?.bio || ""  // Ensuring bio is not null
+                    bio: userProfile?.bio || ""  
                 }),
             });
 
@@ -222,7 +221,6 @@ function PersonalInformation() {
 
             console.log("User and profile updated successfully");
 
-            // Set updated data as original to prevent reset
             setOriginalData({ user: userData, profile: userProfile });
             setIsEditing(false);
         } catch (error) {
@@ -949,7 +947,7 @@ function TimingCertificate() {
         e.preventDefault();
         if (!selectedRace || !userProfileData) return;
     
-        console.log("Updating raceType:", selectedRace); // Debugging
+        console.log("Updating raceType:", selectedRace); 
     
         try {
             const response = await fetch(`http://localhost:5000/userProfile/${userProfileData.id}`, {
@@ -961,7 +959,7 @@ function TimingCertificate() {
             });
     
             const result = await response.json();
-            console.log("Server response:", result); // Debugging response
+            console.log("Server response:", result); 
     
             if (!response.ok) {
                 throw new Error("Failed to update raceType");

@@ -88,7 +88,7 @@ export default function RegisterPage() {
 
       console.log('Form is valid', payload);
 
-      fetch('http://localhost:5000/auth/register', {
+      await fetch('http://localhost:5000/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

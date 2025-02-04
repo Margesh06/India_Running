@@ -19,10 +19,10 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @UseGuards(AuthGuard) // Protect this route
-  @Get('current') // Fetch user based on JWT
+  @UseGuards(AuthGuard)
+  @Get('current')
   async getCurrentUser(@Req() req: Request) {
-    console.log("Extracted user ID from JWT:", req.user.id); // Debugging
-    return this.usersService.findOne(req.user.id); // User ID from JWT token
+    console.log("Extracted user ID from JWT:", req.user.id); 
+    return this.usersService.findOne(req.user.id); 
   }
 }

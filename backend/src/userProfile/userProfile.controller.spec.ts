@@ -70,7 +70,10 @@ describe('UserProfileController', () => {
   });
 
   it('should update user profile', async () => {
-    const updateDto: UpdateUserProfileDto = { profileImage: 'updated.jpg' };
+    const updateDto: UpdateUserProfileDto = {
+      profileImage: 'updated.jpg',
+      user_id: 0
+    };
 
     const updatedUserProfile: UserProfile = { 
       id: 1,
