@@ -15,8 +15,8 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
-    const { email, password } = loginDto; // Use email instead of username
-    const user = await this.usersRepository.findOne({ where: { email } }); // Find by email
+    const { email, password } = loginDto; 
+    const user = await this.usersRepository.findOne({ where: { email } }); 
     console.log("email matched",user);
 
     if (!user) {
@@ -28,7 +28,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { email: user.email, sub: user.id }; // JWT payload with email
+    const payload = { email: user.email, sub: user.id }; 
     const token = await this.jwtService.sign(payload);
 
     return { access_token: token };
