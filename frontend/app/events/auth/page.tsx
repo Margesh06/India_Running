@@ -5,12 +5,17 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
-type User = {
-  email: string
-  firstName: string
-  lastName: string
-  mobile: string
-  organization: string
+interface User {
+  id: number;
+  fname: string;
+  lname: string;
+  email: string;
+  role:string;
+}
+
+interface UserProfile {
+  id: number;
+  phone_no: number;
 }
 
 type Event = {
@@ -22,19 +27,69 @@ type Event = {
 export default function EventsPage() {
   const [view, setView] = useState<"auth" | "signup" | "dashboard" | "create" | "details">("auth")
   const [email, setEmail] = useState("")
-  const [user, setUser] = useState<User | null>(null)
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(false)
   const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
+  const [userData, setUserData] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [formData, setFormData] = useState({
+    email: "",
     firstName: "",
     lastName: "",
     mobile: "",
     organization: "",
-  })
+  });
+  
+
+  
 
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+        try {
+            const token = localStorage.getItem('access_token');
+            if (!token) return console.error("No token found");
+
+            const response = await fetch("http://localhost:5000/users/current", {
+                method: "GET",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (!response.ok) throw new Error("Failed to fetch user");
+
+            const user = await response.json();
+            setUserData(user);
+            console.log(user);
+
+            const profileResponse = await fetch(`http://localhost:5000/userProfile/${user.id}`, {
+                method: "GET",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            const profile = await profileResponse.json();
+            setUserProfile(profile);
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+    fetchUserData();
+}, []);
+
+useEffect(() => {
+  console.log("sdfg",userData)
+  if (userData) {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      email: userData.email || "",
+      firstName: userData.fname || "",
+      lastName: userData.lname || "",
+    }));
+  }
+}, [userData]);
+
+
 
   useEffect(() => {
     const eventId = searchParams.get("eventId")
@@ -44,19 +99,59 @@ export default function EventsPage() {
   }, [searchParams])
 
   const checkEmail = async (email: string) => {
-    // Implement your API call here
-    // For demo, returning false to show signup form
+    
+    if(!userData) 
+      return false;
+    const role=userData?.role;
+    if(role==="organiser") return true;
     return false
   }
 
-  const createUser = async (data: User) => {
-    // Implement your user creation API call here
-    console.log("Creating user:", data)
-    return data
-  }
+  const createUser = async (data) => {
+    try {
+      const response = await fetch("http://localhost:5000/organisers/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to register organiser");
+      }
+  
+      const result = await response.json();
+      console.log("User registered successfully:", result);
+
+
+      const userId = userData.id; 
+
+    const roleUpdateResponse = await fetch(`http://localhost:5000/users/${userId}/updateRole`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        role: "organiser", 
+      }),
+    });
+
+    if (!roleUpdateResponse.ok) {
+      throw new Error("Failed to update user role");
+    }
+
+    const updatedUser = await roleUpdateResponse.json();
+    console.log("User role updated successfully:", updatedUser);
+      return result; 
+    } catch (error) {
+      console.error("Error registering organiser:", error);
+      return null;
+    }
+  };
 
   const fetchEvents = async () => {
-    // Implement your API call to fetch events
+  
     return [
       { id: "1", name: "Sample Event 1", date: "2023-06-01" },
       { id: "2", name: "Sample Event 2", date: "2023-06-15" },
@@ -64,7 +159,6 @@ export default function EventsPage() {
   }
 
   const fetchEventDetails = async (eventId: string) => {
-    // Implement your API call to fetch event details
     setCurrentEvent({ id: eventId, name: `Event ${eventId}`, date: "2023-06-01" })
     setView("details")
   }
@@ -76,13 +170,13 @@ export default function EventsPage() {
     try {
       const exists = await checkEmail(email)
       if (exists) {
-        // Simulate fetching user data
-        setUser({ email, firstName: "John", lastName: "Doe", mobile: "", organization: "" })
+        setFormData({ email:userData?.email, firstName: userData?.fname, lastName: userData?.lname, mobile: "" , organization: "" })
         const fetchedEvents = await fetchEvents()
         setEvents(fetchedEvents)
         setView("dashboard")
       } else {
         setView("signup")
+        setFormData({ email:userData?.email, firstName: userData?.fname, lastName: userData?.lname, mobile: "", organization: "" })
       }
     } catch (error) {
       console.error("Error checking email:", error)
@@ -96,8 +190,7 @@ export default function EventsPage() {
     setLoading(true)
 
     try {
-      const newUser = await createUser({ email, ...formData })
-      setUser(newUser)
+      const newUser = await createUser(formData)
       const fetchedEvents = await fetchEvents()
       setEvents(fetchedEvents)
       setView("dashboard")
@@ -117,7 +210,7 @@ export default function EventsPage() {
           <Input
             type="email"
             placeholder="Email address"
-            value={email}
+            value={formData?.email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -150,7 +243,7 @@ export default function EventsPage() {
             <Input
               id="firstName"
               placeholder="Enter your First Name"
-              value={formData.firstName}
+              value={formData.firstName || ""}
               onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
               required
             />
@@ -163,7 +256,7 @@ export default function EventsPage() {
             <Input
               id="lastName"
               placeholder="Enter your Last Name"
-              value={formData.lastName}
+              value={formData.lastName ||""}
               onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
               required
             />
@@ -183,7 +276,7 @@ export default function EventsPage() {
                 type="tel"
                 className="rounded-l-none"
                 placeholder="Enter your mobile number"
-                value={formData.mobile}
+                value={formData.mobile ||""}
                 onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
                 required
               />
@@ -197,7 +290,7 @@ export default function EventsPage() {
             <Input
               id="organization"
               placeholder="Enter your Organization Name"
-              value={formData.organization}
+              value={formData.organization ||""}
               onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
               required
             />

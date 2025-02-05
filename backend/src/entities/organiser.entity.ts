@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { User } from "./users.entity"; // Ensure correct path
 
-@Entity("Organiser")
+@Entity("organisers")
 export class Organiser {
   @PrimaryGeneratedColumn()
   id: number;
@@ -35,4 +36,7 @@ export class Organiser {
   @Column({ name: "pan_card", type: "text" })
   panCard: string;
 
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "user_id" })
+  user: User; 
 }

@@ -18,4 +18,8 @@ export class UpdateUserDto {
   @IsString()
   @Length(6, 20)
   password?: string;
+
+  @IsOptional()  
+  @IsString()
+  role: string = "user";
 }

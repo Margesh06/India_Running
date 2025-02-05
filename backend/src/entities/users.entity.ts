@@ -23,6 +23,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ default: "user" })
+  role: string;
+
   @CreateDateColumn({name:'createdAt' , type: "timestamptz" }) 
   reg_at: Date;
 }

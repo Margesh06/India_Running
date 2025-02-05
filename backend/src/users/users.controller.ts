@@ -19,6 +19,11 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
+  @Patch(':id/updateRole')
+  async updateUserRole(@Param('id') id: number, @Body() updateRoleDto: { role: string }) {
+    return this.usersService.updateUserRole(id, updateRoleDto.role);
+  }
+
   @UseGuards(AuthGuard)
   @Get('current')
   async getCurrentUser(@Req() req: Request) {

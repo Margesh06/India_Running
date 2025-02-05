@@ -137,7 +137,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
-    console.log ("Access token:",token);
+    console.log("Access token:", token);
     console.log(process.env.JWT_SECRET);
     if (token) {
       setIsLoggedIn(true);
@@ -297,58 +297,58 @@ export default function HomePage() {
           </div>
 
           <div className="w-full sm:w-auto relative">
-  <input
-    type="text"
-    placeholder="Search events"
-    className="px-4 py-2 rounded-md bg-white text-gray-700 w-full border border-gray-200 focus:outline-none focus:border-emerald-500"
-    value={searchQuery}
-    onChange={handleSearchChange}
-    onFocus={handleFocus}
-    onBlur={handleBlur}
-  />
-  
-  {showSuggestions && filteredSuggestions.length > 0 && (
-    <ul className="absolute z-10 left-0 right-0 bg-white shadow-lg rounded-md mt-1 max-h-[280px] overflow-auto divide-y divide-gray-100">
-      {filteredSuggestions.map((event) => (
-        <li
-          key={event.id}
-          className="px-4 py-3 text-[15px] text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors"
-          onClick={() => handleSuggestionClick(event)}
-        >
-          {event.name}
-          {event.city && (
-            <>
-              <span className="mx-2 text-gray-400">—</span>
-              <span className="text-gray-500">{event.city}</span>
-            </>
-          )}
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
+            <input
+              type="text"
+              placeholder="Search events"
+              className="px-4 py-2 rounded-md bg-white text-gray-700 w-full border border-gray-200 focus:outline-none focus:border-emerald-500"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+
+            {showSuggestions && filteredSuggestions.length > 0 && (
+              <ul className="absolute z-10 left-0 right-0 bg-white shadow-lg rounded-md mt-1 max-h-[280px] overflow-auto divide-y divide-gray-100">
+                {filteredSuggestions.map((event) => (
+                  <li
+                    key={event.id}
+                    className="px-4 py-3 text-[15px] text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors"
+                    onClick={() => handleSuggestionClick(event)}
+                  >
+                    {event.name}
+                    {event.city && (
+                      <>
+                        <span className="mx-2 text-gray-400">—</span>
+                        <span className="text-gray-500">{event.city}</span>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
 
           <div className="w-full sm:w-auto space-x-4 flex flex-wrap justify-between sm:justify-start">
-          {!isLoggedIn &&
-            (
-              <>
-                <button
-                  onClick={() => handleAuthForm('login')}
-                  className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
-                >
-                  Login
-                </button>
-                <button
-                  onClick={() => handleAuthForm('register')}
-                  className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
-                >
-                  Register
-                </button>
-              </>
-            )}
+            {!isLoggedIn &&
+              (
+                <>
+                  <button
+                    onClick={() => handleAuthForm('login')}
+                    className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => handleAuthForm('register')}
+                    className="text-black hover:text-blue-500 hover:underline font-medium py-2 px-4 w-full sm:w-auto text-center"
+                  >
+                    Register
+                  </button>
+                </>
+              )}
             <Link
-              href="/events/auth"
+              href={localStorage.getItem('access_token') ? "/events/auth" : "/auth/login"}
               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 w-full sm:w-auto text-center"
             >
               Create Event

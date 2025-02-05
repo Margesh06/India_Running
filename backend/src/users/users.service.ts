@@ -19,6 +19,20 @@ export class UsersService {
     return user;
   }
 
+  async updateUserRole(id: number, role: string): Promise<User> {
+    // Correct the findOne() method usage to pass 'where' with 'id'
+    const user = await this.userRepository.findOne({
+      where: { id: id }, // Correctly pass the condition using 'where'
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    user.role = role; // Update the role to 'organiser'
+    return this.userRepository.save(user);
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findOne(id);
     Object.assign(user, updateUserDto);
