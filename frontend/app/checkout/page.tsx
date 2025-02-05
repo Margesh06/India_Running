@@ -10,7 +10,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from 'next/link';
-
+import * as React from "react";
+import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import { Check } from "lucide-react";
 export default function Home() {
 
   const router = useRouter();
@@ -27,7 +29,12 @@ export default function Home() {
     email: "",
     phone: "",
     address: "",
-    pincode: ""
+    pincode: "",
+    bloodGroup: "",
+    emergencyContactName: "",
+    emergencyContactNumber: "",
+    termsAndCondition: false,
+    medicalCondition: "",
   });
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
@@ -70,6 +77,11 @@ export default function Home() {
           phone: profileData?.phone_no || "",
           address: profileData?.address || "",
           pincode: profileData?.pincode || "",
+          bloodGroup: profileData?.bloodGroup || "",
+          emergencyContactName: profileData?.emergencyContactName || "",
+          emergencyContactNumber: profileData?.emergencyContactNumber || "",
+          termsAndCondition: false,
+          medicalCondition:"",
         });
 
       } catch (error) {
@@ -255,16 +267,16 @@ export default function Home() {
                       </Label>
                       <RadioGroup
                         value={formData.gender}
-                        
+
                         onValueChange={(value) => handleInputChange('gender', value)}
                         className="flex gap-6 mt-2"
                       >
                         <div className="flex items-center gap-2">
-                          <RadioGroupItem value="male" id="male" className="border-gray-300" checked={formData.gender === "Male"}/>
+                          <RadioGroupItem value="male" id="male" className="border-gray-300" checked={formData.gender === "Male"} />
                           <Label htmlFor="male" className="text-sm" >Male</Label>
                         </div>
                         <div className="flex items-center gap-2">
-                          <RadioGroupItem value="female" id="female" className="border-gray-300" checked={formData.gender === "Female"}/>
+                          <RadioGroupItem value="female" id="female" className="border-gray-300" checked={formData.gender === "Female"} />
                           <Label htmlFor="female" className="text-sm">Female</Label>
                         </div>
                       </RadioGroup>
@@ -303,12 +315,107 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-            ) : (
-              <div className="bg-white rounded shadow-sm p-4">
-                <h5 className="text-[#00856F] font-medium mb-4">Additional Information</h5>
-                {/* Add additional information form fields here */}
-              </div>
-            )}
+            ) :
+              (
+                <div className="space-y-4">
+                  <div className="bg-white rounded shadow-sm p-4">
+                    <div className="border border-dashed border-yellow-400 bg-[#FFFBEB] p-3 mb-6 text-xs">
+                      <div className="flex gap-1 items-start">
+                        <span className="text-red-500">*</span>
+                        <span>indicates mandatory fields.</span>
+                      </div>
+                      <div className="flex gap-1 items-start mt-1">
+                        <span>Fields highlighted with</span>
+                        <div className="w-3 h-3 relative">
+                          <Image
+                            src="http://localhost:3000/DefaultUserProfile.svg"
+                            alt="Info"
+                            fill
+                            className="object-contain"
+                          />
+                        </div>
+                        <span>are saved to your account.</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 p-2">
+                      <div className="font-bold">EMERGENCY DETAILS</div>
+                      <div>
+                        <Label className="text-sm mb-1">
+                          Emergency Contact Name <span className="text-red-500">*</span>
+                        </Label>
+                        <input type="text" name="emergencyContactName" value={formData?.emergencyContactName || ""} onChange={(e) => handleInputChange('emergencyContactName', e.target.value)} pattern="[A-Za-z ]*" placeholder="Enter Name" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+
+                      </div>
+
+                      <div>
+                        <Label className="text-sm mb-1">
+                          Emergency Contact Number <span className="text-red-500">*</span>
+                        </Label>
+
+                        <input type="tel" name="emergencyContactNumber" value={formData?.emergencyContactNumber || ""} onChange={(e) => handleInputChange('emergencyContactNumber', e.target.value)} pattern="[0-9]{10}" placeholder="Enter Mobile No." required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                      </div>
+                      <div className="font-bold">MEDICAL QUESTIONAIRE</div>
+                      <div>
+                        <Label className="text-sm mb-1">
+                          Blood Group <span className="text-red-500">*</span>
+                        </Label>
+                          <select name="bloodGroup" value={formData?.bloodGroup || ""} onChange={(e) => handleInputChange('bloodGroup', e.target.value)} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
+                            <option value="" disabled>Select your blood group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                          </select>
+                      </div>
+                      <div>
+                        <Label className="text-sm mb-1">
+                          Any other medical condition that you would want us to be aware of? Please specify if any. 
+                        </Label>
+                        <textarea
+                          name="medicalCondition"
+                          value={formData.medicalCondition}
+                          onChange={(e) => handleInputChange('medicalCondition', e.target.value)}
+                          placeholder="Enter your medical conditions here..."
+                          className="border p-3 w-full rounded bg-gray-100 text-gray-800 resize-none"
+                        />
+                      </div>
+
+                      <div className="font-bold">TERMS & CONDITIONS </div>
+
+                      <div className="flex items-center gap-2">
+                        <CheckboxPrimitive.Root
+                          checked={formData.termsAndCondition} 
+                          onCheckedChange={(checked) => handleInputChange("termsAndCondition", checked === true)}
+                          className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                        >
+                          <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
+                            <Check className="h-4 w-4" />
+                          </CheckboxPrimitive.Indicator>
+                        </CheckboxPrimitive.Root>
+
+                        <label className="text-sm">
+                          I agree to the Terms and Conditions.
+                        </label>
+                      </div>
+
+
+
+                      <Button
+                        onClick={handleSaveAndContinue}
+                        className="bg-[#FF1B75] hover:bg-[#FF1B75]/90 text-white mt-4 rounded"
+                      >
+                        Save and Continue
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
           </div>
 
           {/* Right Section - Summary */}

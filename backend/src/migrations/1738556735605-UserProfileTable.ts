@@ -55,8 +55,7 @@ export class UserProfileTable1738556735605 implements MigrationInterface {
                 },
                 {
                   name: "phone_no",
-                  type: "integer",
-                  
+                  type: "bigint",                  
                   isNullable: true,
                 },
                 {
