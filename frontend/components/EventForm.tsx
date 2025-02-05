@@ -819,8 +819,8 @@ export function EventForm() {
     city: "",
     pincode: "",
     area: "",
-    banner_image: "",
-    mobile_banner: "",
+    banner_image: null as File | null,
+    mobile_banner: null as File | null,
     
     // Step 3 data (Category)
     title: "",
@@ -852,8 +852,9 @@ export function EventForm() {
   };
 
   const handleFileChange = (name: string, file: File) => {
-    setFormData((prev) => ({ ...prev, [name]: file.name }));
+    setFormData((prev) => ({ ...prev, [name]: file }));
   };
+  
 
   const handleGalleryImages = (files: FileList) => {
     const fileNames = Array.from(files).map(file => file.name);
@@ -921,9 +922,40 @@ export function EventForm() {
   };
 
   const handleFinish = async () => {
-    
     try {
-      // First submit the event data
+      // Function to upload image to ImgBB
+      const uploadImage = async (imageFile: File) => {
+        if (!imageFile || !(imageFile instanceof File)) {
+          console.error("Invalid image file:", imageFile);
+          throw new Error("Invalid image file");
+        }
+  
+        const formData = new FormData();
+        formData.append("image", imageFile);
+  
+        const response = await fetch(
+          "https://api.imgbb.com/1/upload?key=ce4f9ca69b51993d4ec69a5b4f0aa874",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+  
+        if (!response.ok) throw new Error("Failed to upload image");
+  
+        const result = await response.json();
+        return result.data.display_url;
+      };
+    
+      // Upload the banner and mobile banner images
+      const bannerImageUrl = formData.banner_image
+        ? await uploadImage(formData.banner_image) // Pass File object here
+        : null;
+      const mobileBannerUrl = formData.mobile_banner
+        ? await uploadImage(formData.mobile_banner) // Pass File object here
+        : null;
+  
+      // Prepare event data
       const eventData = {
         name: formData.name,
         description: formData.description,
@@ -940,24 +972,27 @@ export function EventForm() {
         city: formData.city,
         pincode: formData.pincode,
         area: formData.area,
-        banner_image: formData.banner_image,
-        mobile_banner: formData.mobile_banner,
+        banner_image: bannerImageUrl, // Use uploaded URL
+        mobile_banner: mobileBannerUrl, // Use uploaded URL
       };
-
-      const eventResponse = await fetch('http://localhost:5000/events', {
-        method: 'POST',
+  
+      console.log("Submitting event data:", eventData);
+  
+      // Submit event data
+      const eventResponse = await fetch("http://localhost:5000/events", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(eventData),
       });
-
-      if (!eventResponse.ok) throw new Error('Failed to submit event');
-      
+  
+      if (!eventResponse.ok) throw new Error("Failed to submit event");
+  
       const eventResult = await eventResponse.json();
       const eventId = eventResult.id;
-
-      // Then submit each ticket category
+  
+      // Submit ticket categories
       for (const ticket of addedTickets) {
         const categoryData = {
           title: ticket.title,
@@ -967,43 +1002,45 @@ export function EventForm() {
           ageLimitMax: ticket.ageLimitMax,
           inclusive: ticket.inclusive,
         };
-
-        const categoryResponse = await fetch('http://localhost:5000/category', {
-          method: 'POST',
+  
+        const categoryResponse = await fetch("http://localhost:5000/category", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(categoryData),
         });
-
-        if (!categoryResponse.ok) throw new Error('Failed to submit category');
-        
+  
+        if (!categoryResponse.ok) throw new Error("Failed to submit category");
+  
         const categoryResult = await categoryResponse.json();
-
+  
         // Link event and category
         const eventCategoryData = {
           eventId: eventId,
           categoryId: categoryResult.id,
         };
-
-        const eventCategoryResponse = await fetch('http://localhost:5000/event-categories', {
-          method: 'POST',
+  
+        const eventCategoryResponse = await fetch("http://localhost:5000/event-categories", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(eventCategoryData),
         });
-
-        if (!eventCategoryResponse.ok) throw new Error('Failed to link event and category');
+  
+        if (!eventCategoryResponse.ok) throw new Error("Failed to link event and category");
       }
-
-      alert('Event creation completed successfully!');
+  
+      alert("Event creation completed successfully!");
       window.location.reload();
     } catch (error) {
-      console.error('Error submitting event:', error);
-      alert('Failed to submit event. Please try again.');
+      console.error("Error submitting event:", error);
+      alert("Failed to submit event. Please try again.");
     }
   };
+  
+  
 
   const [selectedActivity, setSelectedActivity] = useState(null);
 
@@ -1312,6 +1349,7 @@ export function EventForm() {
                         <input
                           type="file"
                           onChange={(e) => e.target.files && handleFileChange('banner_image', e.target.files[0])}
+                          accept='image/*'
                           className="hidden"
                           id="web-banner"
                         />
@@ -1322,7 +1360,7 @@ export function EventForm() {
                       </div>
                       <p className="text-xs text-gray-500 mt-1">Only PNG or JPEG, Max: 2MB Dimensions: 1024x576</p>
                       {formData.banner_image && (
-                        <p className="text-sm text-gray-600 mt-2">Selected: {formData.banner_image}</p>
+                        <p className="text-sm text-gray-600 mt-2">Selected: {formData.banner_image.name}</p>
                       )}
                     </div>
                   </div>
@@ -1334,6 +1372,7 @@ export function EventForm() {
                         <input
                           type="file"
                           onChange={(e) => e.target.files && handleFileChange('mobile_banner', e.target.files[0])}
+                          accept='image/*'
                           className="hidden"
                           id="mobile-banner"
                         />
@@ -1344,7 +1383,7 @@ export function EventForm() {
                       </div>
                       <p className="text-xs text-gray-500 mt-1">Only PNG or JPEG, Max: 2MB Dimensions: 123x180</p>
                       {formData.mobile_banner && (
-                        <p className="text-sm text-gray-600 mt-2">Selected: {formData.mobile_banner}</p>
+                        <p className="text-sm text-gray-600 mt-2">Selected: {formData.mobile_banner.name}</p>
                       )}
                     </div>
                   </div>
