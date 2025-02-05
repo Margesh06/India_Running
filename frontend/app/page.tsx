@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Carousel from '../components/carousel';
 import Footer from "../components/Footer";
+
 import * as jwt from 'jsonwebtoken';
 // const events = [
 //   {
@@ -124,6 +125,8 @@ export default function HomePage() {
   const [selectedDistance, setSelectedDistance] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const eventsPerRow = 3;
   const rowsPerPage = 2;
@@ -226,6 +229,43 @@ export default function HomePage() {
       router.push('/auth/register');
     }
   };
+  // Handle search query change
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.trim().length > 0) {
+      const filtered = events.filter((event) => {
+        const queryLowerCase = query.toLowerCase();
+        return (
+          event.name.toLowerCase().includes(queryLowerCase) ||
+          event.city.toLowerCase().includes(queryLowerCase)
+        );
+      });
+      setFilteredSuggestions(filtered);
+    } else {
+      setFilteredSuggestions([]);
+    }
+  };
+
+  // Show suggestions when input is focused
+  const handleFocus = () => {
+    setShowSuggestions(true);
+  };
+
+  // Hide suggestions when input loses focus
+  const handleBlur = () => {
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 100);
+  };
+
+  // When a suggestion is clicked, set it as the search query
+  const handleSuggestionClick = (event) => {
+    setSearchQuery(event.name);
+    setShowSuggestions(false);
+  };
+
 
   return (
     <div className="bg-gray-100">
@@ -256,15 +296,38 @@ export default function HomePage() {
             </select>
           </div>
 
-          <div className="w-full sm:w-auto">
-            <input
-              type="text"
-              placeholder="Search events"
-              className="px-4 py-2 rounded-md bg-white text-gray-700 w-full"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+          <div className="w-full sm:w-auto relative">
+  <input
+    type="text"
+    placeholder="Search events"
+    className="px-4 py-2 rounded-md bg-white text-gray-700 w-full border border-gray-200 focus:outline-none focus:border-emerald-500"
+    value={searchQuery}
+    onChange={handleSearchChange}
+    onFocus={handleFocus}
+    onBlur={handleBlur}
+  />
+  
+  {showSuggestions && filteredSuggestions.length > 0 && (
+    <ul className="absolute z-10 left-0 right-0 bg-white shadow-lg rounded-md mt-1 max-h-[280px] overflow-auto divide-y divide-gray-100">
+      {filteredSuggestions.map((event) => (
+        <li
+          key={event.id}
+          className="px-4 py-3 text-[15px] text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors"
+          onClick={() => handleSuggestionClick(event)}
+        >
+          {event.name}
+          {event.city && (
+            <>
+              <span className="mx-2 text-gray-400">—</span>
+              <span className="text-gray-500">{event.city}</span>
+            </>
+          )}
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
 
           <div className="w-full sm:w-auto space-x-4 flex flex-wrap justify-between sm:justify-start">
           {!isLoggedIn &&
