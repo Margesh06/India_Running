@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-const EventRegisterButton = ({eveName, evePrice}) => {
+const EventRegisterButton = ({eveName, evePrice, eventId}) => {
   const router = useRouter();
   const access_token = localStorage.getItem('access_token');
 
@@ -12,8 +12,8 @@ const EventRegisterButton = ({eveName, evePrice}) => {
     onClick={() => {
       if (access_token) {
         // If access_token exists, navigate to checkout page
-        router.push(`/checkout?name=${encodeURIComponent(eveName)}&price=${encodeURIComponent(evePrice)}`);
-      } else {
+        router.push(`/checkout?name=${encodeURIComponent(eveName)}&price=${encodeURIComponent(evePrice)}&eventId=${encodeURIComponent(eventId)}`);
+        } else {
         // If no access_token, navigate to home page
         alert('Please log in to register for events.');
         router.push('/auth/login');

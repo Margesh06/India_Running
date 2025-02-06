@@ -8,6 +8,9 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RegisterModule } from './auth/register/register.module';
 import { UserProfileModule } from './userProfile/userProfile.module';
+import { PaymentsController } from './payments/payments.controller';
+import { PaymentsModule } from './payments/payments.module';
+import { RegistrationsController } from './registrations/registrations.controller';
 
 @Module({
   imports: [
@@ -18,7 +21,9 @@ import { UserProfileModule } from './userProfile/userProfile.module';
     UsersModule,
     AuthModule,
     RegisterModule,
-    UserProfileModule
+    UserProfileModule,
+    PaymentsModule
   ],
+  controllers: [RegistrationsController],
 })
 export class AppModule {}

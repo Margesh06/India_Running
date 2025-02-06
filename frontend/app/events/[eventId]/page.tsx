@@ -296,7 +296,11 @@ const EventPage = ({
                     <p className="text-xs text-gray-500">(Inc. of all taxes)</p>
                   </div>
                   <div>
-                    <EventRegisterButton eveName={eventData.name} evePrice={subtotal} />
+                  <EventRegisterButton 
+    eveName={eventData.name} 
+    evePrice={subtotal} 
+    eventId={eventData.id} 
+  />
                   </div>
 
                 </div>

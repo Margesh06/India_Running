@@ -20,6 +20,7 @@ export default function Home() {
 
   const eventName = searchParams.get('name');
   const eventPrice = searchParams.get('price');
+  const eventId = searchParams.get('eventId');
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -136,13 +137,119 @@ export default function Home() {
     setShowAdditionalInfo(true);
   };
 
+
+  const logPaymentStatus = (userId, eventId, status) => {
+    fetch("http://localhost:5000/payment/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        event_id: eventId,
+        status: status,  // Can be PENDING, COMPLETED, FAILED, or REFUNDED
+        type: "CARDS",  // Adjust based on actual payment type
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Payment status logged successfully:", data);
+      })
+      .catch((err) => {
+        console.error("Error logging payment status:", err);
+      });
+  };
+
   const handleCheckout = () => {
     if (!isFormValid) {
       alert("Please fill in all required fields before proceeding to checkout.");
       return;
     }
-    alert("Proceeding to checkout...");
+  
+    // Dynamically load Razorpay script
+    const loadRazorpayScript = () => {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.onload = resolve;
+        script.onerror = reject;
+        document.body.appendChild(script);
+      });
+    };
+  
+    loadRazorpayScript()
+      .then(() => {
+        // Create an order on the backend
+        return fetch("http://localhost:5000/payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: (Number(eventPrice) + 70.75) * 100,
+            currency: "INR",
+            userId,
+            eventId
+          }),          
+        });
+      })
+      .then((res) => res.json())
+      .then((order) => {
+        const options = {
+          key: "rzp_test_1WqWcdSu93kyf7",
+          amount: order.amount,
+          currency: order.currency,
+          name: "Fitpage",
+          description: "Test Transaction",
+          order_id: order.id,
+          handler: function (response) {
+            // Send payment verification request to backend
+            fetch("http://localhost:5000/payment/verify", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                userId,
+                eventId
+              }),
+            })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                alert("Payment successful!");
+                window.location.href = "/";
+              } else {
+                alert("Payment verification failed!");
+              }
+            })
+            .catch(err => {
+              console.error("Error verifying payment:", err);
+              alert("Error verifying payment");
+            });
+          },
+          prefill: {
+            name: (formData.firstName + formData.lastName),
+            email: (formData.email),
+            contact: (formData.phone),
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+  
+        const rzp1 = new window.Razorpay(options);
+        rzp1.open();
+      })
+      .catch((err) => {
+        console.error("Error creating Razorpay order:", err);
+        alert("An error occurred while processing the payment.");
+      });
   };
+   
 
   const handleGoBack = () => {
     if (showAdditionalInfo) {

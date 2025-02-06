@@ -146,7 +146,7 @@ export default function HomePage() {
     }
 
     const fetchEvents = async () => {
-      const res = await fetch('http://localhost:5000/events'); // Update with the correct route
+      const res = await fetch('http://localhost:5000/events/trending'); // Update with the correct route
       const data = await res.json();
       setEvents(data.data); // Assuming the response contains `data` key
     };
