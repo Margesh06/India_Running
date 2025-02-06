@@ -128,6 +128,35 @@ export class EventsService {
   
     return await this.categoryRepository.save(category);
   }
+  async getTrendingEvents(): Promise<any> {
+    const currentDate = new Date(); // Current date-time
+  
+    // Fetch all events
+    const events = await this.eventRepository.find({
+      relations: ['eventCategories', 'eventCategories.category'],
+    });
+  
+    // Filter events that have a start_date greater than or equal to the current date
+    const upcomingEvents = events.filter(event => new Date(event.start_date) >= currentDate);
+  
+    // Sort events by start_date in descending order (latest first)
+    upcomingEvents.sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
+  
+    // Take the first 3 events
+    const trendingEvents = upcomingEvents.slice(0, 3);
+  
+    // Map events to include category titles and minimum prices
+    return trendingEvents.map((event) => {
+      const prices = event.eventCategories.map((eventCategory) => eventCategory.category.price);
+      const minPrice = Math.min(...prices);
+  
+      return {
+        ...event,
+        categories: event.eventCategories.map((eventCategory) => eventCategory.category.title),
+        minPrice,
+      };
+    });
+  }
 
   async getEventByOrganiser(organiserId: number) {
     // Query the event database for events where the organiser_id matches

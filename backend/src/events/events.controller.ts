@@ -12,7 +12,21 @@ export class EventsController {
     return this.eventsService.createEvent(createEventDto);
   }
 
-  
+  @Get('trending')
+  async getTrendingEvents(): Promise<any> {
+    try {
+      const result = await this.eventsService.getTrendingEvents();
+      return {
+        data: result,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        error: error.message,
+      };
+    }
+  }
 
   // GET request to fetch all events
   @Get()

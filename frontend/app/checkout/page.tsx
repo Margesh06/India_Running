@@ -13,8 +13,8 @@ import Link from 'next/link';
 import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
-export default function Home() {
 
+export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -41,6 +41,7 @@ export default function Home() {
   const [couponDialogOpen, setCouponDialogOpen] = useState(false);
   const [couponCode, setCouponCode] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -67,6 +68,7 @@ export default function Home() {
         if (!profileResponse.ok) throw new Error("Failed to fetch profile");
 
         const profileData = await profileResponse.json();
+        console.log("pd"+profileData.dob);
 
         setFormData({
           firstName: userData?.fname,
@@ -81,7 +83,7 @@ export default function Home() {
           emergencyContactName: profileData?.emergencyContactName || "",
           emergencyContactNumber: profileData?.emergencyContactNumber || "",
           termsAndCondition: false,
-          medicalCondition:"",
+          medicalCondition: "",
         });
 
       } catch (error) {
@@ -91,6 +93,36 @@ export default function Home() {
 
     fetchUserProfile();
   }, []);
+
+  // Add validation check function
+  const validateForm = () => {
+    if (!showAdditionalInfo) {
+      // Validate personal information
+      return !!(
+        formData.firstName &&
+        formData.lastName &&
+        formData.dateOfBirth &&
+        formData.gender &&
+        formData.address &&
+        formData.pincode &&
+        formData.email &&
+        formData.phone
+      );
+    } else {
+      // Validate additional information
+      return !!(
+        formData.emergencyContactName &&
+        formData.emergencyContactNumber &&
+        formData.bloodGroup &&
+        formData.termsAndCondition
+      );
+    }
+  };
+
+  // Update form validity whenever formData changes
+  useEffect(() => {
+    setIsFormValid(validateForm());
+  }, [formData, showAdditionalInfo]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -105,6 +137,10 @@ export default function Home() {
   };
 
   const handleCheckout = () => {
+    if (!isFormValid) {
+      alert("Please fill in all required fields before proceeding to checkout.");
+      return;
+    }
     alert("Proceeding to checkout...");
   };
 
@@ -136,7 +172,6 @@ export default function Home() {
             <Link href="/userProfile" className="text-gray-600 hover:text-gray-900">
               <img src="/DefaultUserProfile.svg" alt="IR Logo" className="h-11 px-6" />
             </Link>
-
           </div>
         </div>
         <div className="absolute left-1/2 transform -translate-x-1/2 bottom-1/4 text-center mt-2">
@@ -153,8 +188,6 @@ export default function Home() {
                 ← Go Back
               </button>
             </div>
-
-
 
             <div className="flex mb-4 h-[100px]">
               <button
@@ -255,6 +288,7 @@ export default function Home() {
                         Date Of Birth <span className="text-red-500">*</span>
                       </Label>
                       <Input
+                        type="date"
                         value={formData.dateOfBirth}
                         onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
                         className="border-gray-300"
@@ -267,20 +301,20 @@ export default function Home() {
                       </Label>
                       <RadioGroup
                         value={formData.gender}
-
                         onValueChange={(value) => handleInputChange('gender', value)}
                         className="flex gap-6 mt-2"
                       >
                         <div className="flex items-center gap-2">
-                          <RadioGroupItem value="male" id="male" className="border-gray-300" checked={formData.gender === "Male"} />
-                          <Label htmlFor="male" className="text-sm" >Male</Label>
+                          <RadioGroupItem value="Male" id="male" className="border-gray-300" />
+                          <Label htmlFor="male" className="text-sm">Male</Label>
                         </div>
                         <div className="flex items-center gap-2">
-                          <RadioGroupItem value="female" id="female" className="border-gray-300" checked={formData.gender === "Female"} />
+                          <RadioGroupItem value="Female" id="female" className="border-gray-300" />
                           <Label htmlFor="female" className="text-sm">Female</Label>
                         </div>
                       </RadioGroup>
                     </div>
+
                     <div>
                       <Label className="text-sm mb-1">
                         Address <span className="text-red-500">*</span>
@@ -315,107 +349,125 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-            ) :
-              (
-                <div className="space-y-4">
-                  <div className="bg-white rounded shadow-sm p-4">
-                    <div className="border border-dashed border-yellow-400 bg-[#FFFBEB] p-3 mb-6 text-xs">
-                      <div className="flex gap-1 items-start">
-                        <span className="text-red-500">*</span>
-                        <span>indicates mandatory fields.</span>
-                      </div>
-                      <div className="flex gap-1 items-start mt-1">
-                        <span>Fields highlighted with</span>
-                        <div className="w-3 h-3 relative">
-                          <Image
-                            src="http://localhost:3000/DefaultUserProfile.svg"
-                            alt="Info"
-                            fill
-                            className="object-contain"
-                          />
-                        </div>
-                        <span>are saved to your account.</span>
-                      </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="bg-white rounded shadow-sm p-4">
+                  <div className="border border-dashed border-yellow-400 bg-[#FFFBEB] p-3 mb-6 text-xs">
+                    <div className="flex gap-1 items-start">
+                      <span className="text-red-500">*</span>
+                      <span>indicates mandatory fields.</span>
                     </div>
-
-                    <div className="space-y-4 p-2">
-                      <div className="font-bold">EMERGENCY DETAILS</div>
-                      <div>
-                        <Label className="text-sm mb-1">
-                          Emergency Contact Name <span className="text-red-500">*</span>
-                        </Label>
-                        <input type="text" name="emergencyContactName" value={formData?.emergencyContactName || ""} onChange={(e) => handleInputChange('emergencyContactName', e.target.value)} pattern="[A-Za-z ]*" placeholder="Enter Name" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
-
-                      </div>
-
-                      <div>
-                        <Label className="text-sm mb-1">
-                          Emergency Contact Number <span className="text-red-500">*</span>
-                        </Label>
-
-                        <input type="tel" name="emergencyContactNumber" value={formData?.emergencyContactNumber || ""} onChange={(e) => handleInputChange('emergencyContactNumber', e.target.value)} pattern="[0-9]{10}" placeholder="Enter Mobile No." required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
-                      </div>
-                      <div className="font-bold">MEDICAL QUESTIONAIRE</div>
-                      <div>
-                        <Label className="text-sm mb-1">
-                          Blood Group <span className="text-red-500">*</span>
-                        </Label>
-                          <select name="bloodGroup" value={formData?.bloodGroup || ""} onChange={(e) => handleInputChange('bloodGroup', e.target.value)} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
-                            <option value="" disabled>Select your blood group</option>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
-                          </select>
-                      </div>
-                      <div>
-                        <Label className="text-sm mb-1">
-                          Any other medical condition that you would want us to be aware of? Please specify if any. 
-                        </Label>
-                        <textarea
-                          name="medicalCondition"
-                          value={formData.medicalCondition}
-                          onChange={(e) => handleInputChange('medicalCondition', e.target.value)}
-                          placeholder="Enter your medical conditions here..."
-                          className="border p-3 w-full rounded bg-gray-100 text-gray-800 resize-none"
+                    <div className="flex gap-1 items-start mt-1">
+                      <span>Fields highlighted with</span>
+                      <div className="w-3 h-3 relative">
+                        <Image
+                          src="http://localhost:3000/DefaultUserProfile.svg"
+                          alt="Info"
+                          fill
+                          className="object-contain"
                         />
                       </div>
-
-                      <div className="font-bold">TERMS & CONDITIONS </div>
-
-                      <div className="flex items-center gap-2">
-                        <CheckboxPrimitive.Root
-                          checked={formData.termsAndCondition} 
-                          onCheckedChange={(checked) => handleInputChange("termsAndCondition", checked === true)}
-                          className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                        >
-                          <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
-                            <Check className="h-4 w-4" />
-                          </CheckboxPrimitive.Indicator>
-                        </CheckboxPrimitive.Root>
-
-                        <label className="text-sm">
-                          I agree to the Terms and Conditions.
-                        </label>
-                      </div>
-
-
-
-                      <Button
-                        onClick={handleSaveAndContinue}
-                        className="bg-[#FF1B75] hover:bg-[#FF1B75]/90 text-white mt-4 rounded"
-                      >
-                        Save and Continue
-                      </Button>
+                      <span>are saved to your account.</span>
                     </div>
                   </div>
+
+                  <div className="space-y-4 p-2">
+                    <div className="font-bold">EMERGENCY DETAILS</div>
+                    <div>
+                      <Label className="text-sm mb-1">
+                        Emergency Contact Name <span className="text-red-500">*</span>
+                      </Label>
+                      <input 
+                        type="text" 
+                        name="emergencyContactName" 
+                        value={formData?.emergencyContactName || ""} 
+                        onChange={(e) => handleInputChange('emergencyContactName', e.target.value)} 
+                        pattern="[A-Za-z ]*" 
+                        placeholder="Enter Name" 
+                        required 
+                        className="border p-3 w-full rounded bg-gray-100 text-gray-800" 
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-sm mb-1">
+                        Emergency Contact Number <span className="text-red-500">*</span>
+                      </Label>
+                      <input 
+                        type="tel" 
+                        name="emergencyContactNumber" 
+                        value={formData?.emergencyContactNumber || ""} 
+                        onChange={(e) => handleInputChange('emergencyContactNumber', e.target.value)} 
+                        pattern="[0-9]{10}" 
+                        placeholder="Enter Mobile No." 
+                        required 
+                        className="border p-3 w-full rounded bg-gray-100 text-gray-800" 
+                      />
+                    </div>
+
+                    <div className="font-bold">MEDICAL QUESTIONAIRE</div>
+                    <div>
+                      <Label className="text-sm mb-1">
+                        Blood Group <span className="text-red-500">*</span>
+                      </Label>
+                      <select 
+                        name="bloodGroup" 
+                        value={formData?.bloodGroup || ""} 
+                        onChange={(e) => handleInputChange('bloodGroup', e.target.value)} 
+                        className="border p-3 w-full rounded bg-gray-100 text-gray-800" 
+                        required
+                      >
+                        <option value="" disabled>Select your blood group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <Label className="text-sm mb-1">
+                        Any other medical condition that you would want us to be aware of? Please specify if any. 
+                      </Label>
+                      <textarea
+                        name="medicalCondition"
+                        value={formData.medicalCondition}
+                        onChange={(e) => handleInputChange('medicalCondition', e.target.value)}
+                        placeholder="Enter your medical conditions here..."
+                        className="border p-3 w-full rounded bg-gray-100 text-gray-800 resize-none"
+                      />
+                    </div>
+
+                    <div className="font-bold">TERMS & CONDITIONS </div>
+                    <div className="flex items-center gap-2">
+                      <CheckboxPrimitive.Root
+                        checked={formData.termsAndCondition} 
+                        onCheckedChange={(checked) => handleInputChange("termsAndCondition", checked === true)}
+                        className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                      >
+                        <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
+                          <Check className="h-4 w-4" />
+                        </CheckboxPrimitive.Indicator>
+                      </CheckboxPrimitive.Root>
+                      <label className="text-sm">
+                        I agree to the Terms and Conditions.
+                      </label>
+                    </div>
+
+                    <Button
+                      onClick={handleSaveAndContinue}
+                      className="bg-[#FF1B75] hover:bg-[#FF1B75]/90 text-white mt-4 rounded"
+                    >
+                      Save and Continue
+                    </Button>
+                  </div>
                 </div>
-              )
-            }
+              </div>
+            )}
           </div>
 
           {/* Right Section - Summary */}
@@ -448,7 +500,6 @@ export default function Home() {
                   <div className="flex justify-between text-sm">
                     <span>Total Amount</span>
                     <span>Rs. {Number(eventPrice) + 70.75}</span>
-
                   </div>
                   <div className="flex justify-between text-sm font-medium">
                     <span>Grand Total</span>
@@ -458,9 +509,14 @@ export default function Home() {
 
                 <button
                   onClick={handleCheckout}
-                  className="w-full bg-gray-100 text-gray-800 py-2 text-sm font-medium rounded hover:bg-gray-200"
+                  disabled={!isFormValid}
+                  className={`w-full py-2 text-sm font-medium rounded ${
+                    isFormValid 
+                      ? 'bg-[#00856F] text-white hover:bg-[#00856F]/90' 
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
                 >
-                  CHECKOUT
+                  {isFormValid ? 'CHECKOUT' : 'Fill all Details'}
                 </button>
               </div>
             </Card>
