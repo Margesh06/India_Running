@@ -61,6 +61,11 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
 
+    if (password.length <= 7) {
+      setError("Password must be longer than 7 characters.");
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:5000/auth/login', {
         method: 'POST',

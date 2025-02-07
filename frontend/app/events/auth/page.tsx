@@ -25,6 +25,7 @@ export default function EventsPage() {
   const [user, setUser] = useState<User | null>(null)
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
   const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
   const [formData, setFormData] = useState({
     email:"",
@@ -45,6 +46,17 @@ export default function EventsPage() {
   }, [searchParams])
 
   const checkEmail = async (email: string) => {
+    setError('');
+
+    if (!email ) {
+      setError("Email is required");
+      return;
+    }
+    const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+    if (!emailRegex.test(email)) {
+      setError("Invalid email format");
+      return;
+    }
     try {
       const response = await fetch(`http://localhost:5000/organisers/check-email?email=${email}`);
   
@@ -94,6 +106,7 @@ export default function EventsPage() {
     e.preventDefault()
     setLoading(true)
 
+
     try {
       const exists = await checkEmail(email)
       if (exists) {
@@ -128,6 +141,7 @@ export default function EventsPage() {
       }
     } catch (error) {
       console.error("Error checking email:", error)
+      throw new Error("Error checking email", error)
     } finally {
       setLoading(false)
     }
