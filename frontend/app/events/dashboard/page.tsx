@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation"
 import { LayoutGrid, Users, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,6 +13,7 @@ export default function Home() {
   const [showEventForm, setShowEventForm] = useState(false)
   const [events, setEvents] = useState([])
   const router = useRouter()
+  // const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -35,18 +37,14 @@ export default function Home() {
   return (
     <div className="flex h-screen">
       <div className="w-64 bg-emerald-700 py-6 text-white">
-        <button className="w-full px-6 py-3 flex items-center gap-3 hover:bg-emerald-600 transition-colors">
-          <LayoutGrid size={24} />
-          <span className="text-sm">Dashboard</span>
-        </button>
-        <button className="w-full px-6 py-3 flex items-center gap-3 hover:bg-emerald-600 transition-colors relative after:content-[''] after:absolute after:left-full after:top-1/2 after:-translate-y-1/2 after:w-1 after:h-8 after:bg-white">
-          <RotateCcw size={24} className="rotate-90" />
-          <span className="text-sm">Events</span>
-        </button>
-        <button className="w-full px-6 py-3 flex items-center gap-3 hover:bg-emerald-600 transition-colors">
-          <Users size={24} />
-          <span className="text-sm">Profile</span>
-        </button>
+
+      <button
+      className="w-full px-6 py-3 flex items-center gap-3 hover:bg-emerald-600 transition-colors"
+      onClick={() => window.location.href = '/events/dashboard'}
+    >
+      <LayoutGrid size={24} />
+      <span className="text-sm">Events</span>
+    </button>
       </div>
 
       <div className="flex-1 overflow-auto">
@@ -64,17 +62,17 @@ export default function Home() {
           <>
             {events.length > 0 ? (
               <>
-                <div className="bg-pink-100 px-8 py-4 flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <Users className="text-pink-500" />
-                    <span className="text-pink-500">
+                {/* <div className="bg-pink-100 px-8 py-4 flex justify-between items-center"> */}
+                  {/* <div className="flex items-center gap-2"> */}
+                    {/* <Users className="text-pink-500" /> */}
+                    {/* <span className="text-pink-500">
                       Complete your KYC (Know Your Customer) process to ensure the security and compliance of your account.
-                    </span>
-                  </div>
-                  <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50">
+                    </span> */}
+                  {/* </div> */}
+                  {/* <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50">
                     Verify Now
-                  </Button>
-                </div>
+                  </Button> */}
+                {/* </div> */}
 
                 <div className="px-8 pt-6">
                   <Tabs defaultValue="active" className="w-full">
@@ -118,13 +116,13 @@ export default function Home() {
                 <span>{event.event_type || 'On Ground'}</span>
               </div>
             </div>
-            <button className="p-2 hover:bg-gray-100 rounded-full">
+            {/* <button className="p-2 hover:bg-gray-100 rounded-full">
               <MoreVertical size={20} className="text-gray-500" />
-            </button>
+            </button> */}
           </div>
           <div className="flex justify-between items-end mt-4">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 bg-amber-100 text-amber-600 rounded-full text-sm">
+              <span className="px-3 py-1 bg-green-200 text-green-600 rounded-full text-sm">
                 Published
               </span>
             </div>
