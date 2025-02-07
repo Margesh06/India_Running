@@ -11,6 +11,7 @@ import { UserProfileModule } from './userProfile/userProfile.module';
 import { PaymentsController } from './payments/payments.controller';
 import { PaymentsModule } from './payments/payments.module';
 import { RegistrationsController } from './registrations/registrations.controller';
+import { OrganiserModule } from './organisers/organiser.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { RegistrationsController } from './registrations/registrations.controlle
     AuthModule,
     RegisterModule,
     UserProfileModule,
-    PaymentsModule
+    PaymentsModule,
+    OrganiserModule
   ],
   controllers: [RegistrationsController],
 })

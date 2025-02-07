@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity("Organiser")
+@Entity("organisers")
 export class Organiser {
   @PrimaryGeneratedColumn()
   id: number;
@@ -11,13 +11,13 @@ export class Organiser {
   @Column({ name: "lname" })
   lastName: string;
 
-  @Column()
-  phone_no: number;
+  @Column({ type: "varchar", length: 10 })
+  phone_no: string;
 
   @Column({ name: "org_name" })
   organizationName: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column({ type: "text" })
@@ -29,10 +29,9 @@ export class Organiser {
   @Column()
   state: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "varchar", length: 6 })
   pincode: string;
 
-  @Column({ name: "pan_card", type: "text" })
+  @Column({ name: "pan_card", type: "text", unique: true })
   panCard: string;
-
 }
