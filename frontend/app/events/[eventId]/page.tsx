@@ -3,10 +3,8 @@
 import React, { Suspense, useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-
 import EventRegisterButton from "./EventRegisterButton"
 
-// Define the type for event data
 type EventData = {
   id: number
   name: string
@@ -38,8 +36,8 @@ type EventData = {
       inclusive: string[];
     }
   }[]
-  categories: string[] // This represents the category titles like "10K", "21.1K"
-  minPrice: number // The minimum price from the event categories
+  categories: string[]
+  minPrice: number
 }
 
 const EventPage = ({
@@ -54,29 +52,20 @@ const EventPage = ({
   const [isHovered, setIsHovered] = useState(false);
 
   const handleAdd = (categoryId: number) => {
-    setSelectedCategories((prev) => {
-      const newSet = new Set(prev)
-      newSet.add(categoryId)
-      return newSet
-    })
+    setSelectedCategories(new Set([categoryId]))
   }
 
   const handleRemove = (categoryId: number) => {
-    setSelectedCategories((prev) => {
-      const newSet = new Set(prev)
-      newSet.delete(categoryId)
-      return newSet
-    })
+    setSelectedCategories(new Set())
   }
 
   useEffect(() => {
-    // Fetch event data from API
     const fetchEventData = async () => {
       try {
         const response = await fetch(`http://localhost:5000/events/${eventId}`)
         const data = await response.json()
         console.log("API Response:", data)
-        setEventData(data.data) // Use `data.data` based on the response structure
+        setEventData(data.data)
         setEventCategories(data.data.eventCategories)
       } catch (error) {
         console.error("Error fetching event data:", error)
@@ -95,7 +84,6 @@ const EventPage = ({
     return sum + (category ? Number.parseFloat(category.category.price) : 0)
   }, 0)
 
-  // Format start date for display
   const startDate = new Date(eventData.start_date)
   const startDay = startDate.getDate()
   const startMonth = startDate.toLocaleString("en-US", { month: "short" })
@@ -108,7 +96,7 @@ const EventPage = ({
   }
 
   return (
-    <div className="flex flex-col h-screen overflow-y-auto ">
+    <div className="flex flex-col h-screen overflow-y-auto">
       <div className="pb-4 bg-white shadow-md">
         <div
           style={{ backgroundColor: "rgb(0 46 37)" }}
@@ -116,7 +104,7 @@ const EventPage = ({
         >
           <nav className="flex flex-row-reverse justify-around w-11/12 mx-auto pt-5 smobile:pt-10 smobile:mb-0 tablet:mb-8">
             <div className="flex items-center cursor-pointer basis-1/12">
-              <div className=" flex flex-row items-center gap-3 group">
+              <div className="flex flex-row items-center gap-3 group">
                 <div
                   className="relative flex flex-col items-center"
                   onMouseEnter={() => setIsHovered(true)}
@@ -129,10 +117,10 @@ const EventPage = ({
                     height={40}
                     className="cursor-pointer"
                   />
-
                   <div
-                    className={`absolute flex justify-between top-12 transition-opacity duration-500 ${isHovered ? "opacity-100 visible" : "opacity-0 invisible"
-                      }`}
+                    className={`absolute flex justify-between top-12 transition-opacity duration-500 ${
+                      isHovered ? "opacity-100 visible" : "opacity-0 invisible"
+                    }`}
                   >
                     <button
                       onClick={handleLogout}
@@ -157,7 +145,7 @@ const EventPage = ({
           </nav>
 
           <div className="pt-7 w-full flex flex-col items-center">
-            <h1 className="font-extrabold text-center text-white text-5xl  font-paytone m-5">{eventData.name}</h1>
+            <h1 className="font-extrabold text-center text-white text-5xl font-paytone m-5">{eventData.name}</h1>
             <div className="block mx-2 tablet:mx-auto rounded-xl">
               <Image
                 className="rounded-xl max-h-[600px]"
@@ -167,9 +155,8 @@ const EventPage = ({
                 height={900}
               />
             </div>
-            <div className="flex px-2 mx-auto justify-between max-w-[50%]  items-start flex-wrap bg-sematicInfo-100  py-2  border w-4/5 gap-y-4  list-none shadow-infoCard bg-blue-100 m-5">
+            <div className="flex px-2 mx-auto justify-between max-w-[50%] items-start flex-wrap bg-sematicInfo-100 py-2 border w-4/5 gap-y-4 list-none shadow-infoCard bg-blue-100 m-5">
               <div className="flex justify-between w-full">
-                {/* Location */}
                 <li className="flex flex-col items-center h-full justify-between min-w-fit w-1/4 basis-full">
                   <div className="rounded-full">
                     <Image
@@ -180,12 +167,11 @@ const EventPage = ({
                       height={48}
                     />
                   </div>
-                  <p className="font-medium text-center underline text-primary smobile:text-xs tablet:text-base line-clamp-1">
+                  <p className="font-medium text-center text-primary smobile:text-xs tablet:text-base line-clamp-1">
                     {eventData.city}
                   </p>
                 </li>
 
-                {/* Calendar */}
                 <li className="flex flex-col items-center h-full justify-between min-w-fit w-1/4 basis-full">
                   <div className="rounded-full">
                     <Image
@@ -202,7 +188,6 @@ const EventPage = ({
                   <p>{startYear}</p>
                 </li>
 
-                {/* Run */}
                 <li className="flex flex-col items-center h-full justify-between min-w-fit w-1/4 basis-full">
                   <div className="rounded-full">
                     <Image
@@ -236,73 +221,95 @@ const EventPage = ({
 
         <div className="min-h-screen pb-20">
           <div className="space-y-4">
-            {eventData?.eventCategories?.map((category) => (
-              <div key={category.id} className="bg-white rounded-lg p-8 shadow-sm flex items-center justify-between">
-                <div className="space-y-1">
-                  <h3 className="text-2xl font-medium text-gray-900">{category.category.title}</h3>
-                  <p className="text-gray-500 text-sm">Registrations are open</p>
-                </div>
+            {eventData?.eventCategories?.map((category) => {
+              const isSelected = selectedCategories.has(category.category.id)
+              const isDisabled = selectedCategories.size > 0 && !isSelected
 
-                <div className="flex-1 mx-16">
-                  <p className="text-gray-700 mb-3">Inclusive</p>
-                  <div className="flex flex-wrap gap-2">
-                    {category.category.inclusive?.length > 0 ? (
-                      category.category.inclusive.map((item) => (
-                        <span key={item} className="px-3 py-1 bg-blue-50 text-blue-700 rounded text-sm">
-                          {item}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-gray-500 text-sm">No inclusions available</span>
-                    )}
+              return (
+                <div 
+                  key={category.id} 
+                  className={`bg-white rounded-lg p-8 shadow-sm ${
+                    isDisabled ? 'opacity-50' : ''
+                  }`}
+                >
+                  <div className="flex items-start border-l-4 border-[#00e6b3] pl-4">
+                    <div className="flex-1">
+                      <div className="grid grid-cols-[2fr,3fr,2fr] gap-8 items-center">
+                        <div className="space-y-1">
+                          <h3 className="text-2xl font-medium text-gray-900">{category.category.title}</h3>
+                          <p className="text-gray-500 text-sm">
+                            {isDisabled ? 'Please remove selected category first' : 'Registrations are open'}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center space-x-4">
+                          <div className="h-12 w-px bg-gray-200"></div>
+                          <div className="flex-1">
+                            <p className="text-gray-700 font-medium mb-2">Inclusive</p>
+                            <div className="flex flex-wrap gap-2">
+                              {category.category.inclusive?.length > 0 ? (
+                                category.category.inclusive.map((item) => (
+                                  <span key={item} className="px-3 py-1 bg-blue-50 text-blue-700 rounded text-sm">
+                                    {item}
+                                  </span>
+                                ))
+                              ) : (
+                                <span className="text-gray-500 text-sm">No inclusions available</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-end space-x-8">
+                          <div className="text-right">
+                            <p className="text-xl font-medium">Rs. {category.category.price}</p>
+                            <p className="text-xs text-gray-500">(Inc. of all taxes)</p>
+                          </div>
+                          {isSelected ? (
+                            <button
+                              onClick={() => handleRemove(category.category.id)}
+                              className="px-4 py-2 border border-[#00e6b3] text-[#00e6b3] rounded-lg hover:bg-[#00e6b3] hover:text-white transition-colors font-medium whitespace-nowrap"
+                            >
+                              - Remove
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleAdd(category.category.id)}
+                              disabled={isDisabled}
+                              className={`px-4 py-2 ${
+                                isDisabled 
+                                  ? 'bg-gray-300 cursor-not-allowed' 
+                                  : 'bg-[#00e6b3] hover:bg-[#00cc9f]'
+                              } text-white rounded-lg transition-colors font-medium whitespace-nowrap`}
+                            >
+                              + Add
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-
-                <div className="flex items-center gap-8">
-                  <div className="text-right">
-                    <p className="text-xl font-medium">Rs. {category.category.price}</p>
-                    <p className="text-xs text-gray-500">(Inc. of all taxes)</p>
-                  </div>
-                  {selectedCategories.has(category.category.id) ? (
-                    <button
-                      onClick={() => handleRemove(category.category.id)}
-                      className="px-4 py-2 border border-[#00e6b3] text-[#00e6b3] rounded-lg hover:bg-[#00e6b3] hover:text-white transition-colors font-medium"
-                    >
-                      - Remove
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleAdd(category.category.id)}
-                      className="px-4 py-2 bg-[#00e6b3] text-white rounded-lg hover:bg-[#00cc9f] transition-colors font-medium"
-                    >
-                      + Add
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
 
           {selectedCategories.size > 0 && (
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg">
               <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-                <p className="text-gray-900 font-medium">
-                  {selectedCategories.size} {selectedCategories.size === 1 ? "category" : "categories"} selected
-                </p>
+                <p className="text-gray-900 font-medium">1 category selected</p>
                 <div className="flex items-center gap-8">
                   <div className="text-right">
                     <p className="text-xl font-medium">Subtotal: Rs. {subtotal}</p>
                     <p className="text-xs text-gray-500">(Inc. of all taxes)</p>
                   </div>
                   <div>
-                  <EventRegisterButton 
-    eveName={eventData.name} 
-    evePrice={subtotal} 
-    eventId={eventData.id} 
-  />
+                    <EventRegisterButton 
+                      eveName={eventData.name} 
+                      evePrice={subtotal} 
+                      eventId={eventData.id} 
+                    />
                   </div>
-
                 </div>
               </div>
             </div>
@@ -324,4 +331,3 @@ export default function EventPageWrapper({
     </Suspense>
   )
 }
-
