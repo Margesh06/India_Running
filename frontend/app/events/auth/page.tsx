@@ -27,6 +27,7 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(false)
   const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
   const [formData, setFormData] = useState({
+    email:"",
     firstName: "",
     lastName: "",
     mobile: "",
@@ -44,15 +45,35 @@ export default function EventsPage() {
   }, [searchParams])
 
   const checkEmail = async (email: string) => {
-    // Implement your API call here
-    // For demo, returning false to show signup form
-    return false
+    try {
+      const response = await fetch(`http://localhost:5000/organisers/check-email?email=${email}`);
+  
+      if (!response.ok) {
+        throw new Error("Failed to check email");
+      }
+  
+      const data = await response.json();
+      return data.exists; 
+    } catch (error) {
+      console.error("Error checking email:", error);
+      return false;
+    }
   }
 
-  const createUser = async (data: User) => {
-    // Implement your user creation API call here
-    console.log("Creating user:", data)
-    return data
+  const createUser = async (formData) => {
+    const response = await fetch("http://localhost:5000/organisers/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+  
+    if (!response.ok) {
+      throw new Error("Failed to register organiser");
+    }
+  
+    return response.json();
   }
 
   const fetchEvents = async () => {
@@ -76,13 +97,34 @@ export default function EventsPage() {
     try {
       const exists = await checkEmail(email)
       if (exists) {
-        // Simulate fetching user data
-        setUser({ email, firstName: "John", lastName: "Doe", mobile: "", organization: "" })
-        const fetchedEvents = await fetchEvents()
-        setEvents(fetchedEvents)
-        setView("dashboard")
+        setFormData({ email:formData?.email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: "" , organization: "" })
+        // const fetchedEvents = await fetchEvents()
+        // setEvents(fetchedEvents)
+        // setView("dashboard")
+        router.push('/events/dashboard');
+        try {
+          const response = await fetch("http://localhost:5000/organisers/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+          });
+      
+          if (!response.ok) {
+            throw new Error("Email not found");
+          }
+      
+          const data = await response.json();
+          localStorage.setItem("organiserToken", data.token);
+          return data;
+        } catch (error) {
+          console.error("Login failed:", error);
+          return null;
+        }
       } else {
         setView("signup")
+        setFormData({ email:formData?.email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: "", organization: "" })
       }
     } catch (error) {
       console.error("Error checking email:", error)
