@@ -110,7 +110,7 @@ export default function EventsPage() {
     try {
       const exists = await checkEmail(email)
       if (exists) {
-        setFormData({ email:formData?.email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: "" , organization: "" })
+        setFormData({ email:email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: "" , organization: "" })
         // const fetchedEvents = await fetchEvents()
         // setEvents(fetchedEvents)
         // setView("dashboard")
@@ -137,7 +137,7 @@ export default function EventsPage() {
         }
       } else {
         setView("signup")
-        setFormData({ email:formData?.email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: "", organization: "" })
+        setFormData({ email:email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: "", organization: "" })
       }
     } catch (error) {
       console.error("Error checking email:", error)
@@ -154,9 +154,10 @@ export default function EventsPage() {
     try {
       const newUser = await createUser({ email, ...formData })
       setUser(newUser)
-      const fetchedEvents = await fetchEvents()
-      setEvents(fetchedEvents)
-      setView("dashboard")
+    //   const fetchedEvents = await fetchEvents()
+    //   setEvents(fetchedEvents)
+    //   setView("dashboard")
+    router.push('/events/dashboard');
     } catch (error) {
       console.error("Error creating user:", error)
     } finally {
@@ -179,7 +180,7 @@ export default function EventsPage() {
           />
         </div>
         <Button type="submit" className="w-full bg-[#ff0066] hover:bg-[#ff1a75]" disabled={loading}>
-          {loading ? "Checking..." : "Get OTP"}
+          {loading ? "Checking..." : "Submit"}
         </Button>
       </form>
     </div>
