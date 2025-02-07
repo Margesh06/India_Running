@@ -60,6 +60,7 @@ export class PaymentsService {
     signature: string,
     userId: number,
     eventId: number,
+    amount: number
   ) {
     try {
       // Verify signature
@@ -68,51 +69,57 @@ export class PaymentsService {
         .createHmac('sha256', this.webhookSecret)
         .update(payload)
         .digest('hex');
-
+  
       if (expectedSignature !== signature) {
         throw new Error('Invalid signature');
       }
-
-      // Find and update payment record
-      const payment = await this.paymentRepository.findOne({
-        where: {
-          user_id: userId,
-          event_id: eventId,
-        } as any, 
+  
+      // Find existing payment records for the order
+      const existingPayments = await this.paymentRepository.find({
+        where: { razorpay_order_id: orderId } as any,
       });
-
-      if (!payment) {
-        throw new Error('Payment record not found');
-      }
-
-      // Update payment details
-      payment.status = PaymentStatus.COMPLETED;
-      payment.razorpay_payment_id = paymentId;
-      await this.paymentRepository.save(payment);
-
+  
+      // If a previous payment exists, check if it's failed
+      const failedPayment = existingPayments.find(
+        (payment) => payment.status === PaymentStatus.FAILED
+      );
+  
+      // Create a new entry if there was a previous failed transaction
+      const newPayment = this.paymentRepository.create({
+        user_id: userId,
+        event_id: eventId,
+        amount: failedPayment ? failedPayment.amount : amount / 100, // Reuse amount
+        status: PaymentStatus.COMPLETED, // Success on retry
+        type: PaymentType.CARDS,
+        razorpay_payment_id: paymentId,
+        razorpay_order_id: orderId,
+        error_message: '',
+      });
+  
+      await this.paymentRepository.save(newPayment);
+  
       return { success: true, message: 'Payment verified successfully' };
     } catch (error) {
       console.error('Payment verification failed:', error);
-      
-      // Log failed payment
-      if (orderId) {
-        const payment = await this.paymentRepository.findOne({
-          where: { razorpay_order_id: orderId } as any, 
-        });
-        
-        if (payment) {
-          payment.status = PaymentStatus.FAILED;
-          payment.error_message = error.message;
-          await this.paymentRepository.save(payment);
-        }
-      }
-
-      throw new HttpException(
-        'Payment verification failed',
-        HttpStatus.BAD_REQUEST,
-      );
+  
+      // Log failed payment as a new entry instead of updating the old one
+      const newFailedPayment = this.paymentRepository.create({
+        user_id: userId,
+        event_id: eventId,
+        amount: amount / 100, // Assign correct amount if available
+        status: PaymentStatus.FAILED,
+        type: PaymentType.CARDS,
+        razorpay_payment_id: paymentId,
+        razorpay_order_id: orderId,
+        error_message: error.message,
+      });
+  
+      await this.paymentRepository.save(newFailedPayment);
+  
+      throw new HttpException('Payment verification failed', HttpStatus.BAD_REQUEST);
     }
   }
+  
 
   async handleWebhook(webhookData: any, signature: string) {
     try {

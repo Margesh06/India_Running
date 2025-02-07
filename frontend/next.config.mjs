@@ -1,7 +1,9 @@
-/** @type {import('next').NextConfig} */
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
     images: {
-      domains: ['plus.unsplash.com','race-registration-cdn.indiarunning.com'],
+      domains: ['plus.unsplash.com','race-registration-cdn.indiarunning.com','i.ibb.co'],
     },
   };
   

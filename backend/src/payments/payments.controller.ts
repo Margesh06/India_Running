@@ -30,8 +30,9 @@ export class PaymentsController {
     }
   }
 
-  @Post('verify')
+  @Post('event')
   async verifyPayment(@Body() body: {
+    amount: number;
     razorpay_payment_id: string;
     razorpay_order_id: string;
     razorpay_signature: string;
@@ -44,7 +45,8 @@ export class PaymentsController {
         body.razorpay_order_id,
         body.razorpay_signature,
         body.userId,
-        body.eventId
+        body.eventId,
+        body.amount,
       );
 
       return result;

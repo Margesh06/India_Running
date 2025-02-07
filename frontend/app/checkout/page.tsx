@@ -204,7 +204,7 @@ export default function Home() {
           order_id: order.id,
           handler: function (response) {
             // Send payment verification request to backend
-            fetch("http://localhost:5000/payment/verify", {
+            fetch("https://92a2-2407-3e40-11-cfce-3c62-fc1-70ec-a1b4.ngrok-free.app/payment/event", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
