@@ -11,6 +11,7 @@ import { UserProfileModule } from './userProfile/userProfile.module';
 import { PaymentsController } from './payments/payments.controller';
 import { PaymentsModule } from './payments/payments.module';
 import { RegistrationModule } from './registrations/registrations.module';
+import { OrganiserModule } from './organisers/organiser.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { RegistrationModule } from './registrations/registrations.module';
     RegisterModule,
     UserProfileModule,
     PaymentsModule,
-    RegistrationModule
+    RegistrationModule,
+    OrganiserModule
   ],
 })
 export class AppModule {}
