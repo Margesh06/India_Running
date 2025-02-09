@@ -10,8 +10,7 @@ import { RegisterModule } from './auth/register/register.module';
 import { UserProfileModule } from './userProfile/userProfile.module';
 import { PaymentsController } from './payments/payments.controller';
 import { PaymentsModule } from './payments/payments.module';
-import { RegistrationsController } from './registrations/registrations.controller';
-import { OrganiserModule } from './organisers/organiser.module';
+import { RegistrationModule } from './registrations/registrations.module';
 
 @Module({
   imports: [
@@ -24,8 +23,7 @@ import { OrganiserModule } from './organisers/organiser.module';
     RegisterModule,
     UserProfileModule,
     PaymentsModule,
-    OrganiserModule
+    RegistrationModule
   ],
-  controllers: [RegistrationsController],
 })
 export class AppModule {}

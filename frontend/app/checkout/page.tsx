@@ -930,11 +930,12 @@
     const handleSaveAndContinue = () => {
       const isValid = validateForm();
       if (!isValid) {
-        alert("Please fix the errors before continuing");
-        return;
+          alert("Please fix the errors before continuing");
+          return;
       }
       setShowAdditionalInfo(true);
-    };
+  };
+  
   
     const logPaymentStatus = (userId, eventId, status) => {
       fetch("http://localhost:5000/payment/create", {
@@ -1018,14 +1019,37 @@
               .then(res => res.json())
               .then(data => {
                 if (data.success) {
-                  // alert("Payment successful!");
-                  // window.location.href = "/";
-                  setPaymentDetails({
-                    transactionId: response.razorpay_payment_id,
-                    amount: (Number(eventPrice) + 70.75),
-                    date: new Date().toLocaleString()
+                  // Proceed to call the registration API after successful payment
+                  fetch("http://localhost:5000/registration", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      user_id: userId,
+                      event_id: eventId,
+                      reg_date: new Date().toISOString(),
+                      payment_status: "COMPLETED" // You can set this based on the payment status
+                    }),
+                  })
+                  .then(res => res.json())
+                  .then(registrationData => {
+                    if (registrationData) {
+                      // Handle success, maybe show a confirmation card
+                      setPaymentDetails({
+                        transactionId: response.razorpay_payment_id,
+                        amount: (Number(eventPrice) + 70.75),
+                        date: new Date().toLocaleString()
+                      });
+                      setShowSuccessCard(true);
+                    } else {
+                      alert("Error during registration!");
+                    }
+                  })
+                  .catch(err => {
+                    console.error("Error creating registration:", err);
+                    alert("Error creating registration");
                   });
-                  setShowSuccessCard(true);
                 } else {
                   alert("Payment verification failed!");
                 }
@@ -1053,6 +1077,7 @@
           alert("An error occurred while processing the payment.");
         });
     };
+    
   
     const handleGoBack = () => {
       if (showAdditionalInfo) {
@@ -1438,12 +1463,16 @@
                       </label>
                     </div>
   
-                      <Button
-                        onClick={handleSaveAndContinue}
-                        className="bg-[#FF1B75] hover:bg-[#FF1B75]/90 text-white mt-4 rounded"
-                      >
-                        Save and Continue
-                      </Button>
+                    <Button
+  onClick={() => {
+    window.scrollTo({ top: 0, behavior: "smooth" }); // Scrolls to the top smoothly
+    handleSaveAndContinue(); // Calls the function after scrolling
+  }}
+  className="bg-[#FF1B75] hover:bg-[#FF1B75]/90 text-white mt-4 rounded"
+>
+  Save and Continue
+</Button>
+
                     </div>
                   </div>
                 </div>

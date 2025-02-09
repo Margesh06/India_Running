@@ -91,8 +91,8 @@ const EventPage = ({
 
   const { name, description, venue, gallery_images, banner_image } = eventData
   const handleLogout = () => {
-    localStorage.removeItem('access_token')
-    window.location.href = '/'
+    // localStorage.removeItem('access_token')
+    window.location.href = '/userProfile'
   }
 
   return (
@@ -105,32 +105,19 @@ const EventPage = ({
           <nav className="flex flex-row-reverse justify-around w-11/12 mx-auto pt-5 smobile:pt-10 smobile:mb-0 tablet:mb-8">
             <div className="flex items-center cursor-pointer basis-1/12">
               <div className="flex flex-row items-center gap-3 group">
-                <div
-                  className="relative flex flex-col items-center"
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
-                >
-                  <img
-                    src="https://www.indiarunning.com/images/DefaultUserProfile.svg"
-                    alt="User Profile"
-                    width={40}
-                    height={40}
-                    className="cursor-pointer"
-                  />
-                  <div
-                    className={`absolute flex justify-between top-12 transition-opacity duration-500 ${
-                      isHovered ? "opacity-100 visible" : "opacity-0 invisible"
-                    }`}
-                  >
-                    <button
-                      onClick={handleLogout}
-                      className="text-[#023571] font-semibold text-sm px-6 py-2 flex items-center border rounded-md bg-white shadow-lg transition hover:bg-gray-100"
-                    >
-                      <img src="https://registrations.indiarunning.com/logout-icon.svg" alt="Logout" className="mr-2 w-4 h-4" />
-                      Logout
-                    </button>
-                  </div>
-                </div>
+              <div
+  className="relative flex flex-col items-center"
+  onClick={() => window.location.href = '/userProfile'} // Redirects to the desired path
+>
+  <img
+    src="https://www.indiarunning.com/images/DefaultUserProfile.svg"
+    alt="User Profile"
+    width={40}
+    height={40}
+    className="cursor-pointer"
+  />
+</div>
+
               </div>
             </div>
             <Link href="/" target="_blank" className="pl-0 mt-2 sm:mt-0 sm:pl-24 basis-2/3">
