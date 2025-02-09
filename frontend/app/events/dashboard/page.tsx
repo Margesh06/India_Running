@@ -7,13 +7,27 @@ import { LayoutGrid, Users, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { EventForm } from "@/components/EventForm"
-import { MoreVertical,MapPin } from "lucide-react"
+import { MoreVertical, MapPin } from "lucide-react"
 
 export default function Home() {
   const [showEventForm, setShowEventForm] = useState(false)
   const [events, setEvents] = useState([])
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter()
   // const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("organiserToken"); // Check token in localStorage
+
+    if (!token) {
+        router.push("/events/auth"); // Redirect to login page if not authenticated
+    }
+    else {
+      setIsAuthenticated(true);
+      setLoading(false);
+  }
+}, []);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -30,21 +44,26 @@ export default function Home() {
     fetchEvents()
   }, [])
 
+
   const handleCreateEvent = () => {
     setShowEventForm(true)
   }
+
+  if (loading) {
+    return <div className="flex h-screen items-center justify-center text-xl">Loading...</div>;
+}
 
   return (
     <div className="flex h-screen">
       <div className="w-64 bg-emerald-700 py-6 text-white">
 
-      <button
-      className="w-full px-6 py-3 flex items-center gap-3 hover:bg-emerald-600 transition-colors"
-      onClick={() => window.location.href = '/events/dashboard'}
-    >
-      <LayoutGrid size={24} />
-      <span className="text-sm">Events</span>
-    </button>
+        <button
+          className="w-full px-6 py-3 flex items-center gap-3 hover:bg-emerald-600 transition-colors"
+          onClick={() => window.location.href = '/events/dashboard'}
+        >
+          <LayoutGrid size={24} />
+          <span className="text-sm">Events</span>
+        </button>
       </div>
 
       <div className="flex-1 overflow-auto">
@@ -63,13 +82,13 @@ export default function Home() {
             {events.length > 0 ? (
               <>
                 {/* <div className="bg-pink-100 px-8 py-4 flex justify-between items-center"> */}
-                  {/* <div className="flex items-center gap-2"> */}
-                    {/* <Users className="text-pink-500" /> */}
-                    {/* <span className="text-pink-500">
+                {/* <div className="flex items-center gap-2"> */}
+                {/* <Users className="text-pink-500" /> */}
+                {/* <span className="text-pink-500">
                       Complete your KYC (Know Your Customer) process to ensure the security and compliance of your account.
                     </span> */}
-                  {/* </div> */}
-                  {/* <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50">
+                {/* </div> */}
+                {/* <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50">
                     Verify Now
                   </Button> */}
                 {/* </div> */}
@@ -95,43 +114,43 @@ export default function Home() {
                     </TabsList>
 
                     <TabsContent value="active">
-        <div className="flex flex-col gap-4 mt-6">
-         {events.map((event, index) => (
-          <div key={event.id || index} className="flex gap-4 p-4 border rounded-lg">
-               <div className="w-48 h-32 bg-gray-200 rounded-lg overflow-hidden">
-              <img
-                src={event.banner_image}
-                alt={event.name}
-                className="w-full h-full object-cover"
-              />
-        </div>
-        <div className="flex-1">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-lg font-semibold mb-2">{event.name}</h3>
-              <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
-                <MapPin size={16} />
-                <span>{event.location || 'Mumbai'}</span>
-                <span className="mx-2">|</span>
-                <span>{event.event_type || 'On Ground'}</span>
-              </div>
-            </div>
-            {/* <button className="p-2 hover:bg-gray-100 rounded-full">
+                      <div className="flex flex-col gap-4 mt-6">
+                        {events.map((event, index) => (
+                          <div key={event.id || index} className="flex gap-4 p-4 border rounded-lg">
+                            <div className="w-48 h-32 bg-gray-200 rounded-lg overflow-hidden">
+                              <img
+                                src={event.banner_image}
+                                alt={event.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <h3 className="text-lg font-semibold mb-2">{event.name}</h3>
+                                  <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+                                    <MapPin size={16} />
+                                    <span>{event.location || 'Mumbai'}</span>
+                                    <span className="mx-2">|</span>
+                                    <span>{event.event_type || 'On Ground'}</span>
+                                  </div>
+                                </div>
+                                {/* <button className="p-2 hover:bg-gray-100 rounded-full">
               <MoreVertical size={20} className="text-gray-500" />
             </button> */}
-          </div>
-          <div className="flex justify-between items-end mt-4">
-            <div className="flex items-center gap-2">
-              <span className="px-3 py-1 bg-green-200 text-green-600 rounded-full text-sm">
-                Published
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    ))}
-  </div>
-</TabsContent>
+                              </div>
+                              <div className="flex justify-between items-end mt-4">
+                                <div className="flex items-center gap-2">
+                                  <span className="px-3 py-1 bg-green-200 text-green-600 rounded-full text-sm">
+                                    Published
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </TabsContent>
 
 
                     <TabsContent value="past">

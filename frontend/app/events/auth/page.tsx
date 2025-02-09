@@ -110,7 +110,7 @@ export default function EventsPage() {
     try {
       const exists = await checkEmail(email)
       if (exists) {
-        setFormData({ email:email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: "" , organization: "" })
+        setFormData({ email:email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: formData?.mobile , organization: formData?.organization })
         // const fetchedEvents = await fetchEvents()
         // setEvents(fetchedEvents)
         // setView("dashboard")
@@ -137,7 +137,7 @@ export default function EventsPage() {
         }
       } else {
         setView("signup")
-        setFormData({ email:email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: "", organization: "" })
+        setFormData({ email:email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: formData?.mobile, organization: formData?.organization })
       }
     } catch (error) {
       console.error("Error checking email:", error)
@@ -157,7 +157,28 @@ export default function EventsPage() {
     //   const fetchedEvents = await fetchEvents()
     //   setEvents(fetchedEvents)
     //   setView("dashboard")
-    router.push('/events/dashboard');
+    try {
+      const response = await fetch("http://localhost:5000/organisers/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Email not found");
+      }
+  
+      const data = await response.json();
+      localStorage.setItem("organiserToken", data.token);
+      router.push('/events/dashboard');
+      return data;
+    } catch (error) {
+      console.error("Login failed:", error);
+      return null;
+    }
+    
     } catch (error) {
       console.error("Error creating user:", error)
     } finally {
