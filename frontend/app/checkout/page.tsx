@@ -741,6 +741,7 @@
     const [userId, setUserId] = useState<number | null>(null);
     const [isFormValid, setIsFormValid] = useState(false);
     const [showSuccessCard, setShowSuccessCard] = useState(false);
+    const [showCheckout, setShowCheckout] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState({
     transactionId: "",
     amount: 0,
@@ -935,6 +936,16 @@
       }
       setShowAdditionalInfo(true);
   };
+
+  const handleSaveAndContinuelast = () => {
+    const isValid = validateForm();
+    if (!isValid) {
+        alert("Please fix the errors before continuing");
+        return;
+    }
+    setShowAdditionalInfo(true);
+    setShowCheckout(true);
+};
   
   
     const logPaymentStatus = (userId, eventId, status) => {
@@ -1466,7 +1477,7 @@
                     <Button
   onClick={() => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // Scrolls to the top smoothly
-    handleSaveAndContinue(); // Calls the function after scrolling
+    handleSaveAndContinuelast(); // Calls the function after scrolling
   }}
   className="bg-[#FF1B75] hover:bg-[#FF1B75]/90 text-white mt-4 rounded"
 >
@@ -1480,58 +1491,68 @@
             </div>
   
             {/* Right Section - Summary */}
-            <div className="w-[360px]">
-              <Card className="overflow-hidden">
-                <div className="bg-[#00856F] text-white p-3">
-                  <h2 className="font-medium">SUMMARY</h2>
-                </div>
-  
-                <div className="p-4 space-y-6">
-                  <div>
-                   <div>
-                    <h3 className="text-gray-500 text-sm mb-4">EVENT TICKET</h3>
-                    <div className="flex justify-between text-sm mb-2">
-                      <span>{eventName}</span>
-                      <span>Rs. {eventPrice}</span>
-                    </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-gray-500">Platform Fee</span>
-                      <span>Rs. 70.75</span>
-                    </div>
-                    <button
-                      onClick={() => setCouponDialogOpen(true)}
-                      className="text-[#00856F] text-xs mt-1 hover:underline"
-                    >
-                      APPLY COUPON
-                    </button>
-                  </div>
-  
-                  <div className="border-t pt-4 space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Total Amount</span>
-                      <span>Rs. {Number(eventPrice) + 70.75}</span>
-                    </div>
-                    <div className="flex justify-between text-sm font-medium">
-                      <span>Grand Total</span>
-                      <span>Rs. {Number(eventPrice) + 70.75}</span>
-                    </div>
-                  </div>
-  
-                  <button
-                    onClick={handleCheckout}
-                    disabled={!isFormValid}
-                    className={`w-full py-2 text-sm font-medium rounded ${
-                      isFormValid 
-                        ? 'bg-[#00856F] text-white hover:bg-[#00856F]/90' 
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
-                  >
-                    {isFormValid ? 'CHECKOUT' : 'Fill all Details'}
-                  </button>
-                </div>
-                </div>
-              </Card>
-            </div>
+<div className="w-[480px]">
+  <Card className="overflow-hidden">
+    <div className="bg-[#00856F] text-white p-5">
+      <h2 className="font-semibold text-xl">ORDER SUMMARY</h2>
+    </div>
+
+    <div className="p-6 space-y-8">
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-gray-500 text-sm font-medium tracking-wide mb-4">EVENT TICKET</h3>
+          <div className="flex justify-between text-base mb-3">
+            <span className="font-medium">{eventName}</span>
+            <span className="font-medium">Rs. {eventPrice}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-500">Platform Fee</span>
+            <span>Rs. 70.75</span>
+          </div>
+          {/* <button
+            onClick={() => setCouponDialogOpen(true)}
+            className="text-[#00856F] text-sm mt-3 hover:underline font-medium"
+          >
+            APPLY COUPON
+          </button> */}
+        </div>
+
+        <div className="border-t border-gray-200 pt-6 space-y-3">
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Subtotal</span>
+            <span>Rs. {eventPrice}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Platform Fee</span>
+            <span>Rs. 70.75</span>
+          </div>
+          <div className="flex justify-between text-base font-semibold mt-4">
+            <span>Grand Total</span>
+            <span>Rs. {Number(eventPrice) + 70.75}</span>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+            <span>Secure Checkout</span>
+          </div>
+          <button
+  onClick={handleCheckout}
+  disabled={!showCheckout}
+  className={`w-full py-3 text-sm font-medium rounded-md transition-colors ${
+    showCheckout && isFormValid 
+      ? 'bg-[#00856F] text-white hover:bg-[#00856F]/90' 
+      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+  }`}
+>
+  PROCEED TO CHECKOUT
+</button>
+
+        </div>
+      </div>
+    </div>
+  </Card>
+</div>
           </div>
         </div>
   

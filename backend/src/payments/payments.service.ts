@@ -35,7 +35,7 @@ export class PaymentsService {
         user_id: userId,               
         event_id: eventId,             
         amount: amount / 100,          
-        status: PaymentStatus.FAILED, 
+        status: PaymentStatus.PENDING, 
         type: PaymentType.CARDS,       
         razorpay_payment_id: '',       
         razorpay_order_id: order.id,
@@ -66,12 +66,12 @@ export class PaymentsService {
       // Verify signature
       const payload = `${orderId}|${paymentId}`;
       const expectedSignature = crypto
-        .createHmac('sha256', this.webhookSecret)
+        .createHmac("sha256", this.webhookSecret)
         .update(payload)
-        .digest('hex');
+        .digest("hex");
   
       if (expectedSignature !== signature) {
-        throw new Error('Invalid signature');
+        throw new Error("Invalid signature");
       }
   
       // Find existing payment records for the order
@@ -79,34 +79,44 @@ export class PaymentsService {
         where: { razorpay_order_id: orderId } as any,
       });
   
-      // If a previous payment exists, check if it's failed
+      const pendingPayment = existingPayments.find(
+        (payment) => payment.status === PaymentStatus.PENDING
+      );
       const failedPayment = existingPayments.find(
         (payment) => payment.status === PaymentStatus.FAILED
       );
   
-      // Create a new entry if there was a previous failed transaction
-      const newPayment = this.paymentRepository.create({
-        user_id: userId,
-        event_id: eventId,
-        amount: failedPayment ? failedPayment.amount : amount / 100, // Reuse amount
-        status: PaymentStatus.COMPLETED, // Success on retry
-        type: PaymentType.CARDS,
-        razorpay_payment_id: paymentId,
-        razorpay_order_id: orderId,
-        error_message: '',
-      });
+      if (pendingPayment) {
+        // If a previous payment is pending, update it to completed
+        pendingPayment.status = PaymentStatus.COMPLETED;
+        pendingPayment.razorpay_payment_id = paymentId;
+        pendingPayment.error_message = "";
+        await this.paymentRepository.save(pendingPayment);
+      } else {
+        // If no pending payment, create a new entry (only if failed previously)
+        const newPayment = this.paymentRepository.create({
+          user_id: userId,
+          event_id: eventId,
+          amount: failedPayment ? failedPayment.amount : amount / 100,
+          status: PaymentStatus.COMPLETED,
+          type: PaymentType.CARDS,
+          razorpay_payment_id: paymentId,
+          razorpay_order_id: orderId,
+          error_message: "",
+        });
   
-      await this.paymentRepository.save(newPayment);
+        await this.paymentRepository.save(newPayment);
+      }
   
-      return { success: true, message: 'Payment verified successfully' };
+      return { success: true, message: "Payment verified successfully" };
     } catch (error) {
-      console.error('Payment verification failed:', error);
+      console.error("Payment verification failed:", error);
   
-      // Log failed payment as a new entry instead of updating the old one
+      // Log failed payment as a new entry instead of updating old one
       const newFailedPayment = this.paymentRepository.create({
         user_id: userId,
         event_id: eventId,
-        amount: amount / 100, // Assign correct amount if available
+        amount: amount / 100,
         status: PaymentStatus.FAILED,
         type: PaymentType.CARDS,
         razorpay_payment_id: paymentId,
@@ -116,9 +126,10 @@ export class PaymentsService {
   
       await this.paymentRepository.save(newFailedPayment);
   
-      throw new HttpException('Payment verification failed', HttpStatus.BAD_REQUEST);
+      throw new HttpException("Payment verification failed", HttpStatus.BAD_REQUEST);
     }
   }
+  
   
 
   async handleWebhook(webhookData: any, signature: string) {

@@ -4,6 +4,7 @@ import React, { Suspense, useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import EventRegisterButton from "./EventRegisterButton"
+import { useRouter } from 'next/navigation';
 
 type EventData = {
   id: number
@@ -50,6 +51,20 @@ const EventPage = ({
   const [selectedCategories, setSelectedCategories] = useState<Set<number>>(new Set())
   const [eventCategories, setEventCategories] = useState<EventData["eventCategories"]>([])
   const [isHovered, setIsHovered] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    console.log ("Access token:",token);
+    console.log(process.env.JWT_SECRET);
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+      //router.push("/auth/login");
+    }
+  }, []);
 
   const handleAdd = (categoryId: number) => {
     setSelectedCategories(new Set([categoryId]))
@@ -105,22 +120,32 @@ const EventPage = ({
           <nav className="flex flex-row-reverse justify-around w-11/12 mx-auto pt-5 smobile:pt-10 smobile:mb-0 tablet:mb-8">
             <div className="flex items-center cursor-pointer basis-1/12">
               <div className="flex flex-row items-center gap-3 group">
-              <div
-  className="relative flex flex-col items-center"
-  onClick={() => window.location.href = '/userProfile'} // Redirects to the desired path
->
-  <img
-    src="https://www.indiarunning.com/images/DefaultUserProfile.svg"
-    alt="User Profile"
-    width={40}
-    height={40}
+              
+              <div className="relative flex flex-col items-center">
+  <button
+    onClick={() => {
+      if (isLoggedIn) {
+        window.location.href = "/userProfile";
+      } else {
+        window.location.href = "/auth/login";
+      }
+    }}
     className="cursor-pointer"
-  />
+  >
+    <img
+      src="https://www.indiarunning.com/images/DefaultUserProfile.svg"
+      alt="User Profile"
+      width={40}
+      height={40}
+    />
+  </button>
 </div>
+
+
 
               </div>
             </div>
-            <Link href="/" target="_blank" className="pl-0 mt-2 sm:mt-0 sm:pl-24 basis-2/3">
+            <Link href="/" className="pl-0 mt-2 sm:mt-0 sm:pl-24 basis-2/3">
               <Image
                 className="block smobile:h-9 smobile:w-32 tablet:w-64 tablet:h-14"
                 src="https://registrations.indiarunning.com/Logo1.svg"

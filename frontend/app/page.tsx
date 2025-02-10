@@ -456,9 +456,11 @@ export default function HomePage() {
               </div>
             )}
           </div>
-          <Link href="/events/registered" className="text-gray-600 hover:text-gray-900">
-            Your Events
-          </Link>
+          {isLoggedIn && (
+        <Link href="/events/registered" className="text-gray-600 hover:text-gray-900">
+          Your Events
+        </Link>
+      )}
 
           <Link href="/blogs" className="text-gray-600 hover:text-gray-900">
             Stories and Blogs

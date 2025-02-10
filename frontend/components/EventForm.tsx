@@ -913,7 +913,7 @@ export function EventForm() {
           ageLimitMin: Number(formData.ageLimitMin),
           ageLimitMax: Number(formData.ageLimitMax),
           inclusive: formData.inclusive,
-          additionalInfo: "" // Provide a default value or retrieve it from formData
+          additionalInfo: formData.additionalInfo
         }
       ]);
 
@@ -1156,7 +1156,7 @@ export function EventForm() {
 
                   {/* Additional Information */}
                   <div className="mb-6 p-5">
-                    <label className="flex text-sm font-medium">Additional Information <span className="text-red-500 mx-3">*</span>
+                    <label className="flex text-sm font-medium">Additional Information 
                       <input
                         type="text"
                         maxLength={15}
@@ -1202,7 +1202,7 @@ export function EventForm() {
                   </div>
 
                   {/* Age Limit */}
-                  <div className="flex gap-4 text-sm mb-6 p-5">Age Limit for Registration <span className="text-red-500 mx-3">*</span>
+                  <div className="flex gap-4 text-sm mb-6 p-5">Age Limit for Registration 
                     <div>
                       <label className="block text-sm font-medium"></label>
                       <input 
@@ -1349,7 +1349,7 @@ export function EventForm() {
             }}>
               <div className="space-y-4">
                 <div>
-                  <Label>About Race</Label>
+                  <Label>About Race<span className="text-red-500 mx-3">*</span></Label>
                   <Textarea
                     placeholder="Add more details to your event like your schedule, sponsors, or featured guests"
                     className="min-h-[200px] mt-1.5"
@@ -1360,7 +1360,7 @@ export function EventForm() {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Web Banner</Label>
+                    <Label>Web Banner<span className="text-red-500 mx-3">*</span></Label>
                     <div className="border-2 border-dashed rounded-lg p-6 text-center">
                       <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                       <div className="text-sm text-gray-600">
@@ -1383,7 +1383,7 @@ export function EventForm() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Mobile Banner</Label>
+                    <Label>Mobile Banner<span className="text-red-500 mx-3">*</span></Label>
                     <div className="border-2 border-dashed rounded-lg p-6 text-center">
                       <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                       <div className="text-sm text-gray-600">
@@ -1408,7 +1408,7 @@ export function EventForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Gallery Images</Label>
+                  <Label>Gallery Images<span className="text-red-500 mx-3">*</span></Label>
                   <div className="border-2 border-dashed rounded-lg p-6 text-center">
                     <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                     <div className="text-sm text-gray-600">
