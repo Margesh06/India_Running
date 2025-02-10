@@ -29,8 +29,9 @@ export class Organiser {
   @Column()
   state: string;
 
-  @Column({ type: "varchar", length: 6 })
-  pincode: string;
+  @Column({ type: "varchar", length: 6, nullable: true })
+  pincode?: string;
+
 
   @Column({ name: "pan_card", type: "text", unique: true })
   panCard: string;

@@ -779,7 +779,7 @@
 
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Rocket, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -789,6 +789,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
+import {jwtDecode} from 'jwt-decode';
+
+interface CustomJwtPayload {
+  id: string; // Define 'id' as the expected field in your JWT payload
+}
 
 export function EventForm() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -803,12 +808,13 @@ export function EventForm() {
     inclusive: string[];
   }>>([]);
   const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     venue: "",
     gallery_images: [] as string[],
-    organiser_id: "1", 
+    organiser_id: "", 
     event_type: "OnGround",
     activity_type: "",
     start_date: "",
@@ -837,6 +843,26 @@ export function EventForm() {
     { id: "E-Certificate", label: "E-Certificate" },
     { id: "Refreshments", label: "Refreshments" }
   ];
+
+  useEffect(() => {
+    const token = localStorage.getItem("organiserToken");
+
+    if (token) {
+      try {
+        // Decode the token to get the organiser_id (or id)
+        const decodedToken = jwtDecode<CustomJwtPayload>(token);
+        const organiserId = decodedToken.id;  // Get the 'id' (organiser_id) from the decoded token
+        
+        // Update formData with the decoded 'organiser_id'
+        setFormData((prev) => ({
+          ...prev,
+          organiser_id: organiserId, // Set the 'organiser_id' in the formData
+        }));
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, []);  // This effect runs once when the component is mounted
 
   const handleInputChange = (name: string, value: any) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -1229,15 +1255,7 @@ export function EventForm() {
                   type="submit" 
                   className="bg-[#FF1F8E] hover:bg-[#FF1F8E]/90"
                 >
-                  Update Ticket
-                </Button>
-                <Button 
-                  type="button"
-                  variant="outline"
-                  className="border-[#FF1F8E] text-[#FF1F8E] hover:bg-[#FF1F8E]/10"
-                  onClick={handleAddAnotherTicket}
-                >
-                  + Add Another Ticket
+                  Add Category
                 </Button>
                 <Button 
                   type="button"

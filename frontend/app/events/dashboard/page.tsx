@@ -5,6 +5,11 @@ import { LayoutGrid, LogOut, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { EventForm } from "@/components/EventForm";
+import {jwtDecode} from "jwt-decode";
+
+interface CustomJwtPayload {
+  id: string;  
+}
 
 export default function Home() {
   const [showEventForm, setShowEventForm] = useState(false);
@@ -28,10 +33,23 @@ export default function Home() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:5000/events/organiser/1");
-        if (!response.ok) throw new Error("Failed to fetch events");
-        const data = await response.json();
-        setEvents(data.data || []);
+        // Retrieve token from localStorage
+        const token = localStorage.getItem("organiserToken");
+
+        if (token) {
+          // Decode the token to get the sub
+          const decodedToken = jwtDecode<CustomJwtPayload>(token);
+          const sub = decodedToken.id;  // Now TypeScript knows 'sub' exists
+          console.log("Decoded sub:", sub);
+
+          // Fetch events using the 'sub' from the token
+          const response = await fetch(`http://localhost:5000/events/organiser/${sub}`);
+          if (!response.ok) throw new Error("Failed to fetch events");
+          const data = await response.json();
+          setEvents(data.data || []);
+        } else {
+          console.error("No token found in localStorage");
+        }
       } catch (error) {
         console.error("Error fetching events:", error);
       }

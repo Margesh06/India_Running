@@ -159,12 +159,21 @@ export class EventsService {
   }
 
   async getEventByOrganiser(organiserId: number) {
-    // Query the event database for events where the organiser_id matches
-    return await this.eventRepository.find({
-      where: {
-        organiser_id: organiserId,
-      },
-    });
+    try {
+      const events = await this.eventRepository.find({
+        where: {
+          organiser_id: organiserId,
+        },
+      });
+  
+      // Return an empty array if no events are found
+      return events.length > 0 ? events : [];
+    } catch (error) {
+      // Handle any errors that may occur during the query
+      console.error("Error fetching events:", error);
+      return [];
+    }
   }
+  
   
 }

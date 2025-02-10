@@ -88,14 +88,6 @@ export default function EventsPage() {
     return response.json();
   }
 
-  const fetchEvents = async () => {
-    // Implement your API call to fetch events
-    return [
-      { id: "1", name: "Sample Event 1", date: "2023-06-01" },
-      { id: "2", name: "Sample Event 2", date: "2023-06-15" },
-    ]
-  }
-
   const fetchEventDetails = async (eventId: string) => {
     // Implement your API call to fetch event details
     setCurrentEvent({ id: eventId, name: `Event ${eventId}`, date: "2023-06-01" })
@@ -137,7 +129,7 @@ export default function EventsPage() {
         }
       } else {
         setView("signup")
-        setFormData({ email:email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: formData?.mobile, organization: formData?.organization })
+        setFormData({ email:email, firstName: formData?.firstName, lastName: formData?.lastName, mobile: formData.mobile, organization: formData.organization })
       }
     } catch (error) {
       console.error("Error checking email:", error)
