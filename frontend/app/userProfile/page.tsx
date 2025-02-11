@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState("personal");
@@ -168,6 +168,16 @@ function PersonalInformation() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (!userData || !userProfile) return;
         const { name, value } = e.target;
+        if (name === "dob") {
+            const selectedDate = new Date(value);
+            const today = new Date();
+            const age = today.getFullYear() - selectedDate.getFullYear();
+    
+            if (age < 15 || (age === 15 && today < new Date(selectedDate.setFullYear(selectedDate.getFullYear() + 15)))) {
+                alert("You must be at least 15 years old.");
+                return;
+            }
+        }
         if (name in userData) {
             setUserData((prev) => ({ ...prev, [name]: value }));
         } else {
@@ -209,9 +219,9 @@ function PersonalInformation() {
                     Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    dob: userProfile?.dob || "", 
+                    dob: userProfile?.dob || "",
                     gender: userProfile?.gender,
-                    bio: userProfile?.bio || ""  
+                    bio: userProfile?.bio || ""
                 }),
             });
 
@@ -246,7 +256,7 @@ function PersonalInformation() {
             <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">
                 Personal Information
                 <button onClick={() => setIsEditing(!isEditing)} className="flex text-sm text-[rgb(0,179,146)]"> <img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
-                    {isEditing ? "cancel" : "Edit"}
+                    {isEditing ? "" : "Edit"}
                 </button>
             </h2>
 
@@ -259,10 +269,10 @@ function PersonalInformation() {
                                 type="text"
                                 name="fname"
                                 value={userData?.fname || ""}
-                                disabled
                                 placeholder={userData?.fname || ""}
+                                onChange={handleChange}
                                 required
-                                className="border p-3 w-full rounded bg-gray-100 text-gray-400"
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-700"
                             />
                         </label>
 
@@ -272,10 +282,10 @@ function PersonalInformation() {
                                 type="text"
                                 name="lname"
                                 value={userData?.lname || ""}
-                                disabled
                                 placeholder={userData?.lname || ""}
+                                onChange={handleChange}
                                 required
-                                className="border p-3 w-full rounded bg-gray-100 text-gray-400"
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-700"
                             />
                         </label>
                     </div>
@@ -287,10 +297,11 @@ function PersonalInformation() {
                                 type="email"
                                 name="email"
                                 value={userData?.email || ""}
-                                disabled
+
                                 placeholder={userData?.email || ""}
+                                onChange={handleChange}
                                 required
-                                className="border p-3 w-full rounded bg-gray-100 text-gray-400"
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-700"
                             />
                         </label>
 
@@ -303,7 +314,7 @@ function PersonalInformation() {
                                 onChange={handleChange}
                                 disabled={!isEditing}
                                 required
-                                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-700"
                             />
                         </label>
                     </div>
@@ -350,7 +361,7 @@ function PersonalInformation() {
                                 disabled={!isEditing}
                                 placeholder="Enter bio (Max 100 characters)"
                                 required
-                                className="border p-3 w-full rounded bg-gray-100 text-gray-800 resize-none"
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-700 resize-none"
                             />
                         </label>
                     </div>
@@ -415,12 +426,12 @@ function AddressForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const updatedData = { 
-            country: userProfile?.country, 
-            state: userProfile?.state, 
-            pincode: userProfile?.pincode, 
+        const updatedData = {
+            country: userProfile?.country,
+            state: userProfile?.state,
+            pincode: userProfile?.pincode,
             address: userProfile?.address,
-            nationality: userProfile?.nationality 
+            nationality: userProfile?.nationality
         };
         if (!userProfile) return;
         try {
@@ -448,15 +459,15 @@ function AddressForm() {
             </div>
             <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">Address
                 <button onClick={() => setIsEditing(!isEditing)} className="flex text-sm text-[rgb(0,179,146)]"> <img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
-                    {isEditing ? "cancel" : "Edit"}
+                    {isEditing ? "" : "Edit"}
                 </button>
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
 
                 <div className="space-y-4">
                     <div className="flex flex-col md:flex-row gap-4">
-                        <label className="text-gray-700 flex-1">Country:   <span className="text-lg text-red-600"> *</span>
-                            <select name="country" value={userProfile?.country || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
+                        <label className=" flex-1">Country:   <span className="text-lg text-red-600"> *</span>
+                            <select name="country" value={userProfile?.country || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 " required>
                                 <option value="" >Select your country</option>
                                 <option value="United States">United States</option>
                                 <option value="Canada">Canada</option>
@@ -469,8 +480,8 @@ function AddressForm() {
                                 <option value="Brazil">Brazil</option>
                             </select>
                         </label>
-                        <label className="text-gray-700 flex-1">Nationality: <span className="text-lg text-red-600"> *</span>
-                            <select name="nationality" value={userProfile?.nationality || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
+                        <label className=" flex-1">Nationality: <span className="text-lg text-red-600"> *</span>
+                            <select name="nationality" value={userProfile?.nationality || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 " required>
                                 <option value="" >Select your nationality</option>
                                 <option value="American">American</option>
                                 <option value="Canadian">Canadian</option>
@@ -486,8 +497,8 @@ function AddressForm() {
                     </div>
 
                     <div className="flex flex-col md:flex-row gap-4">
-                        <label className="text-gray-700 flex-1">State: <span className="text-lg text-red-600"> *</span>
-                            <select name="state" value={userProfile?.state || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
+                        <label className=" flex-1">State: <span className="text-lg text-red-600"> *</span>
+                            <select name="state" value={userProfile?.state || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 " required>
                                 <option value="" >Select your state</option>
                                 <option value="Maharashtra">Maharashtra</option>
                                 <option value="Karnataka">Karnataka</option>
@@ -498,13 +509,13 @@ function AddressForm() {
                             </select>
                         </label>
                         <label className="text-gray-700 flex-1">Pin Code: <span className="text-lg text-red-600"> *</span>
-                            <input type="number" name="pincode" value={userProfile?.pincode || ""} onChange={handleInputChange} disabled={!isEditing} placeholder="Enter your pin code" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                            <input type="number" name="pincode" value={userProfile?.pincode || ""} onChange={handleInputChange} disabled={!isEditing} placeholder="Enter your pin code" required className="border p-3 w-full rounded bg-gray-100 text-gray-700" />
                         </label>
                     </div>
 
                     <div>
                         <label className="text-gray-700">Address: <span className="text-lg text-red-600"> *</span>
-                            <textarea name="address" value={userProfile?.address || ""} onChange={handleInputChange} disabled={!isEditing} placeholder="Enter Your Address" required className="border p-3 w-full rounded bg-gray-100 text-gray-800"></textarea>
+                            <textarea name="address" value={userProfile?.address || ""} onChange={handleInputChange} disabled={!isEditing} placeholder="Enter Your Address" required className="border p-3 w-full rounded bg-gray-100 text-gray-700"></textarea>
                         </label>
                     </div>
                 </div>
@@ -598,15 +609,15 @@ function EmergencyDetails() {
 
             <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">Emergency Details
                 <button onClick={() => setIsEditing(!isEditing)} className="flex text-sm text-[rgb(0,179,146)]"> <img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
-                    {isEditing ? "cancel" : "Edit"}
+                    {isEditing ? "" : "Edit"}
                 </button>
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
 
                 <div className="space-y-4">
                     <div className="flex flex-col md:flex-row gap-4">
-                        <label className="text-gray-700 flex-1">Blood Group: <span className="text-lg text-red-600"> *</span>
-                            <select name="bloodGroup" value={userProfile?.bloodGroup || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
+                        <label className=" flex-1">Blood Group: <span className="text-lg text-red-600"> *</span>
+                            <select name="bloodGroup" value={userProfile?.bloodGroup || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 " required>
                                 <option value="" disabled>Select your blood group</option>
                                 <option value="A+">A+</option>
                                 <option value="A-">A-</option>
@@ -619,13 +630,13 @@ function EmergencyDetails() {
                             </select>
                         </label>
                         <label className="text-gray-700 flex-1">Emergency Contact Name: <span className="text-lg text-red-600"> *</span>
-                            <input type="text" name="emergencyContactName" value={userProfile?.emergencyContactName || ""} onChange={handleInputChange} disabled={!isEditing} pattern="[A-Za-z ]*" placeholder="Enter Name" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                            <input type="text" name="emergencyContactName" value={userProfile?.emergencyContactName || ""} onChange={handleInputChange} disabled={!isEditing} pattern="[A-Za-z ]*" placeholder="Enter Name" required className="border p-3 w-full rounded bg-gray-100 text-gray-700" />
                         </label>
                     </div>
 
                     <div>
                         <label className="text-gray-700">Emergency Contact Number: <span className="text-lg text-red-600"> *</span>
-                            <input type="tel" name="emergencyContactNumber" value={userProfile?.emergencyContactNumber || ""} onChange={handleInputChange} disabled={!isEditing} pattern="[0-9]{10}" placeholder="Enter Mobile No." required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                            <input type="tel" name="emergencyContactNumber" value={userProfile?.emergencyContactNumber || ""} onChange={handleInputChange} disabled={!isEditing} pattern="[0-9]{10}" placeholder="Enter Mobile No." required className="border p-3 w-full rounded bg-gray-100 text-gray-700" />
                         </label>
                     </div>
                 </div>
@@ -719,7 +730,7 @@ function PhysicalMeasurements() {
 
             <h2 className="flex justify-between items-center text-2xl font-semibold text-gray-700 mb-4">Physical Measurements
                 <button onClick={() => setIsEditing(!isEditing)} className="flex text-sm text-[rgb(0,179,146)]"> <img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
-                    {isEditing ? "cancel" : "Edit"}
+                    {isEditing ? "" : "Edit"}
                 </button>
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -727,16 +738,16 @@ function PhysicalMeasurements() {
                 <div className="space-y-4">
                     <div className="flex flex-col md:flex-row gap-4">
                         <label className="text-gray-700 flex-1">Height: <span className="text-lg text-red-600"> *</span>
-                            <input type="text" name="height" value={userProfile?.height || ""} onChange={handleInputChange} disabled={!isEditing} pattern="^\d+(\.\d{1,2})?$" placeholder="Enter height (ft)" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                            <input type="text" name="height" value={userProfile?.height || ""} onChange={handleInputChange} disabled={!isEditing} pattern="^\d+(\.\d{1,2})?$" placeholder="Enter height (ft)" required className="border p-3 w-full rounded bg-gray-100 text-gray-700" />
                         </label>
                         <label className="text-gray-700 flex-1">Weight: <span className="text-lg text-red-600"> *</span>
-                            <input type="text" name="weight" value={userProfile?.weight || ""} onChange={handleInputChange} disabled={!isEditing} pattern="^\d+(\.\d{1,2})?$" placeholder="Enter weight (kg)" required className="border p-3 w-full rounded bg-gray-100 text-gray-800" />
+                            <input type="text" name="weight" value={userProfile?.weight || ""} onChange={handleInputChange} disabled={!isEditing} pattern="^\d+(\.\d{1,2})?$" placeholder="Enter weight (kg)" required className="border p-3 w-full rounded bg-gray-100 text-gray-700" />
                         </label>
                     </div>
 
                     <div>
-                        <label className="text-gray-700">Shoe Size: <span className="text-lg text-red-600"> *</span>
-                            <select name="shoesize" value={userProfile?.shoesize || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 text-gray-800" required>
+                        <label className="">Shoe Size: <span className="text-lg text-red-600"> *</span>
+                            <select name="shoesize" value={userProfile?.shoesize || ""} onChange={handleInputChange} disabled={!isEditing} className="border p-3 w-full rounded bg-gray-100 " required>
                                 <option value="" disabled>Select your shoe size</option>
                                 <option value="6 UK">6 UK</option>
                                 <option value="7 UK">7 UK</option>
@@ -852,7 +863,7 @@ function RaceKitShirtSize() {
                         onClick={() => setIsEditing(!isEditing)}
                         className="flex text-sm text-[rgb(0,179,146)] ml-4"
                     ><img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
-                        {isEditing ? "Cancel" : "Edit"}
+                        {isEditing ? "" : "Edit"}
                     </button>
                 </h2>
                 <div className="text-sm font-normal w-full text-start">
@@ -900,10 +911,10 @@ function TimingCertificate() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                
 
-               
-                
+
+
+
 
                 const token = localStorage.getItem('access_token');
                 if (!token) return console.error("No token found");
@@ -946,9 +957,9 @@ function TimingCertificate() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedRace || !userProfileData) return;
-    
-        console.log("Updating raceType:", selectedRace); 
-    
+
+        console.log("Updating raceType:", selectedRace);
+
         try {
             const response = await fetch(`http://localhost:5000/userProfile/${userProfileData.id}`, {
                 method: "PATCH",
@@ -957,20 +968,20 @@ function TimingCertificate() {
                 },
                 body: JSON.stringify({ raceType: selectedRace }),
             });
-    
+
             const result = await response.json();
-            console.log("Server response:", result); 
-    
+            console.log("Server response:", result);
+
             if (!response.ok) {
                 throw new Error("Failed to update raceType");
             }
-    
+
             setIsEditing(false);
         } catch (error) {
             console.error("Error updating profile:", error);
         }
     };
-    
+
 
     const handleCancel = () => {
         setSelectedRace(userProfileData?.raceType || null);
@@ -989,22 +1000,22 @@ function TimingCertificate() {
                     onClick={() => setIsEditing(!isEditing)}
                     className="flex text-sm text-[rgb(0,179,146)] ml-4"
                 ><img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
-                    {isEditing ? "Cancel" : "Edit"}
+                    {isEditing ? "" : "Edit"}
                 </button>
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
 
                 <div className="space-y-4">
                     <div className="flex flex-col md:flex-row gap-4">
-                        <label className="text-gray-700 flex-1">Race Type: <span className="text-lg text-red-600"> *</span>
+                        <label className=" flex-1">Race Type: <span className="text-lg text-red-600"> *</span>
                             <select
                                 name="raceType"
                                 value={selectedRace || ""}
                                 onChange={handleRaceChange}
                                 disabled={!isEditing}
-                                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
+                                className="border p-3 w-full rounded bg-gray-100 "
                                 required
-                            >                                
+                            >
                                 <option value="" disabled>Select Race Type</option>
                                 <option value="10K">10K</option>
                                 <option value="HALF MARATHON">Half Marathon</option>
@@ -1033,6 +1044,9 @@ function Documents() {
     const [isEditing, setIsEditing] = useState(false);
     const [userData, setUserData] = useState<User | null>(null);
     const [userProfileData, setUserProfileData] = useState<UserProfile | null>(null);
+    const frontPhotoRef = useRef<HTMLInputElement | null>(null);
+    const backPhotoRef = useRef<HTMLInputElement | null>(null);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -1070,27 +1084,63 @@ function Documents() {
 
     const handleDocumentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         if (isEditing) {
+
             setSelectedDocument(e.target.value);
         }
     };
 
     const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>, setPhoto: Function) => {
         if (isEditing && e.target.files) {
+
+
             setPhoto(e.target.files[0]);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
+        const uploadImage = async (imageFile: File): Promise<string> => {
+            if (!imageFile) {
+                console.error("No image file provided");
+                throw new Error("No image file provided");
+            }
+        
+            const formData = new FormData();
+            formData.append("image", imageFile);
+        
+            const response = await fetch("https://api.imgbb.com/1/upload?key=ce4f9ca69b51993d4ec69a5b4f0aa874", {
+                method: "POST",
+                body: formData,
+            });
+        
+            if (!response.ok) {
+                throw new Error("Failed to upload image");
+            }
+        
+            const result = await response.json();
+            return result.data.display_url; // Returns the uploaded image URL
+        };
+        
         e.preventDefault();
-        if (!selectedDocument || !userProfileData) return;
+        if (!selectedDocument || !userProfileData || !backPhoto || !frontPhoto) {
+            return alert("Please select a document type and upload both photos.");
+        }
 
         try {
-            await fetch(`/api/userProfile/${userProfileData}`, {
+            // Upload images to ImgBB
+            const backPhotoUrl = await uploadImage(backPhoto);
+            const frontPhotoUrl = await uploadImage(frontPhoto);
+
+            // Send updated data to backend
+            await fetch(`http://localhost:5000/userProfile/${userProfileData.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ documentType: selectedDocument }),
+                body: JSON.stringify({
+                    documentType: selectedDocument,
+                    backPhoto: backPhotoUrl,
+                    frontPhoto: frontPhotoUrl,
+                }),
             });
 
             setIsEditing(false);
@@ -1099,8 +1149,13 @@ function Documents() {
         }
     };
 
+
     const handleCancel = () => {
         setSelectedDocument(userProfileData?.documentType || null);
+        setFrontPhoto(null);
+        setBackPhoto(null);
+        if (frontPhotoRef.current) frontPhotoRef.current.value = "";
+        if (backPhotoRef.current) backPhotoRef.current.value = "";
         setIsEditing(false);
     };
 
@@ -1120,17 +1175,17 @@ function Documents() {
                         onClick={() => setIsEditing(!isEditing)}
                         className="flex text-sm text-[rgb(0,179,146)] ml-4"
                     ><img src="https://www.indiarunning.com/icons/pencil-edit.svg" alt="" />
-                        {isEditing ? "Cancel" : "Edit"}
+                        {isEditing ? "" : "Edit"}
                     </button>
                 </h2>
                 <div className="flex flex-col md:flex-row gap-4">
-                    <label className="text-gray-700 flex-1">Select Document Type: <span className="text-lg text-red-600"> *</span>
+                    <label className=" flex-1">Select Document Type: <span className="text-lg text-red-600"> *</span>
                         <select
                             name="documentType"
                             value={selectedDocument || ""}
                             onChange={handleDocumentChange}
                             disabled={!isEditing}
-                            className="border p-3 w-full rounded bg-gray-100 text-gray-800"
+                            className="border p-3 w-full rounded bg-gray-100 "
                             required
                         >
                             <option value="" disabled>Select Document Type</option>
@@ -1146,6 +1201,7 @@ function Documents() {
                     <div className="flex flex-col md:flex-row gap-4">
                         <label className="text-gray-700 flex-1">Front Photo (Identity Proof): <span className="text-lg text-red-600"> *</span>
                             <input
+                                ref={frontPhotoRef}
                                 type="file"
                                 accept="image/*"
                                 onChange={(e) => handlePhotoChange(e, setFrontPhoto)}
@@ -1157,11 +1213,12 @@ function Documents() {
 
                         <label className="text-gray-700 flex-1">Back Photo (Identity Proof): <span className="text-lg text-red-600"> *</span>
                             <input
+                                ref={backPhotoRef}
                                 type="file"
                                 accept="image/*"
                                 onChange={(e) => handlePhotoChange(e, setBackPhoto)}
                                 disabled={!isEditing}
-                                className="border p-3 w-full rounded bg-gray-100 text-gray-800"
+                                className="border p-3 w-full rounded bg-gray-100 text-gray-700"
                                 required
                             />
                         </label>
@@ -1178,5 +1235,3 @@ function Documents() {
         </div>
     );
 }
-
-
