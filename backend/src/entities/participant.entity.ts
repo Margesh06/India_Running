@@ -38,9 +38,48 @@ export class Participant {
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   weight?: number;
 
-  @Column({ type: 'enum', enum: TShirtSize, nullable: true })
-  tshirt_size?: TShirtSize;
+  @Column({ type: 'varchar', nullable: true })
+  tshirt_size: TShirtSize | null;
 
   @Column({ type: 'int', nullable: true })
   shoe_size?: number;
+
+  @Column({ type: 'varchar' })
+  first_name: string;
+
+  @Column({ type: 'varchar' })
+  last_name: string;
+
+  @Column({ type: 'date', nullable: true })
+  date_of_birth?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  gender?: string;
+
+  @Column({ type: 'varchar' })
+  email: string;
+
+  @Column({ type: 'bigint', nullable:true })  
+  phone: number;
+
+  @Column({ type: 'text', nullable: true })
+  address?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  pincode?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  blood_group?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  emergency_contact_name?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  emergency_contact_number?: string;
+
+  @Column({ type: 'boolean', default: false })
+  terms_and_condition: boolean;
+
+  @Column({ type: 'text', nullable: true })
+  medical_condition?: string;
 }

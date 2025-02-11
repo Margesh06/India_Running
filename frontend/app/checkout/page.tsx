@@ -976,7 +976,6 @@
         return;
       }
     
-      // Dynamically load Razorpay script
       const loadRazorpayScript = () => {
         return new Promise((resolve, reject) => {
           const script = document.createElement("script");
@@ -989,7 +988,6 @@
     
       loadRazorpayScript()
         .then(() => {
-          // Create an order on the backend
           return fetch("http://localhost:5000/payment", {
             method: "POST",
             headers: {
@@ -1000,7 +998,7 @@
               currency: "INR",
               userId,
               eventId
-            }),          
+            }),
           });
         })
         .then((res) => res.json())
@@ -1013,7 +1011,6 @@
             description: "Test Transaction",
             order_id: order.id,
             handler: function (response) {
-              // Send payment verification request to backend
               fetch("https://92a2-2407-3e40-11-cfce-3c62-fc1-70ec-a1b4.ngrok-free.app/payment/event", {
                 method: "POST",
                 headers: {
@@ -1030,36 +1027,79 @@
               .then(res => res.json())
               .then(data => {
                 if (data.success) {
-                  // Proceed to call the registration API after successful payment
-                  fetch("http://localhost:5000/registration", {
+                  // Send participant data after successful payment verification
+                  fetch("http://localhost:5000/payment/participant", {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                      user_id: userId,
                       event_id: eventId,
-                      reg_date: new Date().toISOString(),
-                      payment_status: "COMPLETED" // You can set this based on the payment status
+                      user_id: userId,
+                      bib_no: "BIB" + Math.floor(Math.random() * 100000), // Generate a random bib number
+                      reg_date: Date.now(),
+                      emergency_no: 8585,
+                      emergency_name: "John Doe",
+                      height: "5.5",
+                      weight: "70",
+                      tshirt_size: "M",
+                      shoe_size: 42,
+                      first_name: formData.firstName,
+                      last_name: formData.lastName,
+                      date_of_birth: formData.dateOfBirth,
+                      gender: formData.gender,
+                      email: formData.email,
+                      phone: 5865,
+                      address: formData.address,
+                      pincode: formData.pincode,
+                      blood_group: formData.bloodGroup,
+                      emergency_contact_name: formData.emergencyContactName,
+                      emergency_contact_number: formData.emergencyContactNumber,
+                      terms_and_condition: true,
+                      medical_condition: formData.medicalCondition || "None"
                     }),
                   })
                   .then(res => res.json())
-                  .then(registrationData => {
-                    if (registrationData) {
-                      // Handle success, maybe show a confirmation card
-                      setPaymentDetails({
-                        transactionId: response.razorpay_payment_id,
-                        amount: (Number(eventPrice) + 70.75),
-                        date: new Date().toLocaleString()
+                  .then(participantData => {
+                    if (participantData) {
+                      console.log("Participant registered:", participantData);
+                      // Proceed to register the user
+                      fetch("http://localhost:5000/registration", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          user_id: userId,
+                          event_id: eventId,
+                          reg_date: new Date().toISOString(),
+                          payment_status: "COMPLETED"
+                        }),
+                      })
+                      .then(res => res.json())
+                      .then(registrationData => {
+                        if (registrationData) {
+                          setPaymentDetails({
+                            transactionId: response.razorpay_payment_id,
+                            amount: (Number(eventPrice) + 70.75),
+                            date: new Date().toLocaleString()
+                          });
+                          setShowSuccessCard(true);
+                        } else {
+                          alert("Error during registration!");
+                        }
+                      })
+                      .catch(err => {
+                        console.error("Error creating registration:", err);
+                        alert("Error creating registration");
                       });
-                      setShowSuccessCard(true);
                     } else {
-                      alert("Error during registration!");
+                      alert("Error registering participant!");
                     }
                   })
                   .catch(err => {
-                    console.error("Error creating registration:", err);
-                    alert("Error creating registration");
+                    console.error("Error sending participant data:", err);
+                    alert("Error sending participant data");
                   });
                 } else {
                   alert("Payment verification failed!");
@@ -1071,7 +1111,7 @@
               });
             },
             prefill: {
-              name: (formData.firstName + formData.lastName),
+              name: (formData.firstName + " " + formData.lastName),
               email: (formData.email),
               contact: (formData.phone),
             },
@@ -1088,6 +1128,7 @@
           alert("An error occurred while processing the payment.");
         });
     };
+    
     
   
     const handleGoBack = () => {

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CalendarDays, MapPin, DollarSign, Calendar, Medal, Timer, Trophy } from 'lucide-react';
+import { CalendarDays, MapPin, DollarSign, Medal, Timer, Trophy } from 'lucide-react';
 import { jwtDecode } from "jwt-decode";
 
 interface Event {
@@ -46,7 +46,10 @@ export default function RegisteredEvents() {
         const eventResponses = await Promise.all(eventPromises);
         const eventData = eventResponses.map(res => res.data);
 
-        setEvents(eventData);
+        const uniqueEventsMap = new Map();
+        eventData.forEach(event => uniqueEventsMap.set(event.id, event));
+
+        setEvents(Array.from(uniqueEventsMap.values()));
       } catch (error) {
         console.error('Error fetching events:', error);
       } finally {
@@ -86,10 +89,6 @@ export default function RegisteredEvents() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=2070')] bg-cover opacity-10"></div>
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-blue-800/90 to-blue-900/90"></div>
-        {/* Animated running tracks */}
-        <div className="absolute w-full h-1 bg-gradient-to-r from-blue-500 to-blue-300 top-1/4 -left-full animate-[slide_15s_linear_infinite]"></div>
-        <div className="absolute w-full h-1 bg-gradient-to-r from-blue-400 to-blue-200 top-2/4 -right-full animate-[slideReverse_20s_linear_infinite]"></div>
-        <div className="absolute w-full h-1 bg-gradient-to-r from-blue-300 to-blue-100 top-3/4 -left-full animate-[slide_25s_linear_infinite]"></div>
       </div>
 
       <div className="max-w-7xl mx-auto relative">
@@ -119,7 +118,7 @@ export default function RegisteredEvents() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {events.map((event, index) => (
               <div
-                key={event.id}
+                key={`${event.id}-${index}`} // Ensure uniqueness by appending index
                 className="group relative transform hover:scale-105 transition-all duration-300"
                 style={{
                   animationDelay: `${index * 150}ms`,
@@ -154,7 +153,7 @@ export default function RegisteredEvents() {
                       </div>
 
                       <div className="flex items-center text-sm text-blue-200 group-hover:text-blue-300 transition-colors">
-                        <DollarSign className="mr-2 h-4 w-4" />
+                        {/* <DollarSign className="mr-2 h-4 w-4" /> */}
                         <span>Entry fee: <span className="font-bold">₹{event.minPrice}</span></span>
                       </div>
                     </div>

@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as crypto from 'crypto';
 import { Payment, PaymentStatus, PaymentType } from '../entities/payment.entity';
 import { Repository } from 'typeorm';
+import { Participant, TShirtSize } from '../entities/participant.entity'
 
 @Injectable()
 export class PaymentsService {
@@ -13,6 +14,8 @@ export class PaymentsService {
   constructor(
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
+    @InjectRepository(Participant)
+    private readonly participantRepository: Repository<Participant>,
   ) {
     this.razorpayInstance = new Razorpay({
       key_id: 'rzp_test_1WqWcdSu93kyf7',
@@ -53,6 +56,73 @@ export class PaymentsService {
     }
   }
   
+  async saveParticipantDetails(
+    userId: number,
+    eventId: number,
+    bibNo: string,
+    emergencyNo: number,
+    emergencyName: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    height?: number,
+    weight?: number,
+    tshirtSize?: string,
+    shoeSize?: number,
+    dateOfBirth?: string,
+    gender?: string,
+    phone?: number,
+    address?: string,
+    pincode?: string,
+    bloodGroup?: string,
+    emergencyContactName?: string,
+    emergencyContactNumber?: string,
+    termsAndCondition?: boolean,
+    medicalCondition?: string
+  ) {
+    try {
+      // Ensure tshirt_size is mapped to the correct enum value
+      const tshirtSizeEnum = tshirtSize ? TShirtSize[tshirtSize as keyof typeof TShirtSize] : undefined;
+      console.log(eventId);  // Now this should print the correct eventId value
+
+      // Create a new participant entity
+      const participant = this.participantRepository.create({
+        event_id: eventId,
+        user_id: userId,
+        bib_no: bibNo,
+        reg_date: Date.now(),
+        emergency_no: emergencyNo,
+        emergency_name: emergencyName,
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        height,
+        weight,
+        tshirt_size: tshirtSizeEnum,  // Pass the enum value or undefined
+        shoe_size: shoeSize,
+        date_of_birth: dateOfBirth,
+        gender,
+        phone,
+        address,
+        pincode,
+        blood_group: bloodGroup,
+        emergency_contact_name: emergencyContactName,
+        emergency_contact_number: emergencyContactNumber,
+        terms_and_condition: termsAndCondition || false,
+        medical_condition: medicalCondition,
+      });
+
+      // Save participant in the database
+      await this.participantRepository.save(participant);
+      return { success: true, message: 'Participant saved successfully' };
+    } catch (error) {
+      console.error('Error saving participant:', error);
+      throw new HttpException('Failed to save participant details', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  
+
 
   async verifyAndUpdatePayment(
     paymentId: string,
